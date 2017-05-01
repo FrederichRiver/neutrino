@@ -16,6 +16,11 @@ def readAccount(filename='config'):
         return None
 def dateStr(t=time.localtime()):
     return time.strftime('%Y%m%d',t)
+def strDate(objstr):
+    try:
+        return int( objstr.replace('-',''))
+    except:
+        return 0
 def readUrl(query,filename='config'):
     from ConfigParser import ConfigParser
     try:

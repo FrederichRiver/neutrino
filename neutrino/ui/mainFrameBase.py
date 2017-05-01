@@ -67,6 +67,12 @@ class mainFrameBase ( wx.Frame ):
         
         self.menuAnalysis.AppendSubMenu( self.menuML, u"Machine Learning" )
         
+        self.menuDataEdit = wx.Menu()
+        self.menuItemST = wx.MenuItem( self.menuDataEdit, wx.ID_ANY, u"ST flag", wx.EmptyString, wx.ITEM_NORMAL )
+        self.menuDataEdit.AppendItem( self.menuItemST )
+        
+        self.menuAnalysis.AppendSubMenu( self.menuDataEdit, u"Data Edit" )
+        
         self.menubarMain.Append( self.menuAnalysis, u"Analysis" ) 
         
         self.menuView = wx.Menu()

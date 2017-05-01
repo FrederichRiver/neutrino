@@ -4,7 +4,7 @@ Created on Apr 24, 2017
 @author: frederich
 '''
 from utility.config import readUrl,readDbDef,netEaseIndex
-def generate_list(flag='indexs'):
+def generate_list(flag='all'):
         #stocks: stocks only
         #indexs: indexs only
         #sh: stocks in sh only
@@ -16,39 +16,39 @@ def generate_list(flag='indexs'):
         #cyb: CYB only
         #funds: funds only
         indexs=[]
-        if flag=='stocks' or flag=='a' or flag=='sh':
+        if flag=='all' or flag=='stocks' or flag=='a' or flag=='sh':
             SHA=['SH600000']*4000
             for i in range(len(SHA)):
                 SHA[i]='SH'+'60'+str(i).zfill(4)
             indexs.extend(SHA)
-        if flag=='stocks' or flag=='a' or flag=='sz':    
+        if flag=='all' or flag=='stocks' or flag=='a' or flag=='sz':    
             SZA=['SZ000001']*1000
             for i in range(len(SZA)):
                 SZA[i]='SZ'+str(i).zfill(6)
             indexs.extend(SZA)
-        if flag=='stocks' or flag=='a' or flag=='sz' or flag=='cyb':
+        if flag=='all' or flag=='stocks' or flag=='a' or flag=='sz' or flag=='cyb':
             CYB=['SZ300001']*1000
             for i in range(len(CYB)):
                 CYB[i]='SZ'+'300'+str(i).zfill(3)
             indexs.extend(CYB)
-        if flag=='stocks' or flag=='a' or flag=='sz'or flag=='zxb':
+        if flag=='all' or flag=='stocks' or flag=='a' or flag=='sz'or flag=='zxb':
             ZXB=['SZ002000']*1000
             for i in range(len(ZXB)):
                 ZXB[i]='SZ'+'002'+str(i).zfill(3)
             indexs.extend(ZXB)
-        if flag=='stocks' or flag=='b' or flag=='sz':
+        if flag=='all' or flag=='stocks' or flag=='b' or flag=='sz':
             SZB=['SZ200001']*1000
             for i in range(len(SZB)):
                 SZB[i]='SZ'+'200'+str(i).zfill(3)
             indexs.extend(SZB)
         #Indexs
-        if flag=='indexs' or flag=='shi':
+        if flag=='all' or flag=='indexs' or flag=='shi':
             SHI=['SH000000']*2000
             for i in range(999):
                 SHI[i]='SH'+str(i).zfill(6)
                 SHI[i+1000]='SH'+'950'+str(i).zfill(3)
             indexs.extend(SHI)
-        if flag=='indexs' or flag=='szi':
+        if flag=='all' or flag=='indexs' or flag=='szi':
             SZI=['SZ399000']*1000
             for i in range(len(SZI)):
                 SZI[i]='SZ'+'399'+str(i).zfill(3)
