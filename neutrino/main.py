@@ -11,6 +11,8 @@ from utility.config import readAccount,dateStr
 from db.mysql import mysql
 from dataEngine.index import generate_list,queryindex,searchindex
 from dataEngine.stock import fetch_stock
+from dataEngine.finance_report import fetch_finance_report
+from dataEngine.finance_dividend import fetch_finance_dividend
 class mainFrame(mainFrameBase):
     def __init__(self,parent,title):
         """generate a frame from frameBase"""
@@ -23,11 +25,10 @@ class mainFrame(mainFrameBase):
         self.menuItemSpider.Enable(False)
         self.menuItemTimer.Enable(False)
         self.menuItemDb.Enable(False)
-        self.menuItemDividend.Enable(False)
         """menu data"""
         self.menuItemFetchNews.Enable(False)
         self.menuItemFetchFond.Enable(False)
-        self.menuItemFinanceData.Enable(False)
+        #self.menuItemFinanceData.Enable(False)
         """menu analysis"""
         self.menuItemNuetralNetworks.Enable(False)
         self.menuItemSVM.Enable(False)
@@ -45,56 +46,67 @@ class mainFrame(mainFrameBase):
         self.Bind(wx.EVT_MENU, self.Event_fetchIndex, id=self.menuItemFetchIndex.GetId())
         self.Bind(wx.EVT_MENU,self.Event_fetchStock,id=self.menuItemFetchStock.GetId())
         self.Bind(wx.EVT_MENU,self.Event_setSTflag,id=self.menuItemST.GetId())
+        self.Bind(wx.EVT_BUTTON,self.Event_test,self.buttonTest)
+        self.Bind(wx.EVT_MENU,self.Event_fetchFinanceData,id=self.menuItemFinanceData.GetId())
+        self.Bind(wx.EVT_MENU,self.Event_fetchFinanceDividend,id=self.menuItemDividend.GetId())
         """Event definition"""
     def Event_fetchIndex(self,event):
         """ when start button should be disabled incase of error operation"""
         self.menuItemFetchIndex.Enable(False)
         """ start a new thread so that ui can be updated in time."""
-        task=threading.Thread(target=self.check_list,args=(('indexs',)),name='fetch_indexs')
+        task=threading.Thread(target=self.Task_check_list,args=(('indexs',)),name='fetch_indexs')
         task.start()
     def Event_fetchStock(self,event):
         print "fetch stock"
         """ when start button should be disabled incase of error operation"""
         self.menuItemFetchStock.Enable(False)
         """ start a new thread so that ui can be updated in time."""
-        task=threading.Thread(target=self.fetch_stocks,args=(),name='fetch_stocks')
+        task=threading.Thread(target=self.Task_fetch_stocks,args=(),name='fetch_stocks')
         task.start()
     def Event_setSTflag(self,event):
         self.menuItemST.Enable(False)
-        task=threading.Thread(target=self.setSTFlag)
+        task=threading.Thread(target=self.Task_set_st_flag)
         task.start()
-
-    def check_list(self,flag):
+    def Event_fetchFinanceData(self,event):
+        self.menuItemFinanceData.Enable(False)
+        task=threading.Thread(target=self.Task_fetch_finance_report)
+        task.start()
+    def Event_fetchFinanceDividend(self,event):
+        self.menuItemDividend.Enable(False)
+        task=threading.Thread(target=self.Task_fetch_finance_dividend)
+        task.start()
+    def Task_check_list(self,flag):
         cfg=readAccount()
-        db1=mysql('localhost',cfg[0],cfg[1],'indexs')
-        db2=mysql('localhost',cfg[0],cfg[1],'stock_data')
+        db_index=mysql('localhost',cfg[0],cfg[1],'indexs')
+        db_rec=mysql('localhost',cfg[0],cfg[1],'stock_data')
         """generate a list which contains all stocks and indexs"""
         indexlist=generate_list(flag)
         """query from database to get a list"""
-        dblist=queryindex(db1,dateStr(),flag)
+        dblist=queryindex(db_index,dateStr(),flag)
         for i in range(len(dblist)):
             for j in range(len(indexlist)):
                 if indexlist[j]==dblist[i]:
                     indexlist[j]='0' 
         for index in indexlist:
             if index!='0':
-                searchindex(index,flag, db1, db2, dateStr())
+                searchindex(index,flag, db_index, db_rec, dateStr())
         """set menu enable after task."""
         self.menuItemFetchIndex.Enable(True)
-    def fetch_stocks(self):
+    def Task_fetch_stocks(self):
         cfg=readAccount()
         """ create db connection"""
-        db1=mysql('localhost',cfg[0],cfg[1],'indexs')
-        db2=mysql('localhost',cfg[0],cfg[1],'stock_data')
+        db_index=mysql('localhost',cfg[0],cfg[1],'indexs')
+        db_rec=mysql('localhost',cfg[0],cfg[1],'stock_data')
         """ fetch stock indexs."""
-        stocks=db1.selectValues( 'stocks', 'stock_index')
+        stocks=db_index.selectValues( 'stocks', 'stock_index')
         for stock in stocks: 
-            fetch_stock(db1, db2, 'stocks', stock[0], dateStr())
+            fetch_stock(db_index, db_rec, 'stocks', stock[0], dateStr())
         """ fetch indexs."""
-        indexs=db1.selectValues( 'indexs', 'stock_index')
+        indexs=db_index.selectValues( 'indexs', 'stock_index')
         for index in indexs: 
-            fetch_stock(db1, db2, 'indexs', index[0], dateStr())
-    def setSTFlag(self):
+            fetch_stock(db_index, db_rec, 'indexs', index[0], dateStr())
+        self.menuItemFetchStock.Enable(True)
+    def Task_set_st_flag(self):
         cfg=readAccount()
         db=mysql('localhost',cfg[0],cfg[1],'indexs')
         stocks=db.selectValues('stocks','stock_name')
@@ -102,6 +114,32 @@ class mainFrame(mainFrameBase):
             if 'ST' in stock[0]:
                 print stock[0]
                 db.updateTable('stocks',"flag='S'","stock_name='%s'" % stock[0])
+        self.menuItemST.Enable(True)
+    def Task_fetch_finance_report(self):
+        cfg=readAccount()
+        db_index=mysql('localhost',cfg[0],cfg[1],'indexs')
+        db_rec=mysql('localhost',cfg[0],cfg[1],'finance_report')
+        """ fetch stock indexs."""
+        stocks=db_index.selectValues( 'stocks', 'stock_index')
+        for stock in stocks: 
+            print stock[0]
+            fetch_finance_report(db_index, db_rec,stock[0])
+        print 'finish'
+        self.menuItemFinanceData.Enable(True)
+    def Task_fetch_finance_dividend(self):
+        cfg=readAccount()
+        db_index=mysql('localhost',cfg[0],cfg[1],'indexs')
+        db_rec=mysql('localhost',cfg[0],cfg[1],'finance_dividend')
+        stocks=db_index.selectValues( 'stocks', 'stock_index')
+        for stock in stocks: 
+            print stock[0]
+            fetch_finance_dividend(db_rec,stock[0])    
+        print 'finish'
+        self.menuItemDividend.Enable(True)
+    def Event_test(self,event):
+        self.buttonTest.Enable(False)
+        
+        self.buttonTest.Enable(True)
 if __name__ == '__main__':
     app=wx.App()
     win=mainFrame(None,'Neutrino')

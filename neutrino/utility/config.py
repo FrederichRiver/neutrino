@@ -46,3 +46,14 @@ def netEaseIndex(index):
         return index.replace('SZ','1')  
     else:
         return None
+def readFloat(objstr):
+    import re
+    try:
+        if re.match(r'\-?\d+\.\d+',str(objstr)):
+            return float(objstr)
+        elif re.match(r'\-?\d+', str(objstr)):
+            return int(objstr)
+        else:
+            return 0.0
+    except Exception,e:
+        return 0.0
