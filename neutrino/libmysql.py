@@ -12,18 +12,22 @@ import Pyro4
 
 @Pyro4.expose
 class MySQLServer(object):
-    def __init__(self, host, acc, pw, database, charset='utf8'):
+    def __init__(self, acc, pw, database, host='localhost', charset='utf8'):
         self.name = ''
         try:
-            x = MySQLdb.connect(host=host,
+            self._db = MySQLdb.connect(host=host,
                                 user=acc,
                                 passwd=pw,
                                 db=database,
                                 charset='utf8')
-            self._db = x
-            self._cs = x.cursor()
+            self._cs = self._db.cursor()
         except Exception:
             pass
+
+    def selectVersion(self):
+        self._cs.execute('select Version()')
+        self._db.commit()
+        return self._cs.fetchone()[0]
 
     def createTable(self, tab, content):
         try:
@@ -35,7 +39,9 @@ class MySQLServer(object):
 
     def updateTable(self, tab, content, condition):
         try:
-            self._cs.execute("""update %s set %s where %s""" % (tab, content, condition))
+            self._cs.execute("update {table} set {value} where {condition}".format(table=tab,
+                                                                                   value=content,
+                                                                                   condition=condition))
             self._db.commit()
             return 1
         except Exception:
@@ -83,25 +89,20 @@ class MySQLServer(object):
 
     def addColumn(self, tab, col, col_type, *args):
         try:
-            if args!=():
+            if args != ():
                 self._cs.execute("""alter table %s add %s %s default %s""" \
                                  % (tab, col, col_type, args[0]))
-                return 1
             else:
                 self._cs.execute("""alter table %s add %s %s""" \
                                  % (tab, col, col_type))
-                return 1
+            return 1
         except Exception:
             return 0
 
     def showTables(self):
         try:
-            self._cs.execute("""show tables""")
+            self._cs.execute("show tables")
             self._db.commit()
             return self._cs.fetchall()
         except Exception:
             return 0
-
-    def close(self):
-        self._db.close()
-        return 0

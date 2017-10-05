@@ -3,9 +3,27 @@ Created on Apr 23, 2017
 
 @author: frederich
 '''
+from ConfigParser import ConfigParser
 import time
+import pandas as pd
+import urllib2
+import requests
+from io import StringIO
+
+def openCSV(url,coding):
+    resp=urllib2.urlopen(url,timeout=10)
+    csv_content=resp.read().decode(coding)
+    mMatrix=StringIO(csv_content)
+    return pd.read_csv(mMatrix)
+
+def requestCSV(url):
+    resp = requests.get(url)
+    return pd.read_csv(StringIO(resp.text))
+
+def openPage(url):
+    return urllib2.urlopen(url,timeout=10)
+
 def readAccount(filename='config'):
-    from ConfigParser import ConfigParser
     try:
         cf=ConfigParser()
         cf.read(filename)
@@ -15,14 +33,17 @@ def readAccount(filename='config'):
     except:
         return None
 def dateStr(t=time.localtime()):
-    return time.strftime('%Y%m%d',t)
+    return time.strftime('%Y-%m-%d',t)
 def strDate(objstr):
     try:
-        return int( objstr.replace('-',''))
+        return objstr.replace('-','')
     except:
-        return 0
+        return '00000000'
+def int2Date(date):
+    if len(str(date))==7:
+        return str(date)[:3]+'-'+str(date)[4:5]+'-'+str(date)[6:]
+
 def readUrl(query,filename='config'):
-    from ConfigParser import ConfigParser
     try:
         cf=ConfigParser()
         cf.read(filename)
@@ -31,7 +52,6 @@ def readUrl(query,filename='config'):
     except:
         return None
 def readDbDef(query,filename='config'):
-    from ConfigParser import ConfigParser
     try:
         cf=ConfigParser()
         cf.read(filename)
@@ -55,5 +75,5 @@ def readFloat(objstr):
             return int(objstr)
         else:
             return 0.0
-    except Exception,e:
+    except Exception:
         return 0.0
