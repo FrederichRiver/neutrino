@@ -6,6 +6,10 @@ Created on Apr 24, 2017
 import functools
 from utility.config import readUrl, readDbDef, netEaseIndex
 from spider.fetch import openCSV
+from libmysql import MySQLServer
+from globalVar import INDEX_DB, STOCK_DATA_DB
+from dataEngine.stock import fetch_stock
+from utility.config import strDate, dateStr
 
 
 def generate_list(flag='all'):
@@ -98,3 +102,63 @@ def search_index(x, tab, db_index, db_rec, today):
     except Exception:
         pass
         # time.sleep(10)
+
+def update_data():
+        querydb = MySQLServer(acc='stock',
+                              pw='stock2017',
+                              database=INDEX_DB)
+        recdb = MySQLServer(acc='root',
+                            pw='6414939',
+                            database=STOCK_DATA_DB)
+        stock_list = query_stock(querydb)
+        for stock in stock_list:
+            fetch_stock(querydb, recdb, 'stocks', stock, dateStr())
+
+def generate_index():
+    stock_list = pre_stock_list()
+    querydb=MySQLServer(acc='stock',
+                        pw='stock2017',
+                        database=INDEX_DB)
+    createdb = MySQLServer(acc='root',
+                           pw='6414939',
+                           database=STOCK_DATA_DB)        
+    for stock in stock_list:
+        search_index(stock,'stocks',querydb,createdb,strDate)
+    
+def pre_stock_list():
+    '''
+    This function generate a stock list, which contains all codes.
+    From SH600000 to SZ399999.
+    -----
+    Returns:
+        new_list: a char type list object
+    '''   
+    gen_list = generate_list('stocks')
+    querydb = MySQLServer(acc='stock',
+                          pw='stock2017',
+                          database=INDEX_DB)
+    old_list = query_stock(querydb)
+    new_list = []
+    for index in gen_list:
+        if index not in old_list:
+            new_list.append(index)
+    print 'gen_list:', len(gen_list)
+    print 'old_list:', len(old_list)
+    print 'new_list:', len(new_list)
+    return new_list
+        
+def pre_index_list():   
+    gen_list = generate_list('indexs')
+    querydb = MySQLServer(acc='stock',
+                          pw='stock2017',
+                          database=INDEX_DB)
+    old_list = query_index(querydb)
+    new_list = []
+    for index in gen_list:
+        if index not in old_list:
+            new_list.append(index)
+def query_stock_list():
+    querydb = MySQLServer(acc='stock',
+                          pw='stock2017',
+                          database=INDEX_DB)
+    return query_stock(querydb)
