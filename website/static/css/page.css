@@ -1,0 +1,36 @@
+body{
+    text-align:center;
+    font-family:arial;
+}
+#warp{
+    width:780px;
+    margin:auto;
+}
+a:link{color:#ffffff;}
+a:visited{color:#ffffff;}
+a:hover{color:#ffffff;}
+a:active{color:#ffffff;}
+#banner{
+    width:780px;
+    margin:auto;
+    color:#000000;
+    text-align:left;
+}
+ul.nav{
+    list-style-type:none;
+    background-color:#1a94e6;
+    overflow:auto;
+    width:780px;
+    text-align:center;
+}
+.banner,.nav li{
+    width:80px;
+    float:left;
+}
+.nav li>a{
+    display:block;
+}
+.nav li>a:link{
+    text-decoration:none;
+    font-size:15px;
+}
