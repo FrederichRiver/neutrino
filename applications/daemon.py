@@ -1,10 +1,24 @@
 #!/usr/bin/python3
+'''
+Created on Mar 31, 2018
 
+@ Author: Frederich River
+@ Project: Proxima Centauri
+
+Daemon process of whole system.
+v1.0.0-stable: First released.
+'''
 import os
 import sys
 import atexit
 import signal
-import tasksched
+import time
+import sched
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.memory import MemoryJobStore
+from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+
+__version__ = '1.0.0-stable'
 
 def daemonize(pid_file, stdin='/dev/null',
                         stdout='/dev/null',
@@ -43,12 +57,21 @@ def daemonize(pid_file, stdin='/dev/null',
     def sigterm_handler(signo, frame):
         raise SystemExit(1)
     signal.signal(signal.SIGTERM, sigterm_handler)
-def main():
-    import time
+
+def main_function():
     sys.stdout.write('Daemon started with pid {}\n'.format(os.getpid()))
+
+    tasksched = BackgroundScheduler()
+    tasksched.start()
+    tasksched.add_job(test,'interval',seconds=1.0)
+
     while True:
         sys.stdout.write('Daemon Alive! {}\n'.format(time.ctime()))
-        time.sleep(10)
+        time.sleep(60)
+
+def test():
+    pass
+    #print('test', file=sys.stderr)
 
 if  __name__=='__main__':
     PIDFILE = '/tmp/daemon.pid'
@@ -63,9 +86,15 @@ if  __name__=='__main__':
         except RuntimeError as e:
             print(e, file=sys.stderr)
             raise SystemExit(1)
-        tasksched.scheduler()
+        #main function
+        main_function()
+
     elif sys.argv[1] =='stop':
         if os.path.exists(PIDFILE):
+            sys.stdout.flush()
+            with open('/tmp/daemon.log', 'ab', 0) as write_null:
+                os.dup2(write_null.fileno(), sys.stdout.fileno())
+            sys.stdout.write('Daemon Shutdown {}\n'.format(time.ctime()))
             with open(PIDFILE) as f:
                 os.kill(int(f.read()), signal.SIGTERM)
         else:
