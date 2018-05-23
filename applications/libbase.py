@@ -66,7 +66,8 @@ def readacc(filename='config'):
         acc=cf.get('db', 'ACC')
         pw=cf.get('db', 'PW')
         return acc, pw
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 def date2str(t=time.localtime()):
@@ -91,7 +92,8 @@ def readurl(query,filename='config'):
         cf.read(filename)
         url=cf.get('url',query)
         return url
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 def databasedef(query,filename='config'):

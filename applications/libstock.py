@@ -1,4 +1,4 @@
-#!/usr/bin
+#!/usr/bin/python3
 '''
 Created on Apr 24, 2017
 
@@ -16,7 +16,7 @@ system will also treat the stock as exist.
 '''
 import functools
 from libbase import *
-from libmysql import MySQLServer
+from libmysql8 import MySQLServer
 import libencrypt
 import time
 
@@ -124,6 +124,7 @@ def stockinfo(code, tab, db_index, db_rec, today):
     """    from config read url of 'http://money.163.com'    """
     url_ne_index = readurl('URL_NE_INDEX')
     query_index = neteaseindex(code)
+    print(url_ne_index)
     netease_stock_index_url = url_ne_index.format(query_index, today)
     try:
         result = opencsv(netease_stock_index_url, 'gb18030')
@@ -133,7 +134,7 @@ def stockinfo(code, tab, db_index, db_rec, today):
             content = databasedef('DEF_INDEX')
             db_rec.CREATETABLE(code, content)
             db_index.INSERTVALUE(tab,
-                                  "stock_code,stock_name,update_time",
+                                  "stock_code,stock_name,gmt_modified",
                                   "'%s','%s','%s'" % (code,
                                       stock_name,time2str()))
     except Exception as e:
@@ -194,7 +195,7 @@ def fetch_stock(db_index,db_rec,tab,code,today):
     url_ne_stock = readurl('URL_NE_STOCK')
     query_index = neteaseindex(code)
     '''get start date from query update time'''
-    '''#update = db_index.selectOne(tab, 'update_time', "stock_index='%s'"%
+    '''#update = db_index.selectOne(tab, 'gmt_modified', "stock_code='%s'"%
     index)[-1]'''
     start_time = '19901219'
     end_time = '20180405'
@@ -236,7 +237,7 @@ def fetch_stock(db_index,db_rec,tab,code,today):
                                 % query_date)
                     except Exception as e:
                         err('Updating error when fetching stocks: %s' % e)
-                db_index.UPDATETABLE(tab, "update_time='%s'" % query_date,
+                db_index.UPDATETABLE(tab, "gmt_modified='%s'" % query_date,
                         "stock_index='%s'" % code)
     except Exception as e:
         err('Downloading error when opening stock data: %s' % e)
@@ -254,14 +255,12 @@ def query_stock_list():
     return query_stock(querydb)
 
 if __name__ == '__main__':
-    updatedata()
-    """
+    #updatedata()
     print('TEST START!')
     temp_list = stocklist(flag = 'all')
-    #print(temp_list[:10])
+    print(temp_list[:10])
     ms = MySQLServer('stock', libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='), 'finance')
-    #print(querylist(ms, 'stock_index')[:10])
+    print(querylist(ms, 'stock_index')[:15])
     non_listed_stock = nonlisted(temp_list)
-    print(non_listed_stock)
+    print(non_listed_stock[20])
     createstock(non_listed_stock)
-    """
