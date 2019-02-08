@@ -2,15 +2,17 @@
 '''
 Created on Apr 24, 2017
 
-@Author: frederich River
+@Author: Friederich River
 @Project: Venus
 @Workflow:
     1.generate a total list.
     2.compare with database, remove the codes already exist.
-    3.
-    4.
+    
+    
 @Version:
 v1.0.2-beta, Apr 5, 2018
+v1.0.3-beta, Jan 17, 2019, fix a bug in function updatedata()
+
 find a critical bug that if no table created in stock data,
 system will also treat the stock as exist.
 '''
@@ -25,7 +27,7 @@ __version__ = '1.0.1-beta'
 INDEX_DB = 'finance'
 STOCK_DATA_DB = 'stock_data'
 
-def stocklist(flag='all'):
+def generate_stock_list(flag='all'):
     '''
     stocks: stocks only
     indexs: indexs only
@@ -124,7 +126,6 @@ def stockinfo(code, tab, db_index, db_rec, today):
     """    from config read url of 'http://money.163.com'    """
     url_ne_index = readurl('URL_NE_INDEX')
     query_index = neteaseindex(code)
-    print(url_ne_index)
     netease_stock_index_url = url_ne_index.format(query_index, today)
     try:
         result = opencsv(netease_stock_index_url, 'gb18030')
@@ -151,7 +152,7 @@ def updatedata():
                         database=STOCK_DATA_DB)
     stock_list = queryindex(querydb)
     for stock in stock_list:
-        fetch_stock(querydb, recdb, STOCK_DATA_DB, stock, date2str2())
+        fetch_stock(querydb, recdb, 'stock_index', stock, date2str2())
 
 def createstock(stock_list):
     querydb=MySQLServer(acc='stock',
@@ -199,8 +200,7 @@ def fetch_stock(db_index,db_rec,tab,code,today):
     index)[-1]'''
     start_time = '19901219'
     end_time = '20180405'
-    netease_stock_index_url = url_ne_stock.format(
-            query_index, start_time,end_time)
+    netease_stock_index_url = url_ne_stock.format(query_index, start_time, end_time)
     try:
         result = opencsv(netease_stock_index_url, 'gb18030')
         if len(result):
@@ -219,8 +219,8 @@ def fetch_stock(db_index,db_rec,tab,code,today):
                     try:
                         columns='trade_date,close_price,high_price,\
                                 low_price,open_price,\
-                                yesterday_close_price,\
-                                amplitude,turn_volumn,turn_value'
+                                gestern_preis,\
+                                amplitude,volume,value'
                         content="'%s',%s,%s,%s,%s,%s,%s,%s,%s"\
                         % (query_date,CP,HP,LP,OP,YCP,AMP,VolT,ValT)
                         db_rec.INSERTVALUE(code,columns, content)
@@ -230,15 +230,15 @@ def fetch_stock(db_index,db_rec,tab,code,today):
                     try:
                         content='close_price=%s,high_price=%s,\
                                 low_price=%s,open_price=%s,\
-                            yesterday_close_price=%s,amplitude=%s,\
-                            turn_volumn=%s,turn_value=%s'\
+                            gestern_preis=%s,amplitude=%s,\
+                            volume=%s,value=%s'\
                              %(CP, HP,LP,OP,YCP,AMP,VolT,ValT)
                         db_rec.UPDATETABLE(code, content, "trade_date='%s'"\
                                 % query_date)
                     except Exception as e:
                         err('Updating error when fetching stocks: %s' % e)
                 db_index.UPDATETABLE(tab, "gmt_modified='%s'" % query_date,
-                        "stock_index='%s'" % code)
+                        "stock_code='%s'" % code)
     except Exception as e:
         err('Downloading error when opening stock data: %s' % e)
 
@@ -257,10 +257,19 @@ def query_stock_list():
 if __name__ == '__main__':
     #updatedata()
     print('TEST START!')
-    temp_list = stocklist(flag = 'all')
-    print(temp_list[:10])
     ms = MySQLServer('stock', libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='), 'finance')
-    print(querylist(ms, 'stock_index')[:15])
+    '''
+    temp_list = generate_stock_list(flag = 'all')
+    #print(temp_list[:10])
+    ms = MySQLServer('stock', libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='), 'finance')
+    #print(querylist(ms, 'stock_index')[:15])
     non_listed_stock = nonlisted(temp_list)
-    print(non_listed_stock[20])
+    print(non_listed_stock[:20])
     createstock(non_listed_stock)
+    '''
+    stkd = MySQLServer('root', '6414939', 'stock_data')
+    temp_list = queryindex(ms)
+    print(temp_list)
+    for code in temp_list:
+        stkd.dropTable(code)
+    print('all table are dropped.')

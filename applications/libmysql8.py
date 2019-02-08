@@ -110,6 +110,15 @@ class MySQLServer(object):
         except Exception as e:
             info('MySQL adding column failure: %s' % e)
             return 0
+    def rmData(self, table_name, condition):
+        try:
+            sql = 'delete from {0} Where {1}'.format(table_name, condition)
+            self._cs.execute(sql)
+            self._db.commit()
+            return 1
+        except Exception as e:
+            info('MySQL delete failure: %s' % e)
+            return 0
 
     def showTables(self):
         try:
@@ -129,9 +138,19 @@ class MySQLServer(object):
         except Exception as e:
             info('MySQL table checking failure: %s' % e)
             return 0
+    def dropTable(self, table_name):
+        try:
+            sql = "drop table {0}".format(table_name)
+            self._cs.execute(sql)
+            self._db.commit()
+        except Exception as e:
+            info('MySQL table dropping failure: %s' % e)
+            return 0
 
 if __name__ == "__main__":
-    ms = MySQLServer('stock', libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='), 'stock_index')
+    """
+    ms = MySQLServer('stock', libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='),
+    'stock_index') 
     print("select version")
     print(ms.VERSION())
     print("create table")
@@ -156,3 +175,8 @@ if __name__ == "__main__":
     print(ms.showTables())
     print("checking table existance")
     print(ms.TABLEEXIST('stock_index')[0])
+    """
+    ms = MySQLServer('stock',
+            libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='),'stock_data')
+    table_list = ms.SELECTVALUES()
+    ms.dropTable('SH600000')
