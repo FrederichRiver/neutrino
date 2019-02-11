@@ -8,10 +8,8 @@ module time
 
 """
 from datetime import datetime, timezone, timedelta
-LOCAL_TIME_ZONE = 'Beijing'
-"""
-NewYork, London, Frankfort, USWest
-"""
+from environment import *
+import os
 
 class TradeTimeBase(object):
     def __init__(self):
@@ -19,10 +17,11 @@ class TradeTimeBase(object):
         self.holiday_list = set()
         self.time_zone = timezone(timedelta(hours=8))
         self.time_baseline = datetime.now(self.time_zone)
-        self.timezone_FLAG = True 
-        self.city = {'Beijing':8,'Bj':8}
+        self.city = {}
+        self.FLAG_timezone = False
+        self._load_time_zone()
     def city_timezone(self, city_name):
-        if self.timezone_FLAG:
+        if self.FLAG_timezone:
             return self._get_timezone(city_name)
         else:
             return self._get_timezone2(city_name)
@@ -66,7 +65,16 @@ class TradeTimeBase(object):
         else:
             self.timezoneflag = False
         '''
-        #read time zone info from a file and gene a set
+        if os.path.exists('TIMEZONE'):
+            with open('TIMEZONE','r') as f:
+                temp = f.readline()
+                while temp:
+                    city_time = temp.split(':')
+                    self.city[city_time[0]] = int( city_time[1])
+                    temp = f.readline()
+            self.FLAG_timezone = True
+        else:
+            self.FLAG_timezone = False
     def _export_config(self):
         pass
 def next_n_day(day_string, n=1):
@@ -85,7 +93,7 @@ if __name__ == '__main__':
     print(x.time_baseline)
     print(x.time_zone)
     print(x.city_timezone('Chicago'))
-    print(x.city_timezone('London'))
+    print(x.city_timezone('NY'))
     print(x.city_timezone('Beijing'))
-    print(x.city_timezone('Bj'))
-
+    print(x.city_timezone('BJ'))
+    print(x.city)
