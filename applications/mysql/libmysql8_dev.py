@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+from libencrypt import mydecrypt
+import sys
+import pymysql
 '''
 Geschafen im Aug 31, 2017
 
@@ -11,7 +14,7 @@ libencrypt.
 v1.0.2-stable: Add new function TABLEEXIST.
 v2.0.3-dev: Complete funcions of mysql.
 v2.0.4-dev: Modify some bug, using encrypt pw.
-pre-v2.0.4-stable: Rebuild using metaclass methord.
+v2.0.5-dev: Fix bug. drop table -> drop table if exists.
 '''
 
 """
@@ -27,18 +30,16 @@ X10.select now
 25.rename table
 26.database backup
 """
-import pymysql
-import sys
 sys.path.append('..')
-from libencrypt import mydecrypt
-__version__ = '2.0.4-dev'
+__version__ = '2.0.5-dev'
 encode = 'wAKO0tFJ8ZH38RW4WseZnQ=='
+
 
 class MySQLBase(object):
     def __init__(self, acc, pw, database,
-            host='localhost', charset='utf8'):
+                 host='localhost', charset='utf8'):
         self.db = pymysql.connect(host=host, user=acc,
-                passwd=pw, db=database, charset=charset)
+                                  passwd=pw, db=database, charset=charset)
         self.cs = self.db.cursor()
         self.version = self._version()
 
@@ -47,7 +48,7 @@ class MySQLBase(object):
         self.db.commit()
         return self.cs.fetchone()[0]
 
-    def createDatabase(self, dbName):
+    def create_database(self, dbName):
         sql = 'create database {0}'.format(dbName)
         try:
             self.cs.execute(sql)
@@ -56,8 +57,8 @@ class MySQLBase(object):
         except Exception as e:
             info('MySQL database creation failure: %s' % e)
             return 0
-    
-    def dropDatabase(self, dbName):
+
+    def drop_database(self, dbName):
         sql = 'drop database if exists {0}'.format(dbName)
         try:
             self.cs.execute(sql)
@@ -67,9 +68,9 @@ class MySQLBase(object):
             info('MySQL database delete failure: %s' % e)
             return 0
 
-    def createTable(self, tabName, content):
+    def create_table(self, tabName, content):
         sql = 'create table if not exists {0} {1}'.format(
-                tabName, content)
+            tabName, content)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -78,9 +79,9 @@ class MySQLBase(object):
             info('MySQL table creation failure: %s' % e)
             return 0
 
-    def updateTable(self, tabName, content, condition):
+    def update_table(self, tabName, content, condition):
         sql = 'update {0} set {1} where {2}'.format(tabName,
-                content, condition)
+                                                    content, condition)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -89,9 +90,9 @@ class MySQLBase(object):
             info('MySQL table updating failure: %s' % e)
             return 0
 
-    def insertAllValues(self, tabName, content):
+    def insert_all_values(self, tabName, content):
         sql = 'insert into {0} values({1})'.format(
-                tabName, content)
+            tabName, content)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -100,9 +101,9 @@ class MySQLBase(object):
             info('MySQL inserting failure: %s' % e)
             return 0
 
-    def insertValue(self, tabName, field, content):
+    def insert_value(self, tabName, field, content):
         sql = 'insert into {0} ({1}) values({2})'.format(
-                tabName, field, content)
+            tabName, field, content)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -111,22 +112,22 @@ class MySQLBase(object):
             info('MySQL inserting failure: %s' % e)
             return 0
 
-    def selectValues(self, tabName, field, *args):
+    def select_values(self, tabName, field, *args):
         try:
             if args != ():
                 sql = 'select {0} from {1} where {2}'.format(
-                        field, tabName, args[0])
+                    field, tabName, args[0])
                 self.cs.execute(sql)
             else:
                 sql = 'select {0} from {1}'.format(
-                        field, tabName)
+                    field, tabName)
                 self.cs.execute(sql)
             return self.cs.fetchall()
         except Exception as e:
             info('MySQL selecting failure: %s' % e)
             return None
 
-    def selectOne(self, tabName, field, condition):
+    def select_one(self, tabName, field, condition):
         sql = 'select {0} from {1} where {2}'.format(field, tabName, condition)
         try:
             self.cs.execute(sql)
@@ -135,7 +136,7 @@ class MySQLBase(object):
             info('MySQL selecting failure: %s' % e)
             return None
 
-    def addColumn(self, tab, col, col_type, *args):
+    def add_column(self, tab, col, col_type, *args):
         try:
             if args:
                 sql = 'alter table {0} add {1} {2} default {3}'
@@ -150,16 +151,16 @@ class MySQLBase(object):
             info('MySQL adding column failure: %s' % e)
             return 0
 
-    def addIndex(self, tab):
+    def add_index(self, tab):
         sql = 'alter {0} '
         try:
             return 1
         except Exception as e:
             return 0
 
-    def dropIndex(self, tab_name, idx_name):
+    def drop_index(self, tab_name, idx_name):
         sql = 'alter {0} drop index {1}'.format(
-                tab_name, idx_namei)
+            tab_name, idx_namei)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -167,10 +168,10 @@ class MySQLBase(object):
         except Exception as e:
             info('MySQL drop index failure: %s' % e)
             return 0
-    
-    def addPrimaryKey(self, tab_name, idx_name):
+
+    def add_primary_key(self, tab_name, idx_name):
         sql = 'alter table {0} add primary key {1}'.format(
-                tab_name, idx_namei)
+            tab_name, idx_name)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -179,19 +180,19 @@ class MySQLBase(object):
             info('MySQL add primary key failure: %s' % e)
             return 0
 
-    def changeColumn(self, tabName, old_name, new_name, new_type):
+    def change_column(self, tabName, old_name, new_name, new_type):
         sql = 'alter table {0} change {1} {2} {3}'.format(
-                tabName, old_name, new_name, new_type)
+            tabName, old_name, new_name, new_type)
         try:
             self.cs.execute(sql)
             return 1
         except Exception as e:
             info('MySQL change column failure: %s' % e)
             return 0
-    
-    def dropColumn(self, tabName, fieldName):
+
+    def drop_column(self, tabName, fieldName):
         sql = 'alter table {0} drop {1}'.format(
-                tabName, fieldName)
+            tabName, fieldName)
         try:
             self.cs.execute(sql)
             return 1
@@ -199,9 +200,9 @@ class MySQLBase(object):
             info('MySQL drop column failure: %s' % e)
             return 0
 
-    def removeData(self, table_name, condition):
+    def remove_data(self, table_name, condition):
         sql = 'delete from {0} Where {1}'.format(
-                table_name, condition)
+            table_name, condition)
         try:
             self.cs.execute(sql)
             self.db.commit()
@@ -210,7 +211,7 @@ class MySQLBase(object):
             info('MySQL delete failure: %s' % e)
             return 0
 
-    def showDatabases(self):
+    def show_databases(self):
         try:
             self.cs.execute("show databases")
             self.db.commit()
@@ -218,8 +219,8 @@ class MySQLBase(object):
         except Exception as e:
             info('MySQL database showing failure: %s' % e)
             return 0
-    
-    def showTables(self):
+
+    def show_tables(self):
         try:
             self.cs.execute("show tables")
             self.db.commit()
@@ -228,7 +229,7 @@ class MySQLBase(object):
             info('MySQL table showing failure: %s' % e)
             return 0
 
-    def tableExists(self, table_name):
+    def table_exists(self, table_name):
         try:
             sql = "select table_name \
                     from information_schema.TABLES \
@@ -240,15 +241,16 @@ class MySQLBase(object):
             info('MySQL table checking failure: %s' % e)
             return 0
 
-    def dropTable(self, table_name):
+    def drop_table(self, table_name):
         try:
-            sql = "drop table {0}".format(table_name)
+            sql = "drop table if exists {0}".format(table_name)
             self.cs.execute(sql)
             self.db.commit()
         except Exception as e:
             info('MySQL table dropping failure: %s' % e)
             return 0
 
+
 if __name__ == '__main__':
-    ms = MySQLBase('stock', mydecrypt(encode),'finance')
+    ms = MySQLBase('stock', mydecrypt(encode), 'finance')
     print(ms)
