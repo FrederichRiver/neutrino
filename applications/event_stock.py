@@ -2,11 +2,11 @@
 
 """
 Geschafen im Feb 17, 2019
-Verfasst von Friederich Fluss
 Version
 v1.0.1, Feb 17, 2019, First released.
 """
 __version__ = '1.0.1-dev'
+__author__ = 'Friederich Fluss'
 from libstock_dev import *
 
 
@@ -64,9 +64,36 @@ class EventRecordStock(StockEventBase):
 
 
 class downloadStockData(StockEventBase):
+    def __init__(self):
+        super(downloadStockData, self).__init__()
+        self.url = 'test'
     def get_stock_list(self):
         index_list = self.finance.select_values('stock_index', 'stock_code')
         return index_list
+    def get_url(self):
+        self.url = readurl('url_ne_stock')
+    def ne_index(self, index: str) -> str:
+        if index[0:2] == 'SH':
+            return index.replace('SH', '0')
+        elif index[0:2] == 'SZ':
+            return index.replace('SZ', '1')
+        else:
+            return None
+    def download(self, code):
+        start_time = '19901219'
+        end_time = self.today.replace('-', '')
+        t = self.ne_index(code)
+        url = self.url.format(t, start_time, end_time )
+        print(url)
+        result = opencsv(url, 'gb18030')
+        self.queue.append(result)
+    def run(self):
+        self.get_url()
+        stock_list = self.get_stock_list()
+        for stock in stock_list[:6]:
+            self.download(stock)
+        print(len(self.queue))
+
     '''
     generate url
     read url
@@ -78,6 +105,7 @@ class downloadStockData(StockEventBase):
 
 
 if __name__ == '__main__':
-    # for stock in x:
-    #    del_stock(stock, serv)
-
+    x = downloadStockData()
+    x.get_url()
+    print(x.url)
+    x.run()
