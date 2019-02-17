@@ -1,8 +1,5 @@
 #!/usr/bin/python3
-from libencrypt import mydecrypt
-import sys
-import pymysql
-'''
+"""
 Geschafen im Aug 31, 2017
 
 Verfasst von Friederich Fluss
@@ -15,7 +12,7 @@ v1.0.2-stable: Add new function TABLEEXIST.
 v2.0.3-dev: Complete funcions of mysql.
 v2.0.4-dev: Modify some bug, using encrypt pw.
 v2.0.5-dev: Fix bug. drop table -> drop table if exists.
-'''
+"""
 
 """
 X2.exit
@@ -30,9 +27,14 @@ X10.select now
 25.rename table
 26.database backup
 """
+import sys
 sys.path.append('..')
+from applications.libencrypt import mydecrypt
+from applications.libbase import info, warning, err
+import pymysql
+
 __version__ = '2.0.5-dev'
-encode = 'wAKO0tFJ8ZH38RW4WseZnQ=='
+#encode = 'wAKO0tFJ8ZH38RW4WseZnQ=='
 
 
 class MySQLBase(object):
@@ -69,13 +71,14 @@ class MySQLBase(object):
             return 0
 
     def create_table(self, tabName, content):
-        sql = 'create table if not exists {0} {1}'.format(
+        sql = 'create table if not exists {0} ({1})'.format(
             tabName, content)
         try:
             self.cs.execute(sql)
             self.db.commit()
             return 1
         except Exception as e:
+            err(sql)
             info('MySQL table creation failure: %s' % e)
             return 0
 
@@ -109,6 +112,7 @@ class MySQLBase(object):
             self.db.commit()
             return 1
         except Exception as e:
+            err(sql)
             info('MySQL inserting failure: %s' % e)
             return 0
 
@@ -249,7 +253,6 @@ class MySQLBase(object):
         except Exception as e:
             info('MySQL table dropping failure: %s' % e)
             return 0
-
 
 if __name__ == '__main__':
     ms = MySQLBase('stock', mydecrypt(encode), 'finance')
