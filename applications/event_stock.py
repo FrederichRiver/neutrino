@@ -3,9 +3,11 @@
 """
 Geschafen im Feb 17, 2019
 Version
-v1.0.1, Feb 17, 2019, First released.
+v1.0.1-dev, Feb 17, 2019, First released.
+v1.0.2-beta, Feb 18, 2019, Now can download stock data and record into
+database.
 """
-__version__ = '1.0.1-dev'
+__version__ = '1.0.2-beta'
 __author__ = 'Friederich Fluss'
 from libstock_dev import *
 
@@ -68,7 +70,8 @@ class downloadStockData(StockEventBase):
         super(downloadStockData, self).__init__()
         self.url = 'test'
     def get_stock_list(self):
-        index_list = self.finance.select_values('stock_index', 'stock_code')
+        index_list = self.finance.select_values(
+                'stock_index', 'stock_code')
         return index_list
     def get_url(self):
         self.url = readurl('url_ne_stock')
@@ -86,14 +89,54 @@ class downloadStockData(StockEventBase):
         url = self.url.format(t, start_time, end_time )
         print(url)
         result = opencsv(url, 'gb18030')
-        self.queue.append(result)
+        return result
     def run(self):
         self.get_url()
         stock_list = self.get_stock_list()
         for stock in stock_list[:6]:
-            self.download(stock)
-        print(len(self.queue))
+            print(stock[0])
+            data = self.download(stock[0])
+            if len(data):
+                data.replace('None', 0.0)
+                self.analysis(data, stock[0])
 
+    def analysis(self, data, code):
+        data.replace('None', 0.0)
+        
+        for i in range(0, data.shape[0])[::-1]:
+            temp = self.stock.select_values(
+                    code, '*', 
+                    "trade_date='%s'" % data.iloc[i,0])
+            if temp == ():
+                columns = 'trade_date,close_price,\
+                            high_price,low_price,\
+                            open_price,gestern_preis,\
+                            amplitude,volume,value'
+                content ="'{0}','{1}','{2}','{3}',\
+                            '{4}','{5}','{6}','{7}',\
+                            '{8}'".format(data.iloc[i,0],
+                                data.iloc[i,3],data.iloc[i,4],
+                                data.iloc[i,5],data.iloc[i,6],
+                                data.iloc[i,7],data.iloc[i,9],
+                                data.iloc[i,10],data.iloc[i,11])
+                self.stock.insert_value(code, columns, content)
+            else:
+                columns = 'close_price,\
+                            high_price,low_price,\
+                            open_price,gestern_preis,\
+                            amplitude,volume,value'
+                content ="'{0}','{1}','{2}','{3}',\
+                            '{4}','{5}','{6}','{7}'".format(
+                                data.iloc[i,3],data.iloc[i,4],
+                                data.iloc[i,5],data.iloc[i,6],
+                                data.iloc[i,7],data.iloc[i,9],
+                                data.iloc[i,10],data.iloc[i,11])
+                self.stock.update_table(code, content,
+                        "trade_date='%s'"% data.iloc[i,0])
+            self.finance.update_table(
+                'stock_index',
+                "gmt_modified='%s'" % data.iloc[i,0],
+                "stock_code='%s'" % code)
     '''
     generate url
     read url
