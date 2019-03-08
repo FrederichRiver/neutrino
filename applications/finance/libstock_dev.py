@@ -9,7 +9,7 @@ v1.2.5, Feb 17, 2019, build class stockeventbase, not perfect.
 """
 import sys
 sys.path.append('..')
-from mysql.libmysql8_dev import MySQLBase
+from applications.mysql.libmysql8_dev import MySQLBase
 from datetime import *
 __version__ = '1.2.4-dev'
 """
