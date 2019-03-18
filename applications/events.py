@@ -20,10 +20,11 @@ url = 'http://www.shibor.org/shibor/web/html/downLoad.html?nameNew=Historical_Sh
 
 
 class EventStockPrice(StockEventBase):
-    def run(self):
-        prices = self.stock.select_values('SH600000','close_price')
-        result = pd.DataFrame(list(prices))
-        return result
+    def run(self, code, field):
+        prices = self.stock.select_values(code, field)
+        df = pd.DataFrame(list(prices), columns=field.split(','))
+        return df
+
 class EventRecordStock(StockEventBase):
     """
     a pool managed by the class
