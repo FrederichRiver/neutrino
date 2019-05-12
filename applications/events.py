@@ -25,6 +25,7 @@ class EventStockPrice(StockEventBase):
         df = pd.DataFrame(list(prices), columns=field.split(','))
         return df
 
+
 class EventRecordStock(StockEventBase):
     """
     a pool managed by the class
@@ -106,20 +107,22 @@ class EventDownloadStockData(StockEventBase):
         end_time = self.today.replace('-', '')
         t = self.ne_index(code)
         url = self.url.format(t, start_time, end_time)
-        print(url)
+        #print(url)
         result = opencsv(url, 'gb18030')
         return result
 
     def start_time(self, code):
-        t = self.finance.select_values('stock_index', 'gmt_modified', "stock_code ='{0}'".format(code))
+        t = self.finance.select_values(
+            'stock_index', 'gmt_modified', "stock_code ='{0}'".format(code))
         if t:
             if t[0][0]:
                 result = t[0][0].strftime('%Y%m%d')
             else:
                 result = '19901219'
         else:
-                result = '19901219'
+            result = '19901219'
         return result
+
     def run(self):
         self.get_url()
         stock_list = self.get_stock_list()
@@ -185,27 +188,27 @@ class EventRecordShibor(StockEventBase):
             url_new = url.format(year)
             req = requests.get(url_new)
             result = pd.read_excel(url_new)
-            #print(result.iloc[1,0].strftime('%Y-%m-%d'))
+            # print(result.iloc[1,0].strftime('%Y-%m-%d'))
             self.record_shibor(result)
 
     def record_shibor(self, df):
         for i in range(0, df.shape[0])[::-1]:
             dt = df.iloc[i, 0].strftime('%Y-%m-%d')
             if self.shibor.select_values('shibor',
-                '*', "release_date='%s'" % dt) == ():
+                                         '*', "release_date='%s'" % dt) == ():
                 try:
                     columns = 'release_date, overnight,\
                     1W,2W,1M,3M,6M,9M,1Y'
                     content = "'{0}','{1}','{2}','{3}','{4}',\
                     '{5}','{6}','{7}','{8}'"
                     content = content.format(
-                            dt, df.iloc[i, 1],
-                            df.iloc[i, 2], df.iloc[i, 3],
-                            df.iloc[i, 4], df.iloc[i, 5],
-                            df.iloc[i, 6], df.iloc[i, 7],
-                            df.iloc[i, 8])
+                        dt, df.iloc[i, 1],
+                        df.iloc[i, 2], df.iloc[i, 3],
+                        df.iloc[i, 4], df.iloc[i, 5],
+                        df.iloc[i, 6], df.iloc[i, 7],
+                        df.iloc[i, 8])
                     self.shibor.insert_value('shibor',
-                            columns, content)
+                                             columns, content)
                 except Exception as e:
                     err('Inserting err when fetching shibor: %s' % e)
             else:
@@ -214,21 +217,20 @@ class EventRecordShibor(StockEventBase):
                     content = "'{0}','{1}','{2}','{3}','{4}',\
                             '{5}','{6}','{7}'"
                     content = content.format(df.iloc[i, 1],
-                            df.iloc[i, 2], df.iloc[i, 3],
-                            df.iloc[i, 4], df.iloc[i, 5],
-                            df.iloc[i, 6], df.iloc[i, 7],
-                            df.iloc[i, 8])
+                                             df.iloc[i, 2], df.iloc[i, 3],
+                                             df.iloc[i, 4], df.iloc[i, 5],
+                                             df.iloc[i, 6], df.iloc[i, 7],
+                                             df.iloc[i, 8])
                 except Exception as e:
-                    err('Updateing err when fetching shibor: %s'% e)
+                    err('Updating err when fetching shibor: %s' % e)
+
 
 if __name__ == '__main__':
-    #time.sleep(3)
     print('start!')
     #y = EventRecordStock()
-    #y.run()
+    # y.run()
     x = EventDownloadStockData()
     x.get_url()
-    #x.start_time('SH600072')
     x.run()
     #shibor = EventRecordShibor()
-    #shibor.run()
+    # shibor.run()

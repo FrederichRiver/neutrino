@@ -28,7 +28,7 @@ ma12 = functools.partial(ma, n=12)
 ma26 = functools.partial(ma, n=26)
 
 def ema(df, n):
-    df['%dema'%n] = pd.ewma(df['close_price'], span=n)
+    df['%dema'%n] = df['close_price'].ewm(span=n).mean()
     return df.fillna(0.0)
 ema12 = functools.partial(ema, n=12)
 ema26 = functools.partial(ema, n=26)
@@ -42,6 +42,13 @@ def MACD(df):
     df['MACD']=df['12ema']-df['26ema']
     return df
 
+class filter(object):
+    def __init__(self):
+        pass
+    def run(self):
+        pass
+
+
 if __name__ == '__main__':
     fd = financeData()
     t = fd._get_stock_data('SH600001', 'close_price, open_price, high_price, low_price')
@@ -50,6 +57,5 @@ if __name__ == '__main__':
     print(ma(t,7))
     print(ma26(t))
 
-    #ema(t,12)
-    #ema(t,26)
     print(MACD(t))
+

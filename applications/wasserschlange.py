@@ -15,10 +15,10 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 from data_feature import financeData, ma, ma26, MACD
 import pywt
-input_size = 9
+input_size = 4
 hidden_size = 4*input_size
-seq_len = 15
-batch_size = 20
+seq_len = 10
+batch_size = 1
 
 
 def wavelet_nr(df):
@@ -46,29 +46,37 @@ class LSTM101(nn.Module):
         self.lstm2 = nn.LSTM(hidden_size,
                              hidden_size,
                              batch_first=True)
+        self.lstm3 = nn.LSTM(hidden_size,
+                             hidden_size,
+                             batch_first=True)
+
         w1 = torch.zeros(1, batch_size, hidden_size)
         h1 = torch.zeros(1, batch_size, hidden_size)
         w2 = torch.zeros(1, batch_size, hidden_size)
         h2 = torch.zeros(1, batch_size, hidden_size)
+        w3 = torch.zeros(1, batch_size, hidden_size)
+        h3 = torch.zeros(1, batch_size, hidden_size)
         c1 = torch.zeros(1, batch_size, hidden_size)
         c2 = torch.zeros(1, batch_size, hidden_size)
+        c3 = torch.zeros(1, batch_size, hidden_size)
 
         nn.init.xavier_uniform_(w1, 1)
         nn.init.xavier_uniform_(h1, 1)
         nn.init.xavier_uniform_(w2, 1)
         nn.init.xavier_uniform_(h2, 1)
+        nn.init.xavier_uniform_(w3, 1)
+        nn.init.xavier_uniform_(h3, 1)
         self.predict = nn.Linear(hidden_size, 1)
         self.hidden = (h1, c1)
         self.hidden2 = (h2, c2)
-
-    def init_hidden():
-        pass
+        self.hidden3 = (h3, c3)
 
     def forward(self, x):
         _out, _ = self.lstm(x, self.hidden)
-        _out2, _ = self.lstm2(_out, self.hidden2)
-        _out3 = self.predict(_out2)
-        return _out3
+        #_out2, _ = self.lstm2(_out, self.hidden2)
+        #_out3, _ = self.lstm3(_out2, self.hidden3)
+        _out4 = self.predict(_out)
+        return _out4
 
 
 class trainSet2(Dataset):
@@ -88,10 +96,9 @@ class trainSet2(Dataset):
         n = int(len(x)/(self.seq_len+1))
         for i in range(n):
             t = i * self.seq_len
-            # print(t)
-            self.data.append(x[t:t+self.seq_len-1, :-1])
+            self.data.append(x[t:t+self.seq_len-1, :4])
             self.label.append(x[t+1:t+self.seq_len, -1])
-        # print(self.data)
+        # print(self.data[0],self.label[0])
         return self.data, self.label
 
 
@@ -102,13 +109,13 @@ def get_stock_data(stock_code):
     """
     n = input_size
     fd = financeData()
-    EPOCH = 100
     prices = fd._get_stock_data(stock_code,
                                 'close_price, open_price, high_price, low_price')
     prices = ma(prices, 7)
     prices = ma26(prices)
     prices = MACD(prices)
     prices['result'] = prices['close_price'].shift(-1)
+    # print(prices.head)
     return prices
 
 
@@ -132,6 +139,7 @@ def data_get():
 
 
 def training(model, t):
+    import time
     for param in model.parameters():
         param.requires_grad = True
     model.train(mode=True)
@@ -142,8 +150,7 @@ def training(model, t):
                             shuffle=True,
                             drop_last=True)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    basetime = time.time()
-    EPOCH = 100
+    EPOCH = 20
     for epoch in range(EPOCH):
         for step, (x, y) in enumerate(train_data):
             result = model(x)

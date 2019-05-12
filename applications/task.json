@@ -1,0 +1,14 @@
+[
+    {
+        "task": "download",
+        "day of week":"sat,sun"
+    },
+    {
+        "task":"analysis",
+        "hour":19
+    },
+    {
+        "task": "test",
+        "wront": "wrong value"
+    }
+]

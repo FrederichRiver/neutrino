@@ -22,13 +22,13 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from threading import Thread
 import message as msg
 
-__version__ = '1.1.4'
+__version__ = '1.1.5'
 
 
-def daemonize(pid_file, log_file):
+def neutrino(pid_file, log_file):
     # fork a sub process from father
     if os.path.exists(pid_file):
-        raise RuntimeError('Already running')
+        raise RuntimeError('Neutrino is already running')
     try:
         if os.fork() > 0:
             raise SystemExit(0)
@@ -93,18 +93,18 @@ def logMonitor(log_file):
                 os.dup2(error_null.fileno(), sys.stderr.fileno())
 
             sys.stdout.write(
-                'Daemon started with pid {}\n'.format(os.getpid()))
+                'Neutrino started with pid {}\n'.format(os.getpid()))
 
 
 def main_function():
-    sys.stdout.write('Daemon started with pid {}\n'.format(os.getpid()))
+    sys.stdout.write('Neutrino started with pid {}\n'.format(os.getpid()))
 
     tasksched = BackgroundScheduler()
     tasksched.start()
     tasksched.add_job(test, 'interval', seconds=1.0)
 
     while True:
-        sys.stdout.write('{} Daemon Alive!\n'.format(time.ctime()))
+        sys.stdout.write('{} Neutrino is alive!\n'.format(time.ctime()))
         time.sleep(10)
 
 
@@ -126,26 +126,26 @@ def test(x, y):
 
 
 if __name__ == '__main__':
-    LOG_FILE = '/tmp/daemon.log'
-    PID_FILE = '/tmp/daemon.pid'
+    LOG_FILE = '/tmp/neutrino.log'
+    PID_FILE = '/tmp/neutrino.pid'
+    TASK_FILE = 'task.json'
     if len(sys.argv) != 2:
         print(msg.DAEMON_MSG.format(sys.argv[0]))
         raise SystemExit(1)
     if sys.argv[1] == 'start':
         try:
-            daemonize(PID_FILE, LOG_FILE)
+            neutrino(PID_FILE, LOG_FILE)
             sys.stdout.write(msg.DAEMON_START.format(os.getpid()))
         except RuntimeError as e:
-            print(e, file=sys.stderr)
             raise SystemExit(1)
         # working code is added here.
         lm = Thread(target=logMonitor, args=(LOG_FILE,), name='lm', daemon=True)
         lm.start()
         while True:
-            readTaskPlan()
+            readTaskPlan(TASK_FILE)
             sys.stdout.write(msg.DAEMON_ALIVE.format(time.ctime()))
             # run task sequence
-            time.sleep(10)
+            time.sleep(1800)
         # ending of working code.
 
     elif sys.argv[1] == 'stop':
@@ -163,11 +163,19 @@ if __name__ == '__main__':
         os.system('rm %s' % LOG_FILE)
     elif sys.argv[1] == 'help':
         helptext = ''
-        with open('Config/daemonhelp', 'r') as r:
+        with open('config/neutrino', 'r') as r:
             helptext = r.read()
         print(helptext)
+    elif sys.argv[1] == 'log':
+        logtext = []
+        with open(LOG_FILE, 'r') as r:
+            line = r.readline()
+            while line:
+                logtext.append( r.readline())
+                line = r.readline()
+        print(logtext)
     elif sys.argv[1] == 'version':
-        pass
+        print(__version__)
     else:
-        print('Unknown command {!r}'.format(sys.argv[1]), file=sys.stderr)
+        print('Unknown command {!r}'.format(sys.argv[1]))
         raise SystemExit(1)
