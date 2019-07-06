@@ -47,9 +47,9 @@ def neutrino(pid_file, log_file):
     # Flush I/O buffers
     sys.stdout.flush()
     sys.stderr.flush()
-    
-    #with open(log_file, 'rb', 0) as read_null:
-        #os.dup2(read_null.fileno(), sys.stdin.fileno())
+
+    # with open(log_file, 'rb', 0) as read_null:
+    #os.dup2(read_null.fileno(), sys.stdin.fileno())
     with open(log_file, 'ab', 0) as write_null:
         os.dup2(write_null.fileno(), sys.stdout.fileno())
     with open(log_file, 'ab', 0) as error_null:
@@ -109,7 +109,7 @@ def main_function():
 
 
 def readTaskPlan(task_file):
-    task_file = 'home/frederich/Documents/dev/neutrino/applications/task.json'
+    # task_file = 'home/friederich/Documents/dev/neutrino/applications/task.json'
     if os.path.exists(task_file):
         sys.stdout.write('{}\n'.format(time.ctime()))
     else:
@@ -117,8 +117,7 @@ def readTaskPlan(task_file):
             '{0} Task plan file {1} is not found.\n'.format(
                 time.ctime(),
                 task_file)
-            )
-
+        )
 
 
 def test(x, y):
@@ -128,7 +127,7 @@ def test(x, y):
 if __name__ == '__main__':
     LOG_FILE = '/tmp/neutrino.log'
     PID_FILE = '/tmp/neutrino.pid'
-    TASK_FILE = 'task.json'
+    TASK_FILE = 'home/friederich/Documents/dev/neutrino/applications/task.json'
     if len(sys.argv) != 2:
         print(msg.DAEMON_MSG.format(sys.argv[0]))
         raise SystemExit(1)
@@ -139,7 +138,8 @@ if __name__ == '__main__':
         except RuntimeError as e:
             raise SystemExit(1)
         # working code is added here.
-        lm = Thread(target=logMonitor, args=(LOG_FILE,), name='lm', daemon=True)
+        lm = Thread(target=logMonitor, args=(
+            LOG_FILE,), name='lm', daemon=True)
         lm.start()
         while True:
             readTaskPlan(TASK_FILE)
@@ -163,7 +163,7 @@ if __name__ == '__main__':
         os.system('rm %s' % LOG_FILE)
     elif sys.argv[1] == 'help':
         helptext = ''
-        with open('config/neutrino', 'r') as r:
+        with open('config/Neutrino', 'r') as r:
             helptext = r.read()
         print(helptext)
     elif sys.argv[1] == 'log':
@@ -171,7 +171,7 @@ if __name__ == '__main__':
         with open(LOG_FILE, 'r') as r:
             line = r.readline()
             while line:
-                logtext.append( r.readline())
+                logtext.append(r.readline())
                 line = r.readline()
         print(logtext)
     elif sys.argv[1] == 'version':
