@@ -7,8 +7,18 @@ Version
 v1.1.4, Feb 13, 2019, rebuild this lib.
 v1.2.5, Feb 17, 2019, build class stockeventbase, not perfect.
 """
-from datetime import *
+from datetime import datetime
 __version__ = '1.2.4-dev'
+
+
+class StockEventBase(object):
+    def __init__(self):
+        self.queue = []
+        self.code = {}
+        self.today = datetime.now().strftime('%Y-%m-%d')
+
+    def __repr__(self):
+        return self.today
 
 
 def create_stock_list(flag='all'):
@@ -65,16 +75,6 @@ def create_stock_list(flag='all'):
     else:
         pass
     return indices
-
-
-class StockEventBase(object):
-    def __init__(self):
-        self.queue = []
-        self.code = {}
-        self.today = datetime.now().strftime('%Y-%m-%d')
-
-    def __repr__(self):
-        return self.today
 
 
 if __name__ == '__main__':

@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 import json
-from datetime import *
+import logging
+from datetime import datetime
 from pandas import read_csv
+
 
 def readurl(url):
     with open('config/conf.json', 'r') as f:
@@ -18,19 +20,31 @@ def neteaseindex(code):
     return code
 
 
-def opencsv(url):
-    return read_csv(url)
+def opencsv(url, encoding):
+    return read_csv(url, encoding=encoding)
 
 
-def err(text):
-    pass
+def recordBase(text, level=logging.INFO):
+    logging.basicConfig(filename='neutrino.log',
+                        level=logging.INFO,
+                        filemode='a',
+                        format="%(asctime)s [%(levelname)s]: %(message)s",
+                        datefmt="%Y-%m-%d %H:%M:%S")
+    if level == logging.INFO:
+        logging.info(text)
+    elif level == logging.WARNING:
+        logging.warn(text)
+    elif level == logging.ERROR:
+        logging.error(text)
+
 
 def today():
-    td = datetime.now()
-    return td.strftime('%Y%m%d')
+    return datetime.now().strftime('%Y%m%d')
+
 
 if __name__ == '__main__':
-    # print(readurl('URL_163_MONEY'))
+    print(readurl('URL_163_MONEY'))
     print(neteaseindex('SZ002230'))
     print(neteaseindex('SH601818'))
     print(today())
+    recordBase('text')
