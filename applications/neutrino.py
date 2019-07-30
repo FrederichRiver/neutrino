@@ -11,22 +11,22 @@ v1.1.2: Add task/ delete task function.
 v1.1.3: Reading task plan file.
 Log is recorded into file /tmp/daemon.log
 v1.2.6: Some bugs are fixed.
+v1.3.7: Add task manager function.
 '''
+from task_manager import taskResolver
+import json
 import os
 import sys
 import atexit
 import signal
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.jobstores.memory import MemoryJobStore
-from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from threading import Thread
-from task_manager import event_task_resolve
 from message import DM_MSG, DM_ALIVE, DM_STOP, DM_NOT_RUN
 from message import DM_CHECK_TASK, DM_MISS_TASK
 from environment import LOG_FILE, PID_FILE, TASK_FILE, MANUAL
 from message import DM_START
-__version__ = '1.2.6'
+__version__ = '1.3.7'
 
 
 def neutrino(pid_file, log_file):
@@ -76,22 +76,7 @@ def neutrino(pid_file, log_file):
     signal.signal(signal.SIGTERM, sigterm_handler)
 
 
-def add_task(task_name, func, *arg):
-    sys.stdout.write('Add task {}\n'.format(task_name))
-
-    tasksched = BackgroundScheduler()
-    tasksched.start()
-    try:
-        tasksched.add_job(func, 'interval', seconds=1.0, args=(arg))
-    except Exception:
-        sys.stderr.write('{} e'.format(time.ctime()))
-
-
-def del_task(task_name):
-    sys.stdout.write('Delete task {}\n'.format(task_name))
-
-
-def logMonitor(log_file):
+def _logMonitor(log_file):
     # A parallel programe which monitoring the log file.
     # If log file is not exists, it will create one and
     # relocalize the file.
@@ -138,9 +123,15 @@ def check_task_plan(task_file):
         )
     return 1
 
+def analysis():
+    sys.stdout.write('analysis')
 
-def test(x, y):
-    sys.stdout.write('{}\n'.format(str(x)))
+def test():
+    sys.stdout.write('test')
+
+
+def test1():
+    sys.stdout.write('test1')
 
 
 if __name__ == '__main__':
@@ -158,18 +149,35 @@ if __name__ == '__main__':
             sys.stdout.flush()
         except Exception:
             raise SystemExit(1)
-        # working code is added here.
-        lm = Thread(target=logMonitor, args=(
-            LOG_FILE,), name='lm', daemon=True)
+        # Here we start a thread which monitoring the log
+        # file. If log file is missing, it will create one.
+        lm = Thread(target=_logMonitor,
+                    args=(LOG_FILE,),
+                    name='lm',
+                    daemon=True)
         lm.start()
+        tm = BackgroundScheduler()
+        tm.start
         while True:
+            # Checking the task file, if missing, programe 
+            # will send a warning.
             check_task_plan(TASK_FILE)
             sys.stdout.write(DM_ALIVE.format(time.ctime()))
             sys.stdout.flush()
             # run task sequence
-            time.sleep(10)
+            function_list = {'test': test, 'test1': test1}
+            tasksolver = taskResolver(function_list)
+            # From a task file, we solve the task and send
+            # them to the scheduler. The Scheduler will add
+            # jobs into a sequence to be executed.
+            with open(TASK_FILE, 'r') as js:
+                load_dist = json.load(js)
+                result = tasksolver.task_resolve(load_dist)
+            for j, t in result.items():
+                tm.add_job(j, t)
+            tm.print_jobs()
+            time.sleep(1800)
         # ending of working code.
-
     elif sys.argv[1] == 'stop':
         if os.path.exists(PID_FILE):
             sys.stdout.flush()
