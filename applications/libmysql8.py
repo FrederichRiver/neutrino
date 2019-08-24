@@ -19,22 +19,30 @@ from sqlalchemy.orm import sessionmaker
 
 class mysqlBase(object):
     def __init__(self, header):
-        DB_STRING = f"mysql+pymysql://{header.account}:"
-        DB_STRING += f"{header.password}"
-        DB_STRING += f"@{header.host}:{header.port}"
-        DB_STRING += f"/{header.database}"
+        DB_STRING = (f"mysql+pymysql://{header.account}:"
+                     f"{header.password}"
+                     f"@{header.host}:{header.port}"
+                     f"/{header.database}")
         self.engine = create_engine(DB_STRING, echo=False)
         DB_session = sessionmaker(bind=self.engine)
         self.session = DB_session()
-        self.ident = f"mysql engine <{header.account}@{header.host}>"
+        self.ident = (f"mysql engine <{header.account}"
+                      f"@{header.host}>")
 
     def __repr__(self):
         return self.ident
 
 
+def _drop_all(base, engine):
+    # This will drop all tables in database.
+    # It is a private method only for maintance.
+    base.metadata.drop_all(engine)
+
+
 class mysqlHeader(object):
     """ Here defines the parameters passed into mysql engine.
     """
+
     def __init__(self, acc, pw, db,
                  host='localhost', port=3306, charset='utf8'):
         self.account = acc
@@ -55,22 +63,14 @@ def create_table_from_table(name, tableName, engine):
     Base = declarative_base()
     Base.metadata.reflect(engine)
     table = Base.metadata.tables[tableName]
+    # Extract sql from the template table.
     c = str(CreateTable(table))
     c = c.replace("CREATE TABLE", "CREATE TABLE if not exists")
     sql = c.replace(tableName, name)
+    # Execute the sql.
     engine.connect().execute(sql)
     engine.connect().close()
     Base.metadata.clear()
-
-
-def create_table(base, engine):
-    base.metadata.create_all(engine)
-
-
-def _drop_all(base, engine):
-    # This will drop all tables in database.
-    # It is a private method only for maintance.
-    base.metadata.drop_all(engine)
 
 
 if __name__ == '__main__':
