@@ -23,7 +23,9 @@ class mysqlBase(object):
                      f"{header.password}"
                      f"@{header.host}:{header.port}"
                      f"/{header.database}")
-        self.engine = create_engine(DB_STRING, echo=False)
+        self.engine = create_engine(DB_STRING,
+                encoding='utf8',
+                echo=False)
         DB_session = sessionmaker(bind=self.engine)
         self.session = DB_session()
         self.ident = (f"mysql engine <{header.account}"
