@@ -1,0 +1,5 @@
+{
+	"SQL_w_share":"f'INSERT INTO {table_name} (report_date, year, bonus, increase, dividend, record_date, xrdr_date, share_date) VALUES (`{report_date}`, {year}, {bonus}, {increase}, {dividend}, `{record_date}`, `{xrdr}`, `{share}`)'",
+	"SQL_wo_share":"f'INSERT INTO {table_name} (report_date, year, bonus, increase, dividend, record_date, xrdr_date) VALUES (`{report_date}`, {year}, {bonus}, {increase}, {dividend}, `{record_date}`, `{xrdr}`)'"
+	
+}

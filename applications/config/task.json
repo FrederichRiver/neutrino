@@ -1,0 +1,14 @@
+[
+    {
+        "task": "test",
+        "day of week":"sat,sun"
+    },
+    {
+        "task":"test1",
+        "hour":"21"
+    },
+    {
+        "task": "test1",
+        "wrong": "wrong value"
+    }
+]

@@ -16,25 +16,58 @@ import requests
 from env import TIME_FMT
 from utils import read_url, neteaseindex, today, info, error
 from lxml import etree
-from libmysql8 import mysqlBase, mysqlHeader, create_table_from_table
+from libmysql8 import (mysqlBase, mysqlHeader,
+                       create_table_from_table)
 from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 
-__version__ = '1.2.7-dev'
+__version__ = '1.2.8-dev'
 
 
 class StockEventBase(object):
-    def __init__(self):
+    def __init__(self, header):
         self.queue = []
         self.code = {}
         self.today = datetime.now().strftime(TIME_FMT)
+        self.mysql = mysqlBase(header)
+        self.stock_list = []
+        self.security_list = []
 
     def __repr__(self):
-        return self.today
+        return self.mysql.ident
+
+    def fetch_all_stock_list(self):
+        self.stock_list = []
+        result = self.mysql.session.query(
+            formStockList.stock_code, formStockList.flag).all()
+        for dataline in result:
+            if dataline[0] and dataline[1] == 'stock':
+                self.stock_list.append(dataline[0])
+        return self.stock_list
+
+    def fetch_all_security_list(self):
+        # Return all kinds of securities in form stock list.
+        self.security_list = []
+        result = self.mysql.session.query(
+            formStockList.stock_code).all()
+        for dataline in result:
+            if dataline[0]:
+                self.security_list.append(dataline[0])
+        return self.security_list
+
+    def fetch_no_flag_stock(self):
+        result = self.mysql.session.query(
+            formStockList.stock_code).all()
+        stock_list = []
+        for stock in result:
+            if stock[0]:
+                stock_list.append(stock[0])
+        return stock_list
 
 
 def fetch_all_stock_list(engine):
+    # delete after tested.
     result = engine.session.query(
         formStockList.stock_code, formStockList.flag).all()
     stock_list = []
@@ -45,7 +78,7 @@ def fetch_all_stock_list(engine):
 
 
 def fetch_all_security_list(engine):
-    # Return all kinds of securities in form stock list.
+    # delete after tested.
     result = engine.session.query(
         formStockList.stock_code).all()
     stock_list = []
@@ -234,6 +267,20 @@ def event_create_interest_table():
                                 'template_stock_interest', stock.engine)
     return 1
 
+
+class EventCreateInterestTable(StockEventBase):
+    def create_interest_table(self):
+        from form import formInterest
+        self.fetch_all_stock_list()
+        for stock_code in self.stock_list:
+            create_table_from_table(f"{stock_code}_interest",
+                                    formInterest.__tablename__,
+                                    self.mysql.engine)
+
+class EventRecordInterest(StockEventBase):
+    def record_interest(self):
+        self.fetch_all_stock_list()
+        for
 
 def event_record_interest():
     header = mysqlHeader('root', '6414939', 'test')

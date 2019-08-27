@@ -9,11 +9,15 @@ def event_initial_database():
     stock = mysqlBase(header)
     create_table(formTemplate, stock.engine)
 
-# event back up 
+# event back up
+
+
 def event_database_backup():
     pass
 
 # modify tables batchly
+
+
 def table_batch_modify():
     pass
 

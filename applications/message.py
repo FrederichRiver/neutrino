@@ -1,6 +1,7 @@
-DAEMON_MSG = "neutrino start|stop|help"
-DAEMON_START = "Neutrino id is {0}\n"
-DAEMON_ALIVE = "{0}: neutrino is already running.\n"
-DAEMON_STOP = "{0}: neutrino is stopped.\n"
-DAEMON_NOT_RUN = "neutrino is not running.\n"
-
+DM_MSG = "neutrino start|stop|help"
+DM_START = "{t}: Neutrino id is {pid}.\n"
+DM_ALIVE = "{0}: Neutrino is running.\n"
+DM_STOP = "{0}: Neutrino is stopped.\n"
+DM_NOT_RUN = "Neutrino is not running.\n"
+DM_CHECK_TASK = "{}: Checking task file.\n"
+DM_MISS_TASK = "{}: Task plan file is not found.\n"

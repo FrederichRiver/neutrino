@@ -24,8 +24,8 @@ class mysqlBase(object):
                      f"@{header.host}:{header.port}"
                      f"/{header.database}")
         self.engine = create_engine(DB_STRING,
-                encoding='utf8',
-                echo=False)
+                                    encoding='utf8',
+                                    echo=False)
         DB_session = sessionmaker(bind=self.engine)
         self.session = DB_session()
         self.ident = (f"mysql engine <{header.account}"
@@ -53,6 +53,10 @@ class mysqlHeader(object):
         self.host = host
         self.port = port
         self.charset = 'utf8'
+
+
+def create_table(table, engine):
+    table.metadata.create_all(engine)
 
 
 def create_table_from_table(name, tableName, engine):
