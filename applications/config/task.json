@@ -1,14 +1,15 @@
 [
     {
-        "task": "test",
-        "day of week":"sat,sun"
-    },
-    {
-        "task":"test1",
+        "task":"event_create_interest_table",
         "hour":"21"
     },
-    {
-        "task": "test1",
-        "wrong": "wrong value"
-    }
+	{
+		"task":"event_init_stock",
+		"hour":"19"
+	},
+	{
+		"task": "event_download_stock_data",
+		"hour": "20"
+	}
+
 ]

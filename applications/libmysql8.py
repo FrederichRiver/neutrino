@@ -10,7 +10,7 @@ v3.1.7-beta: Modified definition of mysqlBase, use strctural object to
             pass parameters.
 """
 
-__version__ = '3.1.7-beta'
+__version__ = '3.1.8'
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
@@ -28,11 +28,12 @@ class mysqlBase(object):
                                     echo=False)
         DB_session = sessionmaker(bind=self.engine)
         self.session = DB_session()
-        self.ident = (f"mysql engine <{header.account}"
-                      f"@{header.host}>")
+        self.ident_string = (
+            f"mysql engine <{header.account}"
+            f"@{header.host}>")
 
-    def __repr__(self):
-        return self.ident
+    def __str__(self):
+        return self.ident_string
 
 
 def _drop_all(base, engine):
@@ -73,6 +74,7 @@ def create_table_from_table(name, tableName, engine):
     c = str(CreateTable(table))
     c = c.replace("CREATE TABLE", "CREATE TABLE if not exists")
     sql = c.replace(tableName, name)
+    # print(sql)
     # Execute the sql.
     engine.connect().execute(sql)
     engine.connect().close()

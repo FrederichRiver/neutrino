@@ -26,12 +26,12 @@ class formInterest(formTemplate):
 class formStockList(formTemplate):
     __tablename__ = 'stock_list'
     stock_code = Column(String(10), primary_key=True)
-    stock_name = Column(String(10))
+    stock_name = Column(String(20))
     gmt_create = Column(Date)
     gmt_modified = Column(Date)
     flag = Column(String(10))
 
-    def __repr__(self):
+    def __str__(self):
         # Not tested.
         return (f"Stock<{self.stock_code},{self.tock_name}>"
                 "is created at {gmt_create}"
@@ -83,29 +83,4 @@ class formCurrencyFlow(formReportBase):
 
 
 if __name__ == '__main__':
-    from libmysql8 import MySQLBase, createTable
-    import pandas as pd
-    import json
-    from sqlalchemy.engine.url import URL as engine_url
-    from sqlalchemy import create_engine, MetaData
-    """
-    test = MySQLBase('root', '6414939', 'test')
-    createTable(formReport, test.engine)
-    url = 'http://quotes.money.163.com/service/xjllb_{0}.html'
-    url = url.format('600795')
-    r = pd.read_csv(url,
-                    header=None,
-                    encoding='gb18030')
-    r = r.drop(columns=[0])
-    result = pd.DataFrame(r.T, columns=r.index)
-    with open('./config/column_config.json', 'r') as js:
-        load_dist = json.load(js)
-
-    column_list = list(load_dist.values())
-
-    result.columns = column_list
-    result.set_index('c1_report_date', inplace=True)
-    # print(result.head(5))
-    lst = query_stock_list
-    print(lst)
-    """
+    pass

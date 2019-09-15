@@ -3,16 +3,6 @@
 '''
 Created on Mar 31, 2018
 @ Author: Frederich River
-@ Project: Proxima Centauri
-Daemon process of whole system.
-v1.0.0-stable: First released.
-v1.1.1-stable: Even log file is deleted, daemon can also run.
-v1.1.2: Add task/ delete task function.
-v1.1.3: Reading task plan file.
-Log is recorded into file /tmp/daemon.log
-v1.2.6: Some bugs are fixed.
-v1.3.7: Add task manager function.
-v1.4.8: Rebuild task manager and assembly it into neutrino.
 '''
 import atexit
 import os
@@ -29,7 +19,7 @@ from message import (DM_MSG, DM_START, DM_ALIVE, DM_STOP,
 from sqlalchemy.ext.declarative import declarative_base
 from threading import Thread
 
-__version__ = '1.4.7'
+__version__ = '1.4.8'
 
 
 def neutrino(pid_file, log_file):
@@ -93,14 +83,16 @@ def _logMonitor(log_file):
                 os.dup2(write_null.fileno(), 1)
             with open(log_file, 'a') as error_null:
                 os.dup2(error_null.fileno(), 2)
-
-            sys.stdout.write(
-                'Neutrino started with pid {}\n'.format(os.getpid()))
+            print(
+                f"{time.ctime()}: Log file is missing. Recreate it.\n"
+                f"{time.ctime()}: Neutrino started with pid {os.getpid()}\n")
 
 
 def main_function(taskfile=None):
     # judge whether the task file exists.
-    sys.stdout.write('Neutrino started with pid {}\n'.format(os.getpid()))
+    print(
+            f"{time.ctime()}: "
+            f"Neutrino started with pid {os.getpid()}\n")
     Base = declarative_base()
     header = mysqlHeader('root', '6414939', 'test')
     mysql = mysqlBase(header)
@@ -112,24 +104,12 @@ def main_function(taskfile=None):
                           jobstores=jobstores,
                           executors=executor)
     Neptune.start()
-
+    print(f"{time.ctime()}: Neptune start.\n")
     while True:
-        sys.stdout.write(DM_ALIVE.format(time.ctime()))
+        print(DM_ALIVE.format(time.ctime()))
         Neptune.check_task_file()
         time.sleep(1800)
     return 1
-
-
-def analysis():
-    sys.stdout.write('analysis')
-
-
-def test():
-    sys.stdout.write('test')
-
-
-def test1():
-    sys.stdout.write('test1')
 
 
 def print_info(info_file):
@@ -173,6 +153,33 @@ if __name__ == '__main__':
                 os.kill(int(f.read()), signal.SIGTERM)
         else:
             print(DM_NOT_RUN)
+            raise SystemExit(1)
+    elif sys.argv[1] == 'reboot':
+        if os.path.exists(PID_FILE):
+            sys.stdout.flush()
+            with open(LOG_FILE, 'a') as write_null:
+                os.dup2(write_null.fileno(), 1)
+                write_null.write(DM_STOP.format(time.ctime()))
+            with open(PID_FILE) as f:
+                os.kill(int(f.read()), signal.SIGTERM)
+        else:
+            print(DM_NOT_RUN)
+            raise SystemExit(1)
+        try:
+            neutrino(PID_FILE, LOG_FILE)
+            sys.stdout.write(DM_START.format(t=time.ctime(),
+                                             pid=os.getpid()))
+            sys.stdout.flush()
+            # Here we start a thread which monitoring the log
+            # file. If log file is missing, it will create one.
+            lm = Thread(target=_logMonitor,
+                        args=(LOG_FILE,),
+                        name='lm',
+                        daemon=True)
+            lm.start()
+            main_function(TASK_FILE)
+            # ending of working code.
+        except Exception:
             raise SystemExit(1)
     elif sys.argv[1] == 'clear':
         with open(LOG_FILE, 'w') as f:

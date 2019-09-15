@@ -8,30 +8,28 @@ import time
 from message import *
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from apscheduler.triggers.combining import AndTrigger, OrTrigger
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from libmysql8 import mysqlHeader, mysqlBase
-from sqlalchemy.ext.declarative import declarative_base
-from apscheduler.executors.pool import ThreadPoolExecutor
+from event import (event_record_stock, event_init_stock,
+                   event_download_stock_data,
+                   event_create_interest_table,
+                   event_record_interest)
 
 
 class taskManager(BackgroundScheduler):
     def __init__(self, taskfile=None, gconfig={}, **options):
-        """TODO: Docstring for __init__.
-
-        :taskfile: TODO
-        :gconfig: TODO
-        :**options: TODO
-        :returns: TODO
-
-        """
         super(BackgroundScheduler, self).__init__(
             gconfig=gconfig, **options)
-        self.func_list = {'test': test, 'test1': test1}
-        self.taskfile = taskfile
-        if not self.taskfile:
-            print('error')
-
+        if not taskfile:
+            sys.stdout.write(
+                f"{time.ctime()}: Task file is not found.")
+        else:
+            self.func_list = {
+                'event_record_stock': event_record_stock,
+                'event_init_stock': event_init_stock,
+                'event_download_stock_data': event_download_stock_data,
+                'event_create_interest_table': event_create_interest_table,
+                'event_record_interest': event_record_interest
+            }
+            self.taskfile = taskfile
 
     def task_resolve(self, jsdata):
         """
@@ -42,7 +40,12 @@ class taskManager(BackgroundScheduler):
         tasklist = {}
         for task in jsdata:
             # job_resolve
-            job = self.func_list[self.job_resolve(task)]
+            try:
+                job = self.func_list[self.job_resolve(task)]
+            except KeyError:
+                print(
+                    f"{time.ctime()}: "
+                    f"Job {self.job_resolve(task)} could not be found.")
             # trigger_resolve
             trigger = self.trigger_resolve(task)
             if job and trigger:
@@ -76,10 +79,10 @@ class taskManager(BackgroundScheduler):
     def check_task_file(self):
         # if task file not exist, send a warning.
         if os.path.exists(self.taskfile):
-            sys.stdout.write(DM_CHECK_TASK.format(time.ctime()))
+            print(DM_CHECK_TASK.format(time.ctime()))
             self.append_task()
         else:
-            sys.stdout.write(
+            print(
                 DM_MISS_TASK.format(
                     time.ctime(),
                     self.taskfile)
@@ -87,20 +90,30 @@ class taskManager(BackgroundScheduler):
 
     def append_task(self):
         # if exist, resolve the task file.
-        with open(self.taskfile, 'r') as js:
-            load_dict = json.load(js)
-            result = self.task_resolve(load_dict)
-        job_list = self.get_jobs()
-        jobexist = False
-        for (k, v) in result.items():
-            for job in job_list:
-                if k.__name__ == job.id:
-                    self.reschedule_job(k.__name__, trigger=v)
-                    jobexist = True
-            if not jobexist:
-                self.add_job(k, trigger=v, id=k.__name__)
+        try:
+            with open(self.taskfile, 'r') as js:
+                load_dict = json.load(js)
+                result = self.task_resolve(load_dict)
+            job_list = self.get_jobs()
             jobexist = False
+            for (k, v) in result.items():
+                for job in job_list:
+                    if k.__name__ == job.id:
+                        self.reschedule_job(k.__name__, trigger=v)
+                        jobexist = True
+                if not jobexist:
+                    self.add_job(k, trigger=v, id=k.__name__)
+                    print(f'add job {k.__name__}\n')
+                jobexist = False
+            self.task_report()
+        except Exception as e:
+            print("Append task error: ", e, '\n')
+
+    def task_report(self):
+        print('+-'*15)
         self.print_jobs()
+        print('+-'*15)
+
 
 class task(object):
     def __init__(self, func, trigger):
@@ -117,18 +130,5 @@ def test1():
 
 
 if __name__ == "__main__":
-    import os
-    Base = declarative_base()
-    header = mysqlHeader('root', '6414939', 'test')
-    mysql = mysqlBase(header)
-    jobstores = {'default': SQLAlchemyJobStore(
-        engine=mysql.engine,
-        metadata=Base.metadata)}
-    executor = {'default': ThreadPoolExecutor(20)}
-    task = taskManager(taskfile='config/task.json',
-                       jobstores=jobstores,
-                       executors=executor)
-    task.start()
-    task.check_task_file()
-
+    pass
     # task.add_job(test, 'interval', seconds=10, id='my_job')

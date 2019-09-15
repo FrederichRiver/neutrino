@@ -5,24 +5,68 @@
 		<meta name="viewport" content="width=device-width" />
 		<title>Guest_mail</title>
 		<style type="text/css">
-			table {background-color: #00cec9}
-			td {font-family: Helvetica;color: white;font-size: 15px}
-			p {font-family: Lato;color:black;font-size:15px;}
+			table.main_frame  {
+				background-color: #FFFFE0;
+				margin: 0 auto;
+				border-radius:.6em;
+				box-shadow: 5px 5px 3px #888888;
+			}
+			td {
+				color: black;
+				font-family: Helvetica;
+				font-size: 15px;
+			}
+			p {
+				font-family: Lato;
+				color:black;
+				font-size:15px;
+			}
+			table.report_table{
+				margin: 0 auto;
+				border: 1px none;
+			}
+			table.report_table.td{
+				color: black;
+					font-family: Helvetica;
+						font-size: 10px;
+			}
+			tr.lightcyan{
+				color:black;
+				background-color: #00CEC9;
+			}
+			tr.floralwhite{
+				color:black;
+				background-color: LightCyan;
+			}
 		</style>
 	</head>
 	<body>
-		<table>
+		<table cellpadding="20" width="600" class= "main_frame">
 			<tr>
 				<td>Dear my guest:<br/></td>
 			</tr>
 			<tr>
 				<td>
-					<div>This is the first mail I send by my quantitive trading system automaticly. <br/>
-					I will continue optimize my system to provide a better and better invest suggestion.<br/></div>
+					<div>This is the benifit of our investment. <br/></div>
 				</td>
 			</tr>
 			<tr>
-				<td>Friederich River</td>
+				<td>
+					<table class="report_table" width="95%">
+						<thead>
+							<tr class="lightcyan">
+								<th>month</th>
+								<th>benifit</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="floralwhite">
+								<td align="center">September</td>
+								<td align="center">2.1%</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
 			</tr>
 		</table>
 	</body>

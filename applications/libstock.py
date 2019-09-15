@@ -10,6 +10,7 @@ v1.2.5, Feb 17, 2019, build class stockeventbase, not perfect.
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import re
 import pandas as pd
 import talib as ta
 import requests
@@ -21,21 +22,31 @@ from libmysql8 import (mysqlBase, mysqlHeader,
 from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
-
+from enum import Enum
 __version__ = '1.2.8-dev'
 
 
+class SecurityFlag(Enum):
+    index = 0
+    stock = 1
+    fund = 2
+    future = 3
+
+
 class StockEventBase(object):
-    def __init__(self, header):
+    def __init__(self):
         self.queue = []
         self.code = {}
         self.today = datetime.now().strftime(TIME_FMT)
-        self.mysql = mysqlBase(header)
+        self.mysql = None
         self.stock_list = []
         self.security_list = []
 
     def __repr__(self):
         return self.mysql.ident
+
+    def _init_database(self, header):
+        self.mysql = mysqlBase(header)
 
     def fetch_all_stock_list(self):
         self.stock_list = []
@@ -66,125 +77,191 @@ class StockEventBase(object):
         return stock_list
 
 
-def fetch_all_stock_list(engine):
-    # delete after tested.
-    result = engine.session.query(
-        formStockList.stock_code, formStockList.flag).all()
-    stock_list = []
-    for dataline in result:
-        if dataline[0] and dataline[1] == 'stock':
-            stock_list.append(dataline[0])
-    return stock_list
+class codeFormat(object):
+    def __call__(self, stock_code):
+        if type(stock_code) == str:
+            stock_code = stock_code.upper()
+            if re.match(r'^[A-Z][A-Z]\d{6}', stock_code):
+                pass
+            elif re.match(r'(\d{6}).([A-Z][A-Z])\Z', stock_code):
+                result = re.match(r'(\d{6}).([A-Z][A-Z]\Z)', stock_code)
+                stock_code = result.group(2)+result.group(1)
+            else:
+                stock_code = None
+            return stock_code
+
+    def net_ease_code(self, stock_code):
+        stock_code = self.__call__(stock_code)
+        if type(stock_code) == str:
+            if stock_code[:2] == 'SH':
+                stock_code = '0' + stock_code[2:]
+            elif stock_code[:2] == 'SZ':
+                stock_code = '1' + stock_code[2:]
+            else:
+                stock_code = None
+        else:
+            stock_code = None
+        return stock_code
 
 
-def fetch_all_security_list(engine):
-    # delete after tested.
-    result = engine.session.query(
-        formStockList.stock_code).all()
-    stock_list = []
-    for dataline in result:
-        if dataline[0]:
-            stock_list.append(dataline[0])
-    return stock_list
+class EventCreateStockTable(StockEventBase):
+    def __init__(self):
+        super(StockEventBase, self).__init__()
+        self.coder = codeFormat()
 
+    def _get_file_from_net_ease(self, code):
+        url_ne_index = read_url('URL_163_MONEY')
+        query_code = self.coder.net_ease_code(code)
+        netease_stock_index_url = url_ne_index.format(
+            query_code, '19901219', today())
+        return pd.read_csv(netease_stock_index_url,
+                           encoding='gb18030')
 
-def fetch_no_flag_stock(mysql):
-    result = mysql.session.query(
-        formStockList.stock_code).all()
-    stock_list = []
-    for s in result:
-        if s[0]:
-            stock_list.append(s[0])
-    return stock_list
+    def _get_stock_name(self, code):
+        try:
+            result = self._get_file_from_net_ease(code)
+            if len(result) > 0:
+                stock_name = result.iloc[1, 2].replace(' ', '')
+            else:
+                stock_name = None
+        except Exception as e:
+            error(f"_get_stock_name: {e}")
+            stock_name = None
+        return code, stock_name
 
-
-def query_stock_list(mysql):
-    """query stock list from dB
-    :returns: TODO
-
-    """
-    stock_list = mysql.session.query(formStockList.stock_code).all()
-    result = []
-    for stock in stock_list:
-        result.append(stock[0])
-    return result
-
-
-def _get_file(code):
-    url_ne_index = read_url('URL_163_MONEY')
-    query_index = neteaseindex(code)
-    netease_stock_index_url = url_ne_index.format(query_index,
-                                                  '19901219',
-                                                  today())
-    return pd.read_csv(netease_stock_index_url,
-                       encoding='gb18030')
-
-
-def _get_stock_name(code):
-    try:
-        result = _get_file(code)
-        if len(result) > 0:
-            stock_name = result.iloc[1, 2].replace(' ', '')
-    except Exception as e:
-        error(f"E1: {e}")
-        stock_name = ""
-    return code, stock_name
-
-
-def _record_stock(stock, mysql):
-    try:
-        result = mysql.session.query(formStockList).filter_by(
-            stock_code=stock).first()
+    def _record_stock(self, stock_code):
+        result = self._confirm_stock(stock_code)
         if result is None:
-            stock_code, stock_name = _get_stock_name(stock)
-            info(f"{stock_code}: {stock_name}")
+            self._create_table(stock_code)
+
+    def _confirm_stock(self, stock_code):
+        # It is a sub function of _record_stock
+        result = self.mysql.session.query(
+            formStockList.stock_code
+        ).filter_by(stock_code=stock_code).first()
+        return result
+
+    def _create_table(self, code):
+        stock_code, stock_name = self._get_stock_name(code)
+        if stock_name:
+            print(f"{stock_code}: {stock_name}")
             stock_orm = formStockList(stock_code=stock_code,
                                       stock_name=stock_name,
                                       gmt_create=datetime.today())
-            mysql.session.add(stock_orm)
-            mysql.session.commit()
+            self.mysql.session.add(stock_orm)
+            self.mysql.session.commit()
             create_table_from_table(stock_code,
-                                    'template_stock', mysql.engine)
-    except Exception as e:
-        error(f'E2: {e}')
+                                    'template_stock',
+                                    self.mysql.engine)
+
+    def sub_init_stock_table(self):
+        stock_list = create_stock_list()
+        for stock in stock_list:
+            self._record_stock(stock)
+
+    def sub_create_stock_table(self):
+        self.fetch_all_security_list()
+        for stock in self.security_list:
+            self._record_stock(stock)
 
 
-def _download_stock_data(stock_code, con):
-    result = _get_file(stock_code)
-    result.columns = ['trade_date', 'stock_code',
-                      'stock_name', 'close_price',
-                      'highest_price', 'lowest_price',
-                      'open_price', 'prev_close_price',
-                      'change_rate', 'amplitude',
-                      'volume', 'turnover']
-    result.drop(['stock_code'], axis=1, inplace=True)
-    result.replace('None', np.nan, inplace=True)
-    result = result.dropna(axis=0, how='any')
-    columetype = {
-        'trade_date': Date,
-        'stock_name': NVARCHAR(length=10),
-        'close_price': DECIMAL(7, 3),
-        'highest_price': DECIMAL(7, 3),
-        'lowest_price': DECIMAL(7, 3),
-        'open_price': DECIMAL(7, 3),
-        'prev_close_price': DECIMAL(7, 3),
-        'change_rate': DECIMAL(7, 3),
-        'amplitude': DECIMAL(7, 3),
-        'volume': Integer(),
-        'turnover': DECIMAL(17, 2)
-    }
-    # stk = formStockList(stock_code=stock_code,
-    #            gmt_modified=datetime.today())
-    # engine.session.add(stk)
-    # engine.session.commit()
-    try:
-        result.to_sql(name=stock_code,
-                      con=con,
-                      if_exists='append',
-                      index=False,
-                      dtype=columetype)
-    except Exception as e:
-        error(f'E3: {e}')
+class EventDownloadStockData(EventCreateStockTable):
+    def _download_stock_data(self, stock_code):
+        # print(stock_code)
+        result = self._get_file_from_net_ease(stock_code)
+        result.columns = ['trade_date', 'stock_code',
+                          'stock_name', 'close_price',
+                          'highest_price', 'lowest_price',
+                          'open_price', 'prev_close_price',
+                          'change_rate', 'amplitude',
+                          'volume', 'turnover']
+        result.drop(['stock_code'], axis=1, inplace=True)
+        result.replace('None', np.nan, inplace=True)
+        result = result.dropna(axis=0, how='any')
+        columetype = {
+            'trade_date': Date,
+            'stock_name': NVARCHAR(length=10),
+            'close_price': DECIMAL(7, 3),
+            'highest_price': DECIMAL(7, 3),
+            'lowest_price': DECIMAL(7, 3),
+            'open_price': DECIMAL(7, 3),
+            'prev_close_price': DECIMAL(7, 3),
+            'change_rate': DECIMAL(7, 3),
+            'amplitude': DECIMAL(7, 3),
+            'volume': Integer(),
+            'turnover': DECIMAL(17, 2)
+        }
+        # stk = formStockList(stock_code=stock_code,
+        #            gmt_modified=datetime.today())
+        # engine.session.add(stk)
+        # engine.session.commit()
+        try:
+            result.to_sql(name=stock_code,
+                          con=self.mysql.engine,
+                          if_exists='append',
+                          index=False,
+                          dtype=columetype)
+        except Exception as e:
+            print(f'Error 3: {e}')
+
+    def download_stock_data(self):
+        result = self.mysql.session.query(
+            formStockList.stock_code).all()
+        # result format:
+        # (stock_code,)
+        for x in result:
+            self._download_stock_data(x[0])
+
+
+class EventCreateInterestTable(StockEventBase):
+    def create_interest_table(self):
+        from form import formInterest
+        self.fetch_all_stock_list()
+        for stock_code in self.stock_list:
+            create_table_from_table(f"{stock_code}_interest",
+                                    formInterest.__tablename__,
+                                    self.mysql.engine)
+
+
+class EventRecordInterest(StockEventBase):
+    def record_interest(self):
+        self.fetch_all_stock_list()
+        for stock_code in self.stock_list:
+            # stock code format: SH600000
+            print(stock_code)
+            try:
+                self._resolve_dividend(stock_code)
+            except Exception as e:
+                print(e)
+
+    def _resolve_dividend(self, stock_code):
+        """Resolve finance report from net ease.
+
+        :stock_code: TODO
+        :returns: TODO
+
+        """
+        # fetch data table
+        url = read_url('URL_fh_163')
+        url = url.format(stock_code[2:])
+        content = requests.get(url, timeout=3)
+        html = etree.HTML(content.text)
+        table = html.xpath(
+            "//table[@class='table_bg001 border_box limit_sale']")
+        share_table = table[0].xpath(".//tr")
+        table_name = f"{stock_code}_interest"
+        dt = DataLine()
+        # resolve the data table
+        for line in share_table:
+            data_line = line.xpath(".//td/text()")
+            if len(data_line) > 6:
+                data_key, sql = dt.resolve(data_line, table_name)
+                query = (f"SELECT * from {table_name} where"
+                         f"report_date='{data_key}'")
+                result = self.mysql.session.execute(query).fetchall()
+                if not result:
+                    self.mysql.session.execute(sql)
+                    self.mysql.session.commit()
 
 
 def create_stock_list(flag='all'):
@@ -257,45 +334,6 @@ def create_stock_list(flag='all'):
     return indices
 
 
-def event_create_interest_table():
-    header = mysqlHeader('root', '6414939', 'test')
-    stock = mysqlBase(header)
-    stock_list = fetch_all_stock_list()
-    for stock_code in stock_list:
-        # stock code format: SH600000
-        create_table_from_table(f"{stock_code}_interest",
-                                'template_stock_interest', stock.engine)
-    return 1
-
-
-class EventCreateInterestTable(StockEventBase):
-    def create_interest_table(self):
-        from form import formInterest
-        self.fetch_all_stock_list()
-        for stock_code in self.stock_list:
-            create_table_from_table(f"{stock_code}_interest",
-                                    formInterest.__tablename__,
-                                    self.mysql.engine)
-
-class EventRecordInterest(StockEventBase):
-    def record_interest(self):
-        self.fetch_all_stock_list()
-        for
-
-def event_record_interest():
-    header = mysqlHeader('root', '6414939', 'test')
-    stock = mysqlBase(header)
-    stock_list = fetch_all_stock_list()
-    for stock_code in stock_list:
-        # stock code format: SH600000
-        print(stock_code)
-        try:
-            resolve_dividend(stock_code, stock)
-        except Exception as e:
-            print(e)
-    return 1
-
-
 def random_header():
     return 1
 
@@ -310,36 +348,7 @@ def str2zero(input_str, return_type='i'):
             return None
 
 
-def resolve_dividend(stock_code, engine):
-    """Resolve finance report from net ease.
-
-    :stock_code: TODO
-    :returns: TODO
-
-    """
-    # fetch data table
-    url = read_url('URL_fh_163')
-    url = url.format(stock_code[2:])
-    content = requests.get(url)
-    html = etree.HTML(content.text)
-    table = html.xpath("//table[@class='table_bg001 border_box limit_sale']")
-    share_table = table[0].xpath(".//tr")
-    table_name = f"{stock_code}_interest"
-    dt = dataline()
-    # resolve the data table
-    for line in share_table:
-        data_line = line.xpath(".//td/text()")
-        if len(data_line) > 6:
-            data_key, sql = dt.resolve(data_line, table_name)
-            query = (f"SELECT * from {table_name} where"
-                     f"report_date='{data_key}'")
-            result = engine.session.execute(query).fetchall()
-            if not result:
-                engine.session.execute(sql)
-                engine.session.commit()
-
-
-class dataline(object):
+class DataLine(object):
 
     # Resolve the dataline
     # and convert it into sql.
@@ -392,6 +401,45 @@ class dataline(object):
         return str(self.year)
 
 
+def event_stock_flag():
+    header = mysqlHeader('root', '6414939', 'stock')
+    mysql = mysqlBase(header)
+    stock_list = fetch_no_flag_stock()
+    df = pd.DataFrame(stock_list, columns=['stock_code'])
+    df['flag'] = None
+    print(df.head(5))
+    for i in range(df.shape[0]):
+        if re.match(r'^SH0', df.loc[i, 'stock_code']):
+            df.loc[i, 'flag'] = 'index'
+            print(df.iloc[i].values)
+            sql = f"update stock_list set flag=\
+                   '{df.loc[i,'flag']}' where stock_code=\
+                    '{df.loc[i,'stock_code']}'"
+            mysql.session.execute(sql)
+            mysql.session.commit()
+        elif re.match(r'^SH6', df.loc[i, 'stock_code']):
+            df.loc[i, 'flag'] = 'stock'
+            sql = f"update stock_list set flag=\
+                   '{df.loc[i,'flag']}' where stock_code=\
+                    '{df.loc[i,'stock_code']}'"
+            mysql.session.execute(sql)
+            mysql.session.commit()
+        elif re.match(r'^SZ0', df.loc[i, 'stock_code']):
+            df.loc[i, 'flag'] = 'stock'
+            sql = f"update stock_list set flag=\
+                   '{df.loc[i,'flag']}' where stock_code=\
+                    '{df.loc[i,'stock_code']}'"
+            mysql.session.execute(sql)
+            mysql.session.commit()
+        elif re.match(r'^SZ3', df.loc[i, 'stock_code']):
+            df.loc[i, 'flag'] = 'stock'
+            sql = f"update stock_list set flag=\
+                   '{df.loc[i,'flag']}' where stock_code=\
+                    '{df.loc[i,'stock_code']}'"
+            mysql.session.execute(sql)
+            mysql.session.commit()
+
+
 def sub_7_days_benefit_distribution():
     header = mysqlHeader('root', '6414939', 'stock')
     stock = mysqlBase(header)
@@ -420,7 +468,9 @@ def sub_7_days_benefit_distribution():
 
 def fetch_atr(stock_code):
     stock_conn = mysqlBase('root', '6414939', 'stock')
-    sql = f"select highest_price, lowest_price, prev_close_price from {stock_code}"
+    sql = (
+        f"select highest_price, lowest_price, "
+        f"prev_close_price from {stock_code}")
     result = stock_conn.session.execute(sql).fetchall()
     result = pd.DataFrame.from_dict(result)
     result.columns = ['highest', 'lowest', 'prev_close']
@@ -479,7 +529,7 @@ def test(stock_code):
     # res.plot()
     # plt.show()
     # use pyecharts lib
-    #res = res[30:400]
+    # res = res[30:400]
     # print(res.head(10))
     from mpl_finance import candlestick_ochl as kplot
     from matplotlib.dates import date2num
@@ -532,7 +582,9 @@ def test(stock_code):
     print('beta:', beta)
     print('alpha:', alpha)
     print('sharp ratio:', sharp_ratio)
-    return stock_code, total_ret.values[0], annual_ret.values[0], beta, alpha, sharp_ratio
+    return (
+        stock_code, total_ret.values[0], annual_ret.values[0],
+        beta, alpha, sharp_ratio)
 
 
 def rehabilitation():
@@ -561,7 +613,7 @@ def rehabilitation():
     print(res.dtypes)
     res['date'] = pd.to_datetime(res['date'])
     res.set_index('date', inplace=True)
-    #res = res.sort_index()
+    # res = res.sort_index()
     sql2 = f"SELECT xrdr_date, bonus, increase,\
             dividend from {stock_code}_interest"
     share = stock.session.execute(sql2).fetchall()
@@ -609,8 +661,5 @@ for stock in stock_list:
         f.close()
 """
 if __name__ == '__main__':
-    event = StockEventBase()
-    print(event)
     header = mysqlHeader('root', '6414939', 'stock')
-    stock = mysqlBase(header)
-    rehabilitation()
+    stock = EventCreateStockTable()

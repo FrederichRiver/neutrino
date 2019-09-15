@@ -26,6 +26,7 @@ def table_batch_modify():
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("maint init|backup")
+        raise SystemExit(1)
     if sys.argv[1] == "init":
         try:
             event_initial_database()
