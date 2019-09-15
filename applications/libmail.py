@@ -13,19 +13,25 @@ class MailSender(object):
         self.mail_pw = "monster1983"
         self.sender = "Friederich River<friederich@163.com>"
         self.reciever = []
+
     def send(self, message):
         try:
             smtpObj = smtplib.SMTP()
             smtpObj.connect(self.mail_host, 25)
             smtpObj.login(self.mail_user, self.mail_pw)
-            smtpObj.sendmail(self.sender, message['To'].split(','), message.as_string())
+            smtpObj.sendmail(
+                self.sender,
+                message['To'].split(','),
+                message.as_string())
             smtpObj.quit()
             print('Success!')
         except smtplib.SMTPException as e:
             print("Failed!", e)
 
     def mail_list(self):
-        self.reciever = ['Guest<hezhiyuan_tju@163.com>','Guest<362381761@qq.com>']
+        self.reciever = [
+            'Guest<hezhiyuan_tju@163.com>',
+            'Guest<362381761@qq.com>']
         self.reciever = ['Guest<hezhiyuan_tju@163.com>']
 
     def mail_content(self):
@@ -37,6 +43,7 @@ class MailSender(object):
         subject = 'Guten Tag'
         message['Subject'] = Header(subject, 'utf-8')
         return message
+
     def mail_daily_report(self):
         with open('template/guest_mail.html', 'r') as f:
             content = f.read()

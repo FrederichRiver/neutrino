@@ -1,39 +1,37 @@
 #!/usr/bin/python3
 """
-Geschafen im Aug 31, 2017
-
-Verfasst von Friederich Fluss
-
-Lib of mysql contains methods to drive mysql db using python.
-v3.0.6-alpha: change personal engine into commercial engine sqlalchemy.
-v3.1.7-beta: Modified definition of mysqlBase, use strctural object to
-            pass parameters.
+This is a library dealing with mysql which is based on sqlalchemy.
+Auther: Friederich River
 """
-
-__version__ = '3.1.8'
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
+from libexception import AccountException
+__version__ = '3.1.8'
 
 
 class mysqlBase(object):
     def __init__(self, header):
-        DB_STRING = (f"mysql+pymysql://{header.account}:"
-                     f"{header.password}"
-                     f"@{header.host}:{header.port}"
-                     f"/{header.database}")
-        self.engine = create_engine(DB_STRING,
+        # header: Defines the mysql engine parameters.
+        # engine: is the object returned from create_engine.
+        # session: contains the cursor object.
+        mysql_url = (
+            f"mysql+pymysql://{header.account}:"
+            f"{header.password}"
+            f"@{header.host}:{header.port}"
+            f"/{header.database}")
+        self.engine = create_engine(mysql_url,
                                     encoding='utf8',
                                     echo=False)
-        DB_session = sessionmaker(bind=self.engine)
-        self.session = DB_session()
-        self.ident_string = (
+        db_session = sessionmaker(bind=self.engine)
+        self.session = db_session
+        self.id_string = (
             f"mysql engine <{header.account}"
             f"@{header.host}>")
 
     def __str__(self):
-        return self.ident_string
+        return self.id_string
 
 
 def _drop_all(base, engine):
@@ -48,6 +46,12 @@ class mysqlHeader(object):
 
     def __init__(self, acc, pw, db,
                  host='localhost', port=3306, charset='utf8'):
+        if not isinstance(acc, str):
+            raise TypeError
+        if not isinstance(pw, str):
+            raise TypeError
+        if not isinstance(db, str):
+            raise TypeError
         self.account = acc
         self.password = pw
         self.database = db
