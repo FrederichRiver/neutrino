@@ -5,26 +5,20 @@ from datetime import datetime
 from pandas import read_csv
 import functools
 import psutil
-from env import CONF_FILE,LOG_FILE,SQL_FILE
+from env import CONF_FILE, LOG_FILE, SQL_FILE
 
-def read_url(url):
-    with open(CONF_FILE, 'r') as f:
+
+def read_json(key, jfile):
+    with open(jfile, 'r') as f:
         result = f.read()
         j = json.loads(result)
-    return j[url]
-
-
-def read_sql(sql_name):
-    """load sql from sql.json
-
-    :sql_name: TODO
-    :returns: TODO
-
-    """
-    with open(CONF_FILE, 'r') as f:
-        result = f.read()
-        j = json.loads(result)
-        return j[sql_name]
+    try:
+        item = j[key]
+    except KeyError:
+        item = None
+    except:
+        item = None
+    return key, item
 
 
 def neteaseindex(code):
@@ -33,17 +27,6 @@ def neteaseindex(code):
     else:
         code = '1'+code[2:]
     return code
-
-
-def opencsv(url, encoding):
-    import numpy as np
-    dcolumns = ['Date', 'Stock_code',
-                'Stock_name', 'Close_price',
-                'Highest_price', 'Lowest_price',
-                'Open_price', 'Prev_close_price',
-                'Change', 'Amplitude',
-                'Volume', 'Turnover']
-    return read_csv(url, encoding=encoding)
 
 
 def record_base(text, level=logging.INFO):
@@ -67,7 +50,6 @@ warning = functools.partial(record_base, level=logging.WARNING)
 
 def today():
     return datetime.now().strftime('%Y%m%d')
-
 
 
 class Resource(object):
@@ -99,9 +81,7 @@ class Resource(object):
         sys_info = (
             f"<CPU>: {psutil.cpu_count()}\n"
             f"<Total Memory>: {round(mem.total/MB, 2)}MB\n"
-            f"<Total Disk>: {round(disk.total/GB, 2)}GB"
-        )
-
+            f"<Total Disk>: {round(disk.total/GB, 2)}GB")
         return sys_info
 
 

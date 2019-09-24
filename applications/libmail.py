@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import json
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
+
+
+__version__ = '1.0.1'
 
 
 class MailSender(object):
@@ -36,18 +40,30 @@ class MailSender(object):
 
     def mail_content(self):
         # Friederich River<friederich@163.com>
-        mail_content = self.mail_daily_report()
+        subject, mail_content = self.mail_daily_report()
         message = MIMEText(mail_content, 'html', 'utf-8')
         message['From'] = self.sender
         message['To'] = ','.join(self.reciever)
-        subject = 'Guten Tag'
         message['Subject'] = Header(subject, 'utf-8')
         return message
 
-    def mail_daily_report(self):
-        with open('template/guest_mail.html', 'r') as f:
+    def func1(self, jfile, tittle):
+        if os.path.exist(jfile):
+            with open(jfile, 'r') as f:
+                content = json.loads(f.read())
+            for d in content:
+                if d['subject'] == tittle:
+                    result = d['subject'], d['template_file']
+                    # here should be modified.
+        else:
+            result = None
+        return result
+
+    def mail_daily_report(self, subject):
+        template_file = template_list(subject)
+        with open(f"template/{template_file}", 'r') as f:
             content = f.read()
-        return content
+        return subject, content
 
 
 if __name__ == "__main__":

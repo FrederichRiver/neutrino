@@ -5,7 +5,8 @@ from libmysql8 import mysqlHeader
 from libstock import (EventCreateStockTable,
                       EventDownloadStockData,
                       EventCreateInterestTable,
-                      EventRecordInterest)
+                      EventRecordInterest,
+                      EventFlag)
 __version__ = '1.0.4'
 
 
@@ -38,10 +39,22 @@ def event_create_interest_table():
 
 
 def event_record_interest():
-    pass
+    header = mysqlHeader('root', '6414939', 'test')
+    event = EventRecordInterest()
+    event._init_database(header)
+    event.record_interest()
 
+
+def event_flag_stock():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = EventFlag()
+    event._init_database(header)
+    event.fetch_all_security_list()
+    for stock_code in event.security_list:
+        event._flag_stock(stock_code)
 
 if __name__ == "__main__":
     # event_init_stock()
     # event_download_stock_data()
     event_create_interest_table()
+    # event_flag_stock()

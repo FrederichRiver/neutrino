@@ -11,7 +11,10 @@ from apscheduler.triggers.cron import CronTrigger
 from event import (event_record_stock, event_init_stock,
                    event_download_stock_data,
                    event_create_interest_table,
-                   event_record_interest)
+                   event_record_interest,
+                   event_flag_stock)
+
+__version__ = '1.0.1'
 
 
 class taskManager(BackgroundScheduler):
@@ -27,7 +30,8 @@ class taskManager(BackgroundScheduler):
                 'event_init_stock': event_init_stock,
                 'event_download_stock_data': event_download_stock_data,
                 'event_create_interest_table': event_create_interest_table,
-                'event_record_interest': event_record_interest
+                'event_record_interest': event_record_interest,
+                'event_flag_stock': event_flag_stock
             }
             self.taskfile = taskfile
 

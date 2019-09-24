@@ -14,8 +14,8 @@ import re
 import pandas as pd
 import talib as ta
 import requests
-from env import TIME_FMT
-from utils import read_url, neteaseindex, today, info, error
+from env import TIME_FMT, CONF_FILE
+from utils import read_json, neteaseindex, today, info, error
 from lxml import etree
 from libmysql8 import (mysqlBase, mysqlHeader,
                        create_table_from_table)
@@ -23,7 +23,7 @@ from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from enum import Enum
-__version__ = '1.2.8-dev'
+__version__ = '1.2.9'
 
 
 class SecurityFlag(Enum):
@@ -37,13 +37,13 @@ class StockEventBase(object):
     def __init__(self):
         self.queue = []
         self.code = {}
-        self.today = datetime.now().strftime(TIME_FMT)
+        self.Today = datetime.now().strftime(TIME_FMT)
         self.mysql = None
         self.stock_list = []
         self.security_list = []
 
     def __repr__(self):
-        return self.mysql.ident
+        return self.mysql.id_string
 
     def _init_database(self, header):
         self.mysql = mysqlBase(header)
@@ -53,7 +53,7 @@ class StockEventBase(object):
         result = self.mysql.session.query(
             formStockList.stock_code, formStockList.flag).all()
         for dataline in result:
-            if dataline[0] and dataline[1] == 'stock':
+            if dataline[1] == '1':
                 self.stock_list.append(dataline[0])
         return self.stock_list
 
@@ -77,31 +77,65 @@ class StockEventBase(object):
         return stock_list
 
 
-class codeFormat(object):
-    def __call__(self, stock_code):
-        if type(stock_code) == str:
-            stock_code = stock_code.upper()
-            if re.match(r'^[A-Z][A-Z]\d{6}', stock_code):
-                pass
-            elif re.match(r'(\d{6}).([A-Z][A-Z])\Z', stock_code):
-                result = re.match(r'(\d{6}).([A-Z][A-Z]\Z)', stock_code)
-                stock_code = result.group(2)+result.group(1)
-            else:
-                stock_code = None
-            return stock_code
-
-    def net_ease_code(self, stock_code):
-        stock_code = self.__call__(stock_code)
-        if type(stock_code) == str:
-            if stock_code[:2] == 'SH':
-                stock_code = '0' + stock_code[2:]
-            elif stock_code[:2] == 'SZ':
-                stock_code = '1' + stock_code[2:]
-            else:
-                stock_code = None
+class EventFlag(StockEventBase):
+    def main_flag(self, stock_code):
+        if re.match(r'^SH0|^SZ9', stock_code):
+            self._flag_index(stock_code)
+        elif re.match(r'^SH6', stock_code):
+            self._flag_stock(stock_code)
+        elif re.match(r'^SZ[0|3|8]', stock_code):
+            self._flag_stock(stock_code)
         else:
-            stock_code = None
-        return stock_code
+            pass
+
+    def _flag_index(self, stock_code):
+        stock_name = fetch_name(stock_code)
+        result = self.mysql.session.query(
+            formStockList.stock_code,
+            formStockList.flag
+            ).filter_by(stock_code=stock_code)
+        if result:
+            result.update(
+                {"flag": '0'}
+            )
+            self.mysql.session.commit()
+        return 1
+
+    def _flag_stock(self, stock_code):
+        # format '1,S,<1.1,1.2,3.7>'
+        # 1- Stock, S(special treat, including double stars),
+        # numbers in '<>' means hangye, 1st class and 2nd class)
+        # st, stop
+        stock_name = fetch_name(stock_code)
+        result = self.mysql.session.query(
+            formStockList.stock_code,
+            formStockList.flag
+            ).filter_by(stock_code=stock_code)
+        if result:
+            result.update(
+                {"flag": '1'}
+            )
+            self.mysql.session.commit()
+        return 1
+
+    def fetch_name(self, s):
+        pass
+
+    def _flag_fund(self, stock_code):
+        pass
+
+    def _flag_future(self, stock_code):
+        pass
+
+    def _flag_gold(self, stock_code):
+        pass
+
+    def _flag_right(self, stock_code):
+        pass
+
+
+def fetch_name(s):
+    pass
 
 
 class EventCreateStockTable(StockEventBase):
@@ -110,7 +144,7 @@ class EventCreateStockTable(StockEventBase):
         self.coder = codeFormat()
 
     def _get_file_from_net_ease(self, code):
-        url_ne_index = read_url('URL_163_MONEY')
+        url_ne_index = read_json('URL_163_MONEY', CONF_FILE)
         query_code = self.coder.net_ease_code(code)
         netease_stock_index_url = url_ne_index.format(
             query_code, '19901219', today())
@@ -166,6 +200,10 @@ class EventCreateStockTable(StockEventBase):
 
 
 class EventDownloadStockData(EventCreateStockTable):
+    """
+    This method download daily stock trading data.
+    """
+
     def _download_stock_data(self, stock_code):
         # print(stock_code)
         result = self._get_file_from_net_ease(stock_code)
@@ -218,9 +256,10 @@ class EventCreateInterestTable(StockEventBase):
         from form import formInterest
         self.fetch_all_stock_list()
         for stock_code in self.stock_list:
-            create_table_from_table(f"{stock_code}_interest",
-                                    formInterest.__tablename__,
-                                    self.mysql.engine)
+            create_table_from_table(
+                f"{stock_code}_interest",
+                formInterest.__tablename__,
+                self.mysql.engine)
 
 
 class EventRecordInterest(StockEventBase):
@@ -228,7 +267,7 @@ class EventRecordInterest(StockEventBase):
         self.fetch_all_stock_list()
         for stock_code in self.stock_list:
             # stock code format: SH600000
-            print(stock_code)
+            # print(stock_code)
             try:
                 self._resolve_dividend(stock_code)
             except Exception as e:
@@ -262,6 +301,35 @@ class EventRecordInterest(StockEventBase):
                 if not result:
                     self.mysql.session.execute(sql)
                     self.mysql.session.commit()
+
+
+class codeFormat(object):
+    def __call__(self, stock_code):
+        if type(stock_code) == str:
+            stock_code = stock_code.upper()
+            if re.match(r'^[A-Z][A-Z]\d{6}', stock_code):
+                # format <SH600000> or <SZ000001>
+                pass
+            elif re.match(r'(\d{6}).([A-Z][A-Z])\Z', stock_code):
+                # format <600000.SH> or <0000001.SZ>
+                result = re.match(r'(\d{6}).([A-Z][A-Z]\Z)', stock_code)
+                stock_code = result.group(2)+result.group(1)
+            else:
+                stock_code = None
+            return stock_code
+
+    def net_ease_code(self, stock_code):
+        stock_code = self.__call__(stock_code)
+        if type(stock_code) == str:
+            if stock_code[:2] == 'SH':
+                stock_code = '0' + stock_code[2:]
+            elif stock_code[:2] == 'SZ':
+                stock_code = '1' + stock_code[2:]
+            else:
+                stock_code = None
+        else:
+            stock_code = None
+        return stock_code
 
 
 def create_stock_list(flag='all'):

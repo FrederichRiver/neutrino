@@ -1,15 +1,23 @@
 [
     {
         "task":"event_create_interest_table",
-        "hour":"21"
+        "hour":"20"
     },
 	{
 		"task":"event_init_stock",
-		"hour":"19"
+		"hour":"0"
 	},
 	{
 		"task": "event_download_stock_data",
-		"hour": "20"
+		"hour": "22"
+	},
+	{
+		"task":"event_flag_stock",
+		"hour":"16"
+	},
+	{
+		"task":"event_record_interest",
+		"hour":"23"
 	}
 
 ]

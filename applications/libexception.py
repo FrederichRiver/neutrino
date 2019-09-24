@@ -3,6 +3,9 @@
 import time
 
 
+__version__ = '0.0.1-alpha'
+
+
 class NoFileException(BaseException):
     def __init__(self, file_name):
         super(BaseException, self).__init__()

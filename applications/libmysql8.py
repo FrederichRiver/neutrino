@@ -8,24 +8,27 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
 from libexception import AccountException
-__version__ = '3.1.8'
+__version__ = '3.1.9'
 
 
 class mysqlBase(object):
     def __init__(self, header):
-        # header: Defines the mysql engine parameters.
-        # engine: is the object returned from create_engine.
-        # session: contains the cursor object.
+        """
+        :param header: Defines the mysql engine parameters.
+        :param engine: is the object returned from create_engine.
+        :param session: contains the cursor object.
+        """
         mysql_url = (
             f"mysql+pymysql://{header.account}:"
             f"{header.password}"
             f"@{header.host}:{header.port}"
             f"/{header.database}")
-        self.engine = create_engine(mysql_url,
-                                    encoding='utf8',
-                                    echo=False)
+        self.engine = create_engine(
+            mysql_url,
+            encoding='utf8',
+            echo=False)
         db_session = sessionmaker(bind=self.engine)
-        self.session = db_session
+        self.session = db_session()
         self.id_string = (
             f"mysql engine <{header.account}"
             f"@{header.host}>")
@@ -33,10 +36,21 @@ class mysqlBase(object):
     def __str__(self):
         return self.id_string
 
+    def insert(self, sql):
+        self.engine.execute(sql)
+        # self.engine.commit()
+        return 1
+
+    def query(self, sql):
+        result = self.engine.execute(sql).fetchone()
+        return result
+
 
 def _drop_all(base, engine):
-    # This will drop all tables in database.
-    # It is a private method only for maintance.
+    """
+    This will drop all tables in database.
+    It is a private method only for maintance.
+    """
     base.metadata.drop_all(engine)
 
 
@@ -61,6 +75,10 @@ class mysqlHeader(object):
 
 
 def create_table(table, engine):
+    """
+    : param table: It is form template defined in form module.
+    : param engine: It is a sqlalchemy mysql engine.
+    """
     table.metadata.create_all(engine)
 
 

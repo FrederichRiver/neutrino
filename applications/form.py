@@ -2,9 +2,12 @@
 from sqlalchemy import Column, String, Integer, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 
+
+__version__ = '1.0.1'
+
+
 formTemplate = declarative_base()
-formBase = declarative_base()
-formReportBase = declarative_base()
+formFinanceTemplate = declarative_base()
 
 
 class formInterest(formTemplate):
@@ -33,7 +36,7 @@ class formStockList(formTemplate):
 
     def __str__(self):
         # Not tested.
-        return (f"Stock<{self.stock_code},{self.tock_name}>"
+        return (f"Stock<{self.stock_code},{self.stock_name}>"
                 "is created at {gmt_create}"
                 "and modified at {gmt_modified}")
 
@@ -41,7 +44,7 @@ class formStockList(formTemplate):
 class formStock(formTemplate):
     __tablename__ = 'template_stock'
     trade_date = Column(Date, primary_key=True)
-    stock_name = Column(String(10))
+    stock_name = Column(String(20))
     close_price = Column(Float(precision=10,
                                decimal_return_scale=3))
     highest_price = Column(Float(precision=10,
@@ -59,16 +62,19 @@ class formStock(formTemplate):
     volume = Column(Integer)
     turnover = Column(Float)
 
+    def __str__(self):
+        return None
 
-class formFinanceReport(formBase):
+
+class formFinanceReport(formFinanceTemplate):
     __tablename__ = 'finance_report'
     name = Column(String(10), primary_key=True)
 
-    def __repr__(self):
+    def __str__(self):
         pass
 
 
-class formCurrencyFlow(formReportBase):
+class formCurrencyFlow(formFinanceTemplate):
     __tablename__ = 'currency_flow_report'
     report_date = Column(Date, primary_key=True)
     r2_cash_received_from_sales_of_goods_or_rendering_services = Column(Float)
@@ -83,4 +89,5 @@ class formCurrencyFlow(formReportBase):
 
 
 if __name__ == '__main__':
-    pass
+    stocklist = formStockList()
+    print(stocklist)

@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
+__version__ = '0.0.2-alpha'
+
+
 class traderBase(object):
     def __init__(self, name, currency, start_date='1999-12-19'):
         self.name = name

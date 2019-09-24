@@ -1,0 +1,10 @@
+[
+    {
+        "subject":"guest mail",
+        "template":"guest_mail.html"
+    },
+    {
+        "subject":"weekly report",
+        "template":"weekly_report.html"
+    }
+]

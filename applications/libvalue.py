@@ -26,6 +26,9 @@ def wacc(equity, liability):
 # RONIC
 # g
 # Continue Value
+
+
 def continue_value(noplat, ronic, wacc, a):
     cv = noplat*(1-g/ronic)/(wacc-g)
     return cv
+
