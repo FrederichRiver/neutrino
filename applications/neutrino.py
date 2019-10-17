@@ -164,7 +164,7 @@ if __name__ == '__main__':
                 os.kill(int(f.read()), signal.SIGTERM)
         else:
             print(DM_NOT_RUN)
-            raise SystemExit(1)
+            # raise SystemExit(1)
         try:
             neutrino(PID_FILE, LOG_FILE)
             sys.stdout.write(DM_START.format(t=time.ctime(),

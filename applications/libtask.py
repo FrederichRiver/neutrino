@@ -12,9 +12,10 @@ from event import (event_record_stock, event_init_stock,
                    event_download_stock_data,
                    event_create_interest_table,
                    event_record_interest,
-                   event_flag_stock)
+                   event_flag_stock,
+                   event_rehabilitation)
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 class taskManager(BackgroundScheduler):
@@ -31,7 +32,8 @@ class taskManager(BackgroundScheduler):
                 'event_download_stock_data': event_download_stock_data,
                 'event_create_interest_table': event_create_interest_table,
                 'event_record_interest': event_record_interest,
-                'event_flag_stock': event_flag_stock
+                'event_flag_stock': event_flag_stock,
+                'event_rehabilitation': event_rehabilitation
             }
             self.taskfile = taskfile
 

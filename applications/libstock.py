@@ -23,7 +23,7 @@ from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from enum import Enum
-__version__ = '1.2.9'
+__version__ = '1.2.11'
 
 
 class SecurityFlag(Enum):
@@ -143,11 +143,14 @@ class EventCreateStockTable(StockEventBase):
         super(StockEventBase, self).__init__()
         self.coder = codeFormat()
 
-    def _get_file_from_net_ease(self, code):
+    def _get_file_from_net_ease(
+            self, code,
+            start_date='19901219',
+            end_date=today()):
         url_ne_index = read_json('URL_163_MONEY', CONF_FILE)
         query_code = self.coder.net_ease_code(code)
         netease_stock_index_url = url_ne_index.format(
-            query_code, '19901219', today())
+            query_code, start_date, end_date)
         return pd.read_csv(netease_stock_index_url,
                            encoding='gb18030')
 
@@ -239,6 +242,14 @@ class EventDownloadStockData(EventCreateStockTable):
                           if_exists='append',
                           index=False,
                           dtype=columetype)
+            query = self.mysql.session.query(
+                formStockList.stock_code,
+                formStockList.gmt_modified
+            ).filter_by(stock_code=stock_code)
+            if query:
+                query.update(
+                    {"gmt_modified": today()})
+            self.mysql.session.commit()
         except Exception as e:
             print(f'Error 3: {e}')
 
@@ -274,14 +285,8 @@ class EventRecordInterest(StockEventBase):
                 print(e)
 
     def _resolve_dividend(self, stock_code):
-        """Resolve finance report from net ease.
-
-        :stock_code: TODO
-        :returns: TODO
-
-        """
         # fetch data table
-        url = read_url('URL_fh_163')
+        _, url = read_json('URL_fh_163', CONF_FILE)
         url = url.format(stock_code[2:])
         content = requests.get(url, timeout=3)
         html = etree.HTML(content.text)
@@ -295,7 +300,7 @@ class EventRecordInterest(StockEventBase):
             data_line = line.xpath(".//td/text()")
             if len(data_line) > 6:
                 data_key, sql = dt.resolve(data_line, table_name)
-                query = (f"SELECT * from {table_name} where"
+                query = (f"SELECT * from {table_name} where "
                          f"report_date='{data_key}'")
                 result = self.mysql.session.execute(query).fetchall()
                 if not result:

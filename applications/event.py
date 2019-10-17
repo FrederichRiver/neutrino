@@ -7,7 +7,8 @@ from libstock import (EventCreateStockTable,
                       EventCreateInterestTable,
                       EventRecordInterest,
                       EventFlag)
-__version__ = '1.0.4'
+from libstock_dev import EventRehabilitation
+__version__ = '1.0.5'
 
 
 def event_init_stock():
@@ -51,10 +52,20 @@ def event_flag_stock():
     event._init_database(header)
     event.fetch_all_security_list()
     for stock_code in event.security_list:
-        event._flag_stock(stock_code)
+        event.main_flag(stock_code)
+
+
+def event_rehabilitation():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = EventRehabilitation()
+    event._init_database(header)
+    stock_list = event.fetch_all_stock_list()
+    for stock in stock_list:
+        event.rehabilitate(stock)
 
 if __name__ == "__main__":
     # event_init_stock()
     # event_download_stock_data()
-    event_create_interest_table()
+    # event_create_interest_table()
     # event_flag_stock()
+    event_record_interest()

@@ -10,20 +10,19 @@ from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from libstock import StockEventBase
-__version__ = '1.2.8-dev'
+__version__ = '1.3.9-dev'
 
 
 class StratagyBase(StockEventBase):
     def __init__(self):
         super(StockEventBase, self).__init__()
 
-
     def fetch_data(self):
         pass
 
     def settle(self):
         pass
-    
+
     def reha(self):
         pass
 
@@ -31,8 +30,10 @@ class StratagyBase(StockEventBase):
 class InvestmentBase(object):
     def __init__(self):
         self.start_date = datetime.today()
+
     def settle(self):
         pass
+
 
 def test(stock_code):
     print(stock_code)
@@ -74,7 +75,7 @@ def test(stock_code):
     # res.plot()
     # plt.show()
     # use pyecharts lib
-    #res = res[30:400]
+    # res = res[30:400]
     # print(res.head(10))
     from mpl_finance import candlestick_ochl as kplot
     from matplotlib.dates import date2num
@@ -130,62 +131,70 @@ def test(stock_code):
     return stock_code, total_ret.values[0], annual_ret.values[0], beta, alpha, sharp_ratio
 
 
-def rehabilitation():
-    """Calculate the rehabilitation of stock
+class EventRehabilitation(StockEventBase):
+    def rehabilitate(self, stock_code):
+        sql = (
+            "select trade_date,open_price,close_price,"
+            "highest_price, lowest_price, prev_close_price,"
+            f"amplitude from {stock_code}")
+        result = self.mysql.session.execute(sql).fetchall()
+        self.df = pd.DataFrame.from_dict(result)
+        self._config_df()
+        share = self._fetch_share(stock_code)
+        self.df = pd.concat([self.df, share], axis=1, join='outer')
+        self.df.sort_index()
+        self.df['reh'] = self.df['close']
+        self.df.fillna(0, inplace=True)
+        self.factor1()
 
-    :df: TODO
-    :returns: TODO
+    def factor1(self):
+        self.df['factor'] = self.df['close']
+        # res = res[:700]
+        xr_flag = 0
+        factor = 1.0
+        for i in range(self.df.shape[0]):
+            if i:
+                if self.df.ix[i, 'dividend']+self.df.ix[i, 'bonus']+self.df.ix[i, 'increase']:
+                    xr_flag = 2
+                    factor = factor*self.df.ix[i-1, 'close']/self.df.ix[i, 'prev_close']
+                else:
+                    if xr_flag:
+                        xr_flag -= 1
+            self.df.ix[i, 'factor'] = factor
+            self.df.ix[i, 'reh'] = self.df.ix[i, 'close']*factor
+            if xr_flag:
+                print(
+                    self.df.index.T[i], self.df.ix[i, 'close'], self.df.ix[i, 'reh'], self.df.ix[i, 'factor'],
+                    self.df.ix[i, 'dividend'], self.df.ix[i, 'bonus'], self.df.ix[i, 'increase'])
 
-    """
-    stock_code = 'SH600001'
-    header = mysqlHeader('root', '6414939', 'test')
-    stock = mysqlBase(header)
-    sql = f"select trade_date,open_price,close_price,\
-            highest_price, lowest_price,\
-            prev_close_price, amplitude from {stock_code}"
-    res = stock.session.execute(sql).fetchall()
-    res = pd.DataFrame.from_dict(res)
-    res.columns = ['date', 'open', 'close', 'high',
-                   'low', 'prev_close', 'amplitude']
-    res['open'] = res['open'].astype(float)
-    res['close'] = res['close'].astype(float)
-    res['high'] = res['high'].astype(float)
-    res['low'] = res['low'].astype(float)
-    res['prev_close'] = res['prev_close'].astype(float)
-    res['amplitude'] = res['amplitude'].astype(float)
-    print(res.dtypes)
-    res['date'] = pd.to_datetime(res['date'])
-    res.set_index('date', inplace=True)
-    #res = res.sort_index()
-    sql2 = f"SELECT xrdr_date, bonus, increase,\
-            dividend from {stock_code}_interest"
-    share = stock.session.execute(sql2).fetchall()
-    share = pd.DataFrame.from_dict(share)
-    share.columns = ['date', 'bonus', 'increase', 'dividend']
-    share['date'] = pd.to_datetime(share['date'])
-    share.set_index('date', inplace=True)
-    # share.sort_index()
-    res = pd.concat([res, share], axis=1, join='outer')
-    res.sort_index()
-    res['reh'] = res['close']
-    res.fillna(0, inplace=True)
-    b = i = d = 0
-    res['closeshift'] = res['close'].shift(1)
-    print(res[370:410])
-    res = res[370:410]
-    base = res.iat[0, 2]
-    ref = base
-    for index, row in res.iterrows():
-        if row['bonus'] + row['increase'] + row['dividend'] != 0:
-            b = row['bonus']
-            i = row['increase']
-            d = row['dividend']
-            base = (row['closeshift']-b/10)*(1-i/10-d/10)
-            ref = row['closeshift']
-            print('REH', 'last close:', row['closeshift'], 'reh close:', base)
-        row['reh'] = ref * row['close']/base
-        # print(row['close'],row['reh'],b,i,d)
+    def _config_df(self):
+        self.df.columns = ['date', 'open', 'close', 'high', 'low', 'prev_close', 'amplitude']
+        self.df['open'] = self.df['open'].astype(float)
+        self.df['close'] = self.df['close'].astype(float)
+        self.df['high'] = self.df['high'].astype(float)
+        self.df['low'] = self.df['low'].astype(float)
+        self.df['prev_close'] = self.df['prev_close'].astype(float)
+        self.df['amplitude'] = self.df['amplitude'].astype(float)
+        # print(res.dtypes)
+        self.df['date'] = pd.to_datetime(self.df['date'])
+        self.df.set_index('date', inplace=True)
+
+    def _fetch_share(self, stock_code):
+        sql2 = (
+            "SELECT xrdr_date, bonus, increase, dividend "
+            f"FROM {stock_code}_interest")
+        share = self.mysql.session.execute(sql2).fetchall()
+        share = pd.DataFrame.from_dict(share)
+        share.columns = ['date', 'bonus', 'increase', 'dividend']
+        share['date'] = pd.to_datetime(share['date'])
+        share.set_index('date', inplace=True)
+        return share
+
 
 if __name__ == '__main__':
-    header = mysqlHeader('root', '6414939', 'stock')
-    rehabilitation()
+    header = mysqlHeader('root', '6414939', 'test')
+    reh = EventRehabilitation()
+    reh._init_database(header)
+    stock_list = reh.fetch_all_stock_list()
+    for stock in stock_list:
+        reh.rehabilitate(stock)

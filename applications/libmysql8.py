@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
 from libexception import AccountException
-__version__ = '3.1.9'
+__version__ = '3.1.11'
 
 
 class mysqlBase(object):
@@ -44,6 +44,14 @@ class mysqlBase(object):
     def query(self, sql):
         result = self.engine.execute(sql).fetchone()
         return result
+
+    def drop_table(self, table_name):
+        sql = f"DROP TABLE {table_name}"
+        self.engine.execute(sql)
+
+    def truncate_table(self, table_name):
+        sql = f"TRUNCATE TABLE {table_name}"
+        self.engine.execute(sql)
 
 
 def _drop_all(base, engine):

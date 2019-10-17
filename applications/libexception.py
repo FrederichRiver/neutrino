@@ -15,6 +15,11 @@ class NoFileException(BaseException):
         return f"{time.ctime()}: {self.file_name} could not be found.\n"
 
 
+class UrlFormatException(BaseException):
+    def __str__(self):
+        return "Url format error."
+
+
 class AccountException(BaseException):
     def __str__(self):
         return "[Error 1]: Account error."

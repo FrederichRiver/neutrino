@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.3'
 
 
 formTemplate = declarative_base()
@@ -32,6 +32,7 @@ class formStockList(formTemplate):
     stock_name = Column(String(20))
     gmt_create = Column(Date)
     gmt_modified = Column(Date)
+    gmt_xrdr = Column(Date)
     flag = Column(String(10))
 
     def __str__(self):
@@ -61,9 +62,10 @@ class formStock(formTemplate):
                              decimal_return_scale=3))
     volume = Column(Integer)
     turnover = Column(Float)
+    back_adjust_factor = Column(Float)
 
     def __str__(self):
-        return None
+        return "Form Stock List is a template."
 
 
 class formFinanceReport(formFinanceTemplate):

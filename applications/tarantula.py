@@ -4,63 +4,30 @@ from libmysql8 import mysqlHeader, mysqlBase
 from lxml import etree
 import hashlib
 import re
+from model import article
+from libexception import UrlFormatError
 
 
-class article(object):
+__version__ = '1.0.1'
+
+
+class spider(object, mysqlBase):
     def __init__(self):
-        self.title = ""
-        self.author = ""
-        self.content = ""
-        self.date = None
-        self.source = ""
+        self.start_url = None
 
-    def _get_date(self, html):
-        date_string = html.xpath("//div[@class='post_time_source']/text()")
-        for s in date_string:
-            result = re.search(r'\d{4}\-\d{2}\-\d{2}', s)
-            if result:
-                return result[0]
-        return None
-
-    def _get_title(self, html):
-        title = html.xpath("//div/h1/text()")
-        if title:
-            title = title[0]
-        return title
-
-    def _get_source(self, html):
-        source = html.xpath("//div[@class='ep-source cDGray']/span[@class='left']/text()")
-        if source:
-            result = re.split(r'：', source[0])
-            return result[1]
+    def fetch_start_url(self, url):
+        if re.match(r'(https?)://.', url):
+            self.start_url = url
         else:
-            return None
+            raise UrlFormatError
 
-    def _get_author(self, html):
-        author = html.xpath("//span[@class='ep-editor']/text()")
-        if author:
-            result = re.split(r'：', author[0])
-            return result[1]
-        else:
-            return None
-
-    def _text_clean(self, text):
-        content = ''
-        for line in text:
-            result = line.xpath(
-                "./text()"
-                "|.//*[name(.)='font' or name(.)='b' or name(.)='a']/text()")
-            for subline in result:
-                content += subline
-        # remove space
-        content.replace(' ', '')
-        content.replace('\content', '')
-        content.replace('\n', '')
-        # remove \content \n etc.
-        return content
-
+    def query_url(self, url):
+        # query whether url exists.
+        return True
 
 start_url = "https://money.163.com"
+s = spider()
+s.fetch_start_url(start_url)
 md5 = hashlib.md5()
 header = mysqlHeader('root', '6414939', 'spider')
 mysql = mysqlBase(header)
