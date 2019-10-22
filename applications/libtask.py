@@ -3,6 +3,7 @@
 
 import json
 import os
+import re
 import sys
 import time
 from message import *
@@ -15,7 +16,7 @@ from event import (event_record_stock, event_init_stock,
                    event_flag_stock,
                    event_rehabilitation)
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 
 class taskManager(BackgroundScheduler):
@@ -78,6 +79,9 @@ class taskManager(BackgroundScheduler):
                 trigger = CronTrigger(day_of_week=jsdata['day of week'])
             elif k == 'hour':
                 trigger = CronTrigger(hour=jsdata['hour'])
+            elif k == 'time':
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                trigger = CronTrigger(hour=int(m.group(1)), minute=int(m.group(2)))
             else:
                 trigger = None
         return trigger
@@ -136,5 +140,7 @@ def test1():
 
 
 if __name__ == "__main__":
-    pass
+    x = '5:30'
+    m = re.match(r'(\d{1,2}):(\d{2})', x)
+    print(m.group(1))
     # task.add_job(test, 'interval', seconds=10, id='my_job')

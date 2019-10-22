@@ -23,7 +23,7 @@ from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from enum import Enum
-__version__ = '1.2.11'
+__version__ = '1.2.12'
 
 
 class SecurityFlag(Enum):
@@ -147,6 +147,9 @@ class EventCreateStockTable(StockEventBase):
             self, code,
             start_date='19901219',
             end_date=today()):
+        """
+        read csv data and return a dataframe object.
+        """
         url_ne_index = read_json('URL_163_MONEY', CONF_FILE)
         query_code = self.coder.net_ease_code(code)
         netease_stock_index_url = url_ne_index.format(
@@ -525,12 +528,12 @@ def sub_7_days_benefit_distribution():
             result = stock_con.session.execute(sql).fetchall()
             x = pd.DataFrame.from_dict(result)
             x.columns = ['trade_date', 'close_price']
-            l = []
+            li = []
             k = 0
             while k < 300:
                 i = random.randint(0, x.shape[0]-10)
                 benefit = (x.iloc[i+7, 1]-x.iloc[i, 1])/x.iloc[i, 1]
-                l.append(benefit)
+                li.append(benefit)
                 k = k+1
 
             y = pd.DataFrame.from_dict(l)

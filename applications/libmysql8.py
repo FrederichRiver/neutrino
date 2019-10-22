@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
 from libexception import AccountException
-__version__ = '3.1.11'
+__version__ = '3.1.12'
 
 
 class mysqlBase(object):
@@ -90,25 +90,16 @@ def create_table(table, engine):
     table.metadata.create_all(engine)
 
 
-def create_table_from_table(name, tableName, engine):
+def create_table_from_table(name, table_template, engine):
     # Base on a table, create another form which
     # is similar with the original table.
     # Only name was changed.
     # name : which is the target table name.
     # tableName : which is the original table name.
     # engine : a database engine base on MySQLBase.
-    Base = declarative_base()
-    Base.metadata.reflect(engine)
-    table = Base.metadata.tables[tableName]
-    # Extract sql from the template table.
-    c = str(CreateTable(table))
-    c = c.replace("CREATE TABLE", "CREATE TABLE if not exists")
-    sql = c.replace(tableName, name)
-    # print(sql)
-    # Execute the sql.
+    sql = "CREATE table {name} like {table_template}"
     engine.connect().execute(sql)
     engine.connect().close()
-    Base.metadata.clear()
 
 
 if __name__ == '__main__':

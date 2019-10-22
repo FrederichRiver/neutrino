@@ -2,15 +2,17 @@
 # -*- coding: utf-8 -*-
 import sys
 from libmysql8 import mysqlHeader, mysqlBase, create_table
-from form import formTemplate,  formStockList
+from form import formTemplate,  formStockList, formFinanceTemplate
+from libstock import StockEventBase
 
-__version__ = '1.1'
+__version__ = '1.3'
 
 
 def event_initial_database():
     header = mysqlHeader('root', '6414939', 'test')
     mysql = mysqlBase(header)
     create_table(formTemplate, mysql.engine)
+    create_table(formFinanceTemplate, mysql.engine)
 
 
 def event_drop_tables():
@@ -35,7 +37,18 @@ def event_database_backup():
 
 
 def table_batch_modify():
-    pass
+    header = mysqlHeader('root', '6414939', 'test')
+    # self definition
+    event = StockEventBase()
+    event._init_database(header)
+    stock_list = event.fetch_all_stock_list()
+    for stock in stock_list:
+        print(stock)
+        try:
+            sql = f"alter table {stock} add column adjust_factor float"
+            event.mysql.engine.execute(sql)
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
@@ -54,7 +67,7 @@ if __name__ == "__main__":
             print(e)
     elif sys.argv[1] == "test":
         try:
-            event_drop_tables()
+            table_batch_modify()
         except Exception as e:
             print(e)
     else:

@@ -8,7 +8,8 @@ from libstock import (EventCreateStockTable,
                       EventRecordInterest,
                       EventFlag)
 from libstock_dev import EventRehabilitation
-__version__ = '1.0.5'
+from libfinance import EventFinanceReport
+__version__ = '1.0.6'
 
 
 def event_init_stock():
@@ -62,6 +63,18 @@ def event_rehabilitation():
     stock_list = event.fetch_all_stock_list()
     for stock in stock_list:
         event.rehabilitate(stock)
+        event.update_adjust_factor(stock)
+
+
+def event_download_finance_report():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = EventFinanceReport()
+    event._init_database(header)
+    stock_list = event.fetch_all_stock_list()
+    for stock in stock_list:
+        # print(stock[2:])
+        event.update_summary(stock[2:])
+
 
 if __name__ == "__main__":
     # event_init_stock()

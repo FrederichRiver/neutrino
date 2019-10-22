@@ -16,7 +16,7 @@ def read_json(key, jfile):
         item = j[key]
     except KeyError:
         item = None
-    except:
+    except Exception:
         item = None
     return key, item
 
