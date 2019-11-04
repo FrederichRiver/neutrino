@@ -131,14 +131,6 @@ class task(object):
         self.trigger = trigger
 
 
-def test():
-    print('test')
-
-
-def test1():
-    print('test1')
-
-
 if __name__ == "__main__":
     x = '5:30'
     m = re.match(r'(\d{1,2}):(\d{2})', x)

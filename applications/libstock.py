@@ -13,6 +13,7 @@ import random
 import re
 import pandas as pd
 import talib as ta
+import time
 import requests
 from env import TIME_FMT, CONF_FILE
 from utils import read_json, neteaseindex, today, info, error
@@ -23,7 +24,7 @@ from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from enum import Enum
-__version__ = '1.2.12'
+__version__ = '1.2.15'
 
 
 class SecurityFlag(Enum):
@@ -126,7 +127,6 @@ class EventFlag(StockEventBase):
 
     def _flag_future(self, stock_code):
         pass
-
     def _flag_gold(self, stock_code):
         pass
 
@@ -150,7 +150,7 @@ class EventCreateStockTable(StockEventBase):
         """
         read csv data and return a dataframe object.
         """
-        url_ne_index = read_json('URL_163_MONEY', CONF_FILE)
+        _, url_ne_index = read_json('URL_163_MONEY', CONF_FILE)
         query_code = self.coder.net_ease_code(code)
         netease_stock_index_url = url_ne_index.format(
             query_code, start_date, end_date)
@@ -202,6 +202,7 @@ class EventCreateStockTable(StockEventBase):
     def sub_create_stock_table(self):
         self.fetch_all_security_list()
         for stock in self.security_list:
+            print(f"Creat table {stock}.")
             self._record_stock(stock)
 
 
@@ -209,6 +210,52 @@ class EventDownloadStockData(EventCreateStockTable):
     """
     This method download daily stock trading data.
     """
+
+    def first_time_download_stock_data(self, stock_code):
+        # print(stock_code)
+        result = self._get_file_from_net_ease(stock_code)
+        result.columns = ['trade_date', 'stock_code',
+                          'stock_name', 'close_price',
+                          'highest_price', 'lowest_price',
+                          'open_price', 'prev_close_price',
+                          'change_rate', 'amplitude',
+                          'volume', 'turnover']
+        result.drop(['stock_code'], axis=1, inplace=True)
+        result.replace('None', np.nan, inplace=True)
+        result = result.dropna(axis=0, how='any')
+        columetype = {
+            'trade_date': Date,
+            'stock_name': NVARCHAR(length=10),
+            'close_price': DECIMAL(7, 3),
+            'highest_price': DECIMAL(7, 3),
+            'lowest_price': DECIMAL(7, 3),
+            'open_price': DECIMAL(7, 3),
+            'prev_close_price': DECIMAL(7, 3),
+            'change_rate': DECIMAL(7, 3),
+            'amplitude': DECIMAL(7, 4),
+            'volume': Integer(),
+            'turnover': DECIMAL(20, 2)
+        }
+        # stk = formStockList(stock_code=stock_code,
+        #            gmt_modified=datetime.today())
+        # engine.session.add(stk)
+        # engine.session.commit()
+        try:
+            result.to_sql(name=stock_code,
+                          con=self.mysql.engine,
+                          if_exists='append',
+                          index=False,
+                          dtype=columetype)
+            query = self.mysql.session.query(
+                formStockList.stock_code,
+                formStockList.gmt_modified
+            ).filter_by(stock_code=stock_code)
+            if query:
+                query.update(
+                    {"gmt_modified": today()})
+            self.mysql.session.commit()
+        except Exception as e:
+            print(f'{time.ctime()}: Error 3 - {e}')
 
     def _download_stock_data(self, stock_code):
         # print(stock_code)
@@ -231,37 +278,56 @@ class EventDownloadStockData(EventCreateStockTable):
             'open_price': DECIMAL(7, 3),
             'prev_close_price': DECIMAL(7, 3),
             'change_rate': DECIMAL(7, 3),
-            'amplitude': DECIMAL(7, 3),
+            'amplitude': DECIMAL(7, 4),
             'volume': Integer(),
-            'turnover': DECIMAL(17, 2)
+            'turnover': DECIMAL(20, 2)
         }
         # stk = formStockList(stock_code=stock_code,
         #            gmt_modified=datetime.today())
         # engine.session.add(stk)
         # engine.session.commit()
+        from datetime import date
         try:
-            result.to_sql(name=stock_code,
-                          con=self.mysql.engine,
-                          if_exists='append',
-                          index=False,
-                          dtype=columetype)
+            sql = f"SELECT trade_date from {stock_code}"
+            query = self.mysql.engine.execute(sql).fetchall()
+            result['trade_date'] = pd.to_datetime(result['trade_date'], format=TIME_FMT)
+            result = result.sort_values('trade_date')
+            # print(result.head(5))
+            t2 = query[-1][0]
+            update_date = t2
+            for index, row in result.iterrows():
+                t1 = row['trade_date'].to_pydatetime().date()
+                if t1 > t2:
+                    sql2 = (
+                        f"INSERT into {stock_code} "
+                        "(trade_date,stock_name,close_price,"
+                        "highest_price,lowest_price,open_price,prev_close_price,"
+                        "change_rate,amplitude,volume,turnover)"
+                        f"VALUES('{row['trade_date']}','{row['stock_name']}',"
+                        f"{row['close_price']},{row['highest_price']},"
+                        f"{row['lowest_price']},{row['open_price']},"
+                        f"{row['prev_close_price']},{row['change_rate']},"
+                        f"{row['amplitude']},{row['volume']},{row['turnover']})")        
+                    self.mysql.engine.execute(sql2)
+                    update_date = t1
             query = self.mysql.session.query(
-                formStockList.stock_code,
-                formStockList.gmt_modified
-            ).filter_by(stock_code=stock_code)
+                        formStockList.stock_code,
+                        formStockList.gmt_modified
+                    ).filter_by(stock_code=stock_code)
             if query:
                 query.update(
-                    {"gmt_modified": today()})
+                    {"gmt_modified": update_date})
             self.mysql.session.commit()
         except Exception as e:
-            print(f'Error 3: {e}')
+            print(f'{time.ctime()}: Error 3 - {e}')
 
-    def download_stock_data(self):
+    def sub_download_stock_data(self):
         result = self.mysql.session.query(
             formStockList.stock_code).all()
         # result format:
         # (stock_code,)
         for x in result:
+            print(f"{time.ctime()}: Download {x[0]} stock data.")
             self._download_stock_data(x[0])
 
 
@@ -270,6 +336,7 @@ class EventCreateInterestTable(StockEventBase):
         from form import formInterest
         self.fetch_all_stock_list()
         for stock_code in self.stock_list:
+            print(f"{time.ctime()}: Create interest table {stock_code}")
             create_table_from_table(
                 f"{stock_code}_interest",
                 formInterest.__tablename__,
@@ -281,11 +348,11 @@ class EventRecordInterest(StockEventBase):
         self.fetch_all_stock_list()
         for stock_code in self.stock_list:
             # stock code format: SH600000
-            # print(stock_code)
+            print(f"{time.ctime()}: Recording interest of {stock_code}.")
             try:
                 self._resolve_dividend(stock_code)
             except Exception as e:
-                print(e)
+                print(f"{time.ctime()}: Error - {e}")
 
     def _resolve_dividend(self, stock_code):
         # fetch data table

@@ -585,3 +585,5401 @@ Jobstore default:
 time data '--' does not match format '%Y-%m-%d'
 time data '--' does not match format '%Y-%m-%d'
 time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+(pymysql.err.ProgrammingError) (1146, "Table 'test.SZ002820_interest' doesn't exist")
+[SQL: SELECT * from SZ002820_interest where report_date='2019-06-12 00:00:00']
+(Background on this error at: http://sqlalche.me/e/f405)
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+Tue Oct 22 20:37:39 2019: Neutrino is running.
+
+Tue Oct 22 20:37:39 2019: Checking task file.
+
+Append task error:  Unrecognized expression "12:00" for field "hour" 
+
+Tue Oct 22 21:07:39 2019: Neutrino is running.
+
+Tue Oct 22 21:07:39 2019: Checking task file.
+
+Append task error:  Unrecognized expression "12:00" for field "hour" 
+
+Tue Oct 22 21:37:39 2019: Neutrino is running.
+
+Tue Oct 22 21:37:39 2019: Checking task file.
+
+Append task error:  Unrecognized expression "12:00" for field "hour" 
+
+Tue Oct 22 22:07:39 2019: Neutrino is running.
+
+Tue Oct 22 22:07:39 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-22 23:00:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Tue Oct 22 22:37:39 2019: Neutrino is running.
+
+Tue Oct 22 22:37:39 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-22 23:00:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Job "event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 33, in event_download_stock_data
+    event.download_stock_data()
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 265, in download_stock_data
+    self._download_stock_data(x[0])
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 215, in _download_stock_data
+    result = self._get_file_from_net_ease(stock_code)
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 155, in _get_file_from_net_ease
+    netease_stock_index_url = url_ne_index.format(
+AttributeError: 'tuple' object has no attribute 'format'
+Tue Oct 22 23:07:39 2019: Neutrino is running.
+
+Tue Oct 22 23:07:39 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Tue Oct 22 23:37:40 2019: Neutrino is running.
+
+Tue Oct 22 23:37:40 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 00:07:40 2019: Neutrino is running.
+
+Wed Oct 23 00:07:40 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 00:37:40 2019: Neutrino is running.
+
+Wed Oct 23 00:37:40 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 01:07:41 2019: Neutrino is running.
+
+Wed Oct 23 01:07:41 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 01:37:41 2019: Neutrino is running.
+
+Wed Oct 23 01:37:41 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 02:07:41 2019: Neutrino is running.
+
+Wed Oct 23 02:07:41 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 02:37:42 2019: Neutrino is running.
+
+Wed Oct 23 02:37:42 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 03:07:42 2019: Neutrino is running.
+
+Wed Oct 23 03:07:42 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 03:37:42 2019: Neutrino is running.
+
+Wed Oct 23 03:37:42 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 04:07:42 2019: Neutrino is running.
+
+Wed Oct 23 04:07:42 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 04:37:43 2019: Neutrino is running.
+
+Wed Oct 23 04:37:43 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 05:07:43 2019: Neutrino is running.
+
+Wed Oct 23 05:07:43 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 05:37:43 2019: Neutrino is running.
+
+Wed Oct 23 05:37:43 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 06:07:44 2019: Neutrino is running.
+
+Wed Oct 23 06:07:44 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 06:45:37 2019: Neutrino is running.
+
+Wed Oct 23 06:45:37 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='0'], next run at: 2019-10-23 23:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Run time of job "event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)" was missed by 11:05:27.651993
+Run time of job "event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-23 11:00:00 CST)" was missed by 11:05:28.252940
+Run time of job "event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-23 12:00:00 CST)" was missed by 10:05:28.640467
+Run time of job "event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)" was missed by 2:05:28.895411
+Run time of job "event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-23 20:00:00 CST)" was missed by 2:05:28.984281
+Run time of job "event_rehabilitation (trigger: cron[hour='22', minute='1'], next run at: 2019-10-23 22:01:00 CST)" was missed by 0:04:29.073356
+Wed Oct 23 22:11:56 2019: Neutrino is stopped.
+Exception during reset or similar
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 713, in _write_bytes
+    self._sock.sendall(data)
+BrokenPipeError: [Errno 32] Broken pipe
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/pool/base.py", line 680, in _finalize_fairy
+    fairy._reset(pool)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/pool/base.py", line 867, in _reset
+    pool._dialect.do_rollback(self)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/dialects/mysql/base.py", line 2227, in do_rollback
+    dbapi_connection.rollback()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 429, in rollback
+    self._execute_command(COMMAND.COM_QUERY, "ROLLBACK")
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 771, in _execute_command
+    self._write_bytes(packet)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 718, in _write_bytes
+    "MySQL server has gone away (%r)" % (e,))
+pymysql.err.OperationalError: (2006, "MySQL server has gone away (BrokenPipeError(32, 'Broken pipe'))")
+Exception during reset or similar
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 713, in _write_bytes
+    self._sock.sendall(data)
+BrokenPipeError: [Errno 32] Broken pipe
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/pool/base.py", line 680, in _finalize_fairy
+    fairy._reset(pool)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/pool/base.py", line 867, in _reset
+    pool._dialect.do_rollback(self)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/dialects/mysql/base.py", line 2227, in do_rollback
+    dbapi_connection.rollback()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 429, in rollback
+    self._execute_command(COMMAND.COM_QUERY, "ROLLBACK")
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 771, in _execute_command
+    self._write_bytes(packet)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 718, in _write_bytes
+    "MySQL server has gone away (%r)" % (e,))
+pymysql.err.OperationalError: (2006, "MySQL server has gone away (BrokenPipeError(32, 'Broken pipe'))")
+Wed Oct 23 22:12:05 2019: Neutrino id is 18990.
+Wed Oct 23 22:12:05 2019: Neutrino started with pid 18990
+
+Wed Oct 23 22:12:05 2019: Neptune start.
+
+Wed Oct 23 22:12:05 2019: Neutrino is running.
+
+Wed Oct 23 22:12:05 2019: Checking task file.
+
+/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1300, "Invalid utf8mb4 character string: '800495'")
+  result = self._query(query)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_rehabilitation (trigger: cron[hour='9', minute='0'], next run at: 2019-10-24 09:00:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 22:12:42 2019: Neutrino is stopped.
+Wed Oct 23 22:12:45 2019: Neutrino id is 19037.
+Wed Oct 23 22:12:45 2019: Neutrino started with pid 19037
+
+Wed Oct 23 22:12:45 2019: Neptune start.
+
+Wed Oct 23 22:12:45 2019: Neutrino is running.
+
+Wed Oct 23 22:12:45 2019: Checking task file.
+
+Append task error:  Unrecognized expression "22:20" for field "hour" 
+
+Wed Oct 23 22:13:21 2019: Neutrino is stopped.
+Wed Oct 23 22:13:25 2019: Neutrino id is 19092.
+Wed Oct 23 22:13:25 2019: Neutrino started with pid 19092
+
+Wed Oct 23 22:13:25 2019: Neptune start.
+
+Wed Oct 23 22:13:25 2019: Neutrino is running.
+
+Wed Oct 23 22:13:25 2019: Checking task file.
+
+/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1300, "Invalid utf8mb4 character string: '800495'")
+  result = self._query(query)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-23 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='9', minute='0'], next run at: 2019-10-24 09:00:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+(pymysql.err.ProgrammingError) (1146, "Table 'test.SZ002820_interest' doesn't exist")
+[SQL: SELECT * from SZ002820_interest where report_date='2019-06-12 00:00:00']
+(Background on this error at: http://sqlalche.me/e/f405)
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+time data '--' does not match format '%Y-%m-%d'
+Wed Oct 23 22:43:49 2019: Neutrino is running.
+
+Wed Oct 23 22:43:49 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_rehabilitation (trigger: cron[hour='9', minute='0'], next run at: 2019-10-24 09:00:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-24 22:20:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Wed Oct 23 22:46:04 2019: Neutrino is stopped.
+Wed Oct 23 22:46:30 2019: Neutrino id is 20004.
+Wed Oct 23 22:46:30 2019: Neutrino started with pid 20004
+
+Wed Oct 23 22:46:30 2019: Neptune start.
+
+Wed Oct 23 22:46:30 2019: Neutrino is running.
+
+Wed Oct 23 22:46:30 2019: Checking task file.
+
+/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1300, "Invalid utf8mb4 character string: '800495'")
+  result = self._query(query)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-23 22:50:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-24 22:20:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600000
+Calculating adjust factor of SH600001
+Calculating adjust factor of SH600002
+Calculating adjust factor of SH600003
+Calculating adjust factor of SH600004
+Calculating adjust factor of SH600005
+Calculating adjust factor of SH600006
+Calculating adjust factor of SH600007
+Calculating adjust factor of SH600008
+Wed Oct 23 23:16:31 2019: Neutrino is running.
+
+Wed Oct 23 23:16:31 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-24 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-24 22:50:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600009
+Calculating adjust factor of SH600010
+Calculating adjust factor of SH600011
+Calculating adjust factor of SH600012
+Calculating adjust factor of SH600015
+/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py:174: RuntimeWarning: divide by zero encountered in double_scalars
+  factor = factor*self.df.ix[i-1, 'close']/self.df.ix[i, 'prev_close']
+/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py:179: RuntimeWarning: invalid value encountered in double_scalars
+  self.df.ix[i, 'reh'] = self.df.ix[i, 'close']*factor
+Job "event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-24 22:50:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1244, in _execute_context
+    cursor, statement, parameters, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/default.py", line 552, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 170, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 328, in _query
+    conn.query(q)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 732, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1054, "Unknown column 'inf' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 67, in event_rehabilitation
+    event.update_adjust_factor(stock)
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py", line 227, in update_adjust_factor
+    self.mysql.engine.execute(sql)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 2166, in execute
+    return connection.execute(statement, *multiparams, **params)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 982, in execute
+    return self._execute_text(object_, multiparams, params)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1155, in _execute_text
+    parameters,
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    e, statement, parameters, cursor, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1466, in _handle_dbapi_exception
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/util/compat.py", line 383, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/util/compat.py", line 128, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1244, in _execute_context
+    cursor, statement, parameters, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/default.py", line 552, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 170, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 328, in _query
+    conn.query(q)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 732, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.InternalError: (pymysql.err.InternalError) (1054, "Unknown column 'inf' in 'field list'")
+[SQL: update SH600015 set trade_date='2006-03-31 00:00:00',adjust_factor=inf where trade_date='2006-03-31 00:00:00']
+(Background on this error at: http://sqlalche.me/e/2j85)
+Wed Oct 23 23:46:31 2019: Neutrino is running.
+
+Wed Oct 23 23:46:31 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-24 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-24 22:50:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Run time of job "event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)" was missed by 11:39:29.613445
+Run time of job "event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-24 11:00:00 CST)" was missed by 11:39:30.126617
+Run time of job "event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-24 12:00:00 CST)" was missed by 10:39:30.561055
+Run time of job "event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-24 18:00:00 CST)" was missed by 4:39:30.650704
+Run time of job "event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-24 20:00:00 CST)" was missed by 2:39:30.739010
+Run time of job "event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-24 22:20:00 CST)" was missed by 0:19:30.828528
+Run time of job "event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-24 22:50:00 CST)" was missed by 23:49:30.927000
+Fri Oct 25 22:39:44 2019: Neutrino is running.
+
+Fri Oct 25 22:39:44 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-25 22:50:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-26 12:00:00 CST)
+    event_download_stock_data (trigger: cron[hour='18', minute='0'], next run at: 2019-10-26 18:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600000
+Calculating adjust factor of SH600001
+Calculating adjust factor of SH600002
+Calculating adjust factor of SH600003
+Fri Oct 25 22:59:19 2019: Neutrino is stopped.
+Fri Oct 25 22:59:23 2019: Neutrino id is 22552.
+Fri Oct 25 22:59:23 2019: Neutrino started with pid 22552
+
+Fri Oct 25 22:59:24 2019: Neptune start.
+
+Fri Oct 25 22:59:24 2019: Neutrino is running.
+
+Fri Oct 25 22:59:24 2019: Checking task file.
+
+/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1300, "Invalid utf8mb4 character string: '800495'")
+  result = self._query(query)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-25 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-26 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600004
+Calculating adjust factor of SH600005
+Calculating adjust factor of SH600006
+Job "event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 33, in event_download_stock_data
+    event.download_stock_data()
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 266, in download_stock_data
+    print(f"{time.ctime()}: Download {x[0]} trading data.")
+NameError: name 'time' is not defined
+Calculating adjust factor of SH600007
+Calculating adjust factor of SH600008
+Calculating adjust factor of SH600009
+Calculating adjust factor of SH600010
+Calculating adjust factor of SH600011
+Fri Oct 25 23:29:24 2019: Neutrino is running.
+
+Fri Oct 25 23:29:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-26 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600012
+Calculating adjust factor of SH600015
+Job "event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1244, in _execute_context
+    cursor, statement, parameters, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/default.py", line 552, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 170, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 328, in _query
+    conn.query(q)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 732, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1054, "Unknown column 'inf' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 67, in event_rehabilitation
+    event.update_adjust_factor(stock)
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py", line 227, in update_adjust_factor
+    self.mysql.engine.execute(sql)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 2166, in execute
+    return connection.execute(statement, *multiparams, **params)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 982, in execute
+    return self._execute_text(object_, multiparams, params)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1155, in _execute_text
+    parameters,
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    e, statement, parameters, cursor, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1466, in _handle_dbapi_exception
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/util/compat.py", line 383, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/util/compat.py", line 128, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1244, in _execute_context
+    cursor, statement, parameters, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/default.py", line 552, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 170, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 328, in _query
+    conn.query(q)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 732, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.InternalError: (pymysql.err.InternalError) (1054, "Unknown column 'inf' in 'field list'")
+[SQL: update SH600015 set trade_date='2006-03-31 00:00:00',adjust_factor=inf where trade_date='2006-03-31 00:00:00']
+(Background on this error at: http://sqlalche.me/e/2j85)
+Run time of job "event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)" was missed by 0:22:05.700170
+Run time of job "event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-26 11:00:00 CST)" was missed by 0:22:06.183702
+Sat Oct 26 11:30:20 2019: Neutrino is running.
+
+Sat Oct 26 11:30:20 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-26 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 12:00:21 2019: Neutrino is running.
+
+Sat Oct 26 12:00:21 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 12:30:21 2019: Neutrino is running.
+
+Sat Oct 26 12:30:21 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 13:00:21 2019: Neutrino is running.
+
+Sat Oct 26 13:00:21 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 13:30:22 2019: Neutrino is running.
+
+Sat Oct 26 13:30:22 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 14:00:22 2019: Neutrino is running.
+
+Sat Oct 26 14:00:22 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 14:30:22 2019: Neutrino is running.
+
+Sat Oct 26 14:30:22 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 15:00:23 2019: Neutrino is running.
+
+Sat Oct 26 15:00:23 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 15:30:23 2019: Neutrino is running.
+
+Sat Oct 26 15:30:23 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 16:00:23 2019: Neutrino is running.
+
+Sat Oct 26 16:00:23 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 16:30:24 2019: Neutrino is running.
+
+Sat Oct 26 16:30:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 17:00:24 2019: Neutrino is running.
+
+Sat Oct 26 17:00:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 17:30:24 2019: Neutrino is running.
+
+Sat Oct 26 17:30:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 18:00:24 2019: Neutrino is running.
+
+Sat Oct 26 18:00:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 18:30:25 2019: Neutrino is running.
+
+Sat Oct 26 18:30:25 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 19:00:25 2019: Neutrino is running.
+
+Sat Oct 26 19:00:25 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 19:30:26 2019: Neutrino is running.
+
+Sat Oct 26 19:30:26 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-26 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Creat table SH000001.
+Creat table SH000002.
+Creat table SH000003.
+Creat table SH000004.
+Creat table SH000005.
+Creat table SH000006.
+Creat table SH000007.
+Creat table SH000008.
+Creat table SH000009.
+Creat table SH000010.
+Creat table SH000011.
+Creat table SH000012.
+Creat table SH000013.
+Creat table SH000015.
+Creat table SH000016.
+Creat table SH000017.
+Creat table SH000018.
+Creat table SH000019.
+Creat table SH000020.
+Creat table SH000021.
+Creat table SH000022.
+Creat table SH000023.
+Creat table SH000025.
+Creat table SH000026.
+Creat table SH000027.
+Creat table SH000028.
+Creat table SH000029.
+Creat table SH000030.
+Creat table SH000031.
+Creat table SH000032.
+Creat table SH000033.
+Creat table SH000034.
+Creat table SH000035.
+Creat table SH000036.
+Creat table SH000037.
+Creat table SH000038.
+Creat table SH000039.
+Creat table SH000040.
+Creat table SH000041.
+Creat table SH000042.
+Creat table SH000043.
+Creat table SH000044.
+Creat table SH000045.
+Creat table SH000046.
+Creat table SH000047.
+Creat table SH000048.
+Creat table SH000049.
+Creat table SH000050.
+Creat table SH000051.
+Creat table SH000052.
+Creat table SH000053.
+Creat table SH000054.
+Creat table SH000055.
+Creat table SH000056.
+Creat table SH000057.
+Creat table SH000058.
+Creat table SH000059.
+Creat table SH000060.
+Creat table SH000061.
+Creat table SH000062.
+Creat table SH000063.
+Creat table SH000064.
+Creat table SH000065.
+Creat table SH000066.
+Creat table SH000067.
+Creat table SH000068.
+Creat table SH000069.
+Creat table SH000070.
+Creat table SH000071.
+Creat table SH000072.
+Creat table SH000073.
+Creat table SH000074.
+Creat table SH000075.
+Creat table SH000076.
+Creat table SH000077.
+Creat table SH000078.
+Creat table SH000079.
+Creat table SH000090.
+Creat table SH000091.
+Creat table SH000092.
+Creat table SH000093.
+Creat table SH000094.
+Creat table SH000095.
+Creat table SH000096.
+Creat table SH000097.
+Creat table SH000098.
+Creat table SH000099.
+Creat table SH000100.
+Creat table SH000101.
+Creat table SH000102.
+Creat table SH000103.
+Creat table SH000104.
+Creat table SH000105.
+Creat table SH000106.
+Creat table SH000107.
+Creat table SH000108.
+Creat table SH000109.
+Creat table SH000110.
+Creat table SH000111.
+Creat table SH000112.
+Creat table SH000113.
+Creat table SH000114.
+Creat table SH000115.
+Creat table SH000116.
+Creat table SH000117.
+Creat table SH000118.
+Creat table SH000119.
+Creat table SH000120.
+Creat table SH000121.
+Creat table SH000122.
+Creat table SH000123.
+Creat table SH000125.
+Creat table SH000126.
+Creat table SH000128.
+Creat table SH000129.
+Creat table SH000130.
+Creat table SH000131.
+Creat table SH000132.
+Creat table SH000133.
+Creat table SH000134.
+Creat table SH000135.
+Creat table SH000136.
+Creat table SH000137.
+Creat table SH000138.
+Creat table SH000139.
+Creat table SH000141.
+Creat table SH000142.
+Creat table SH000145.
+Creat table SH000146.
+Creat table SH000147.
+Creat table SH000148.
+Creat table SH000149.
+Creat table SH000150.
+Creat table SH000151.
+Creat table SH000152.
+Creat table SH000153.
+Creat table SH000155.
+Creat table SH000158.
+Creat table SH000159.
+Creat table SH000160.
+Creat table SH000161.
+Creat table SH000162.
+Creat table SH600000.
+Creat table SH600001.
+Creat table SH600002.
+Creat table SH600003.
+Creat table SH600004.
+Creat table SH600005.
+Creat table SH600006.
+Creat table SH600007.
+Creat table SH600008.
+Creat table SH600009.
+Creat table SH600010.
+Creat table SH600011.
+Creat table SH600012.
+Creat table SH600015.
+Creat table SH600016.
+Creat table SH600017.
+Creat table SH600018.
+Creat table SH600019.
+Creat table SH600020.
+Creat table SH600021.
+Creat table SH600022.
+Creat table SH600023.
+Creat table SH600025.
+Creat table SH600026.
+Creat table SH600027.
+Creat table SH600028.
+Creat table SH600029.
+Creat table SH600030.
+Creat table SH600031.
+Creat table SH600033.
+Creat table SH600035.
+Creat table SH600036.
+Creat table SH600037.
+Creat table SH600038.
+Creat table SH600039.
+Creat table SH600048.
+Creat table SH600050.
+Creat table SH600051.
+Creat table SH600052.
+Creat table SH600053.
+Creat table SH600054.
+Creat table SH600055.
+Creat table SH600056.
+Creat table SH600057.
+Creat table SH600058.
+Creat table SH600059.
+Creat table SH600060.
+Creat table SH600061.
+Creat table SH600062.
+Creat table SH600063.
+Creat table SH600064.
+Creat table SH600065.
+Creat table SH600066.
+Creat table SH600067.
+Creat table SH600068.
+Creat table SH600069.
+Creat table SH600070.
+Creat table SH600071.
+Creat table SH600072.
+Creat table SH600073.
+Creat table SH600074.
+Creat table SH600075.
+Creat table SH600076.
+Creat table SH600077.
+Creat table SH600078.
+Creat table SH600079.
+Creat table SH600080.
+Creat table SH600081.
+Creat table SH600082.
+Creat table SH600083.
+Creat table SH600084.
+Creat table SH600085.
+Creat table SH600086.
+Creat table SH600087.
+Creat table SH600088.
+Creat table SH600089.
+Creat table SH600090.
+Creat table SH600091.
+Creat table SH600092.
+Creat table SH600093.
+Creat table SH600094.
+Creat table SH600095.
+Creat table SH600096.
+Creat table SH600097.
+Creat table SH600098.
+Creat table SH600099.
+Creat table SH600100.
+Creat table SH600101.
+Creat table SH600102.
+Creat table SH600103.
+Creat table SH600104.
+Creat table SH600105.
+Creat table SH600106.
+Creat table SH600107.
+Creat table SH600108.
+Creat table SH600109.
+Creat table SH600110.
+Creat table SH600111.
+Creat table SH600112.
+Creat table SH600113.
+Creat table SH600114.
+Creat table SH600115.
+Creat table SH600116.
+Creat table SH600117.
+Creat table SH600118.
+Creat table SH600119.
+Creat table SH600120.
+Creat table SH600121.
+Creat table SH600122.
+Creat table SH600123.
+Creat table SH600125.
+Creat table SH600126.
+Creat table SH600127.
+Creat table SH600128.
+Creat table SH600129.
+Creat table SH600130.
+Creat table SH600131.
+Creat table SH600132.
+Creat table SH600133.
+Creat table SH600135.
+Creat table SH600136.
+Creat table SH600137.
+Creat table SH600138.
+Creat table SH600139.
+Creat table SH600141.
+Creat table SH600143.
+Creat table SH600145.
+Creat table SH600146.
+Creat table SH600148.
+Creat table SH600149.
+Creat table SH600150.
+Creat table SH600151.
+Creat table SH600152.
+Creat table SH600153.
+Creat table SH600155.
+Creat table SH600156.
+Creat table SH600157.
+Creat table SH600158.
+Creat table SH600159.
+Creat table SH600160.
+Creat table SH600161.
+Creat table SH600162.
+Creat table SH600163.
+Creat table SH600165.
+Creat table SH600166.
+Creat table SH600167.
+Creat table SH600168.
+Creat table SH600169.
+Creat table SH600170.
+Creat table SH600171.
+Creat table SH600172.
+Creat table SH600173.
+Creat table SH600175.
+Creat table SH600176.
+Creat table SH600177.
+Creat table SH600178.
+Creat table SH600179.
+Creat table SH600180.
+Creat table SH600181.
+Creat table SH600182.
+Creat table SH600183.
+Creat table SH600184.
+Creat table SH600185.
+Creat table SH600186.
+Creat table SH600187.
+Creat table SH600188.
+Creat table SH600189.
+Creat table SH600190.
+Creat table SH600191.
+Creat table SH600192.
+Creat table SH600193.
+Creat table SH600195.
+Creat table SH600196.
+Creat table SH600197.
+Creat table SH600198.
+Creat table SH600199.
+Creat table SH600200.
+Creat table SH600201.
+Creat table SH600202.
+Creat table SH600203.
+Creat table SH600205.
+Creat table SH600206.
+Creat table SH600207.
+Creat table SH600208.
+Creat table SH600209.
+Creat table SH600210.
+Creat table SH600211.
+Creat table SH600212.
+Creat table SH600213.
+Creat table SH600215.
+Creat table SH600216.
+Creat table SH600217.
+Creat table SH600218.
+Creat table SH600219.
+Creat table SH600220.
+Creat table SH600221.
+Creat table SH600222.
+Creat table SH600223.
+Creat table SH600225.
+Creat table SH600226.
+Creat table SH600227.
+Creat table SH600228.
+Creat table SH600229.
+Creat table SH600230.
+Creat table SH600231.
+Creat table SH600232.
+Creat table SH600233.
+Creat table SH600234.
+Creat table SH600235.
+Creat table SH600236.
+Creat table SH600237.
+Creat table SH600238.
+Creat table SH600239.
+Creat table SH600240.
+Creat table SH600241.
+Creat table SH600242.
+Creat table SH600243.
+Creat table SH600246.
+Creat table SH600247.
+Creat table SH600248.
+Creat table SH600249.
+Creat table SH600250.
+Creat table SH600251.
+Creat table SH600252.
+Creat table SH600253.
+Creat table SH600255.
+Creat table SH600256.
+Creat table SH600257.
+Creat table SH600258.
+Creat table SH600259.
+Creat table SH600260.
+Creat table SH600261.
+Creat table SH600262.
+Creat table SH600263.
+Creat table SH600265.
+Creat table SH600266.
+Creat table SH600267.
+Creat table SH600268.
+Creat table SH600269.
+Creat table SH600270.
+Creat table SH600271.
+Creat table SH600272.
+Creat table SH600273.
+Creat table SH600275.
+Creat table SH600276.
+Creat table SH600277.
+Creat table SH600278.
+Creat table SH600279.
+Creat table SH600280.
+Creat table SH600281.
+Creat table SH600282.
+Creat table SH600283.
+Creat table SH600284.
+Creat table SH600285.
+Creat table SH600286.
+Creat table SH600287.
+Creat table SH600288.
+Creat table SH600289.
+Creat table SH600290.
+Creat table SH600291.
+Creat table SH600292.
+Creat table SH600293.
+Creat table SH600295.
+Creat table SH600296.
+Creat table SH600297.
+Creat table SH600298.
+Creat table SH600299.
+Creat table SH600300.
+Creat table SH600301.
+Creat table SH600302.
+Creat table SH600303.
+Creat table SH600305.
+Creat table SH600306.
+Creat table SH600307.
+Creat table SH600308.
+Creat table SH600309.
+Creat table SH600310.
+Creat table SH600311.
+Creat table SH600312.
+Creat table SH600313.
+Creat table SH600315.
+Creat table SH600316.
+Creat table SH600317.
+Creat table SH600318.
+Creat table SH600319.
+Creat table SH600320.
+Creat table SH600321.
+Creat table SH600322.
+Creat table SH600323.
+Creat table SH600325.
+Creat table SH600326.
+Creat table SH600327.
+Creat table SH600328.
+Creat table SH600329.
+Creat table SH600330.
+Creat table SH600331.
+Creat table SH600332.
+Creat table SH600333.
+Creat table SH600335.
+Creat table SH600336.
+Creat table SH600337.
+Creat table SH600338.
+Creat table SH600339.
+Creat table SH600340.
+Creat table SH600343.
+Creat table SH600345.
+Creat table SH600346.
+Creat table SH600348.
+Creat table SH600350.
+Creat table SH600351.
+Creat table SH600352.
+Creat table SH600353.
+Creat table SH600354.
+Creat table SH600355.
+Creat table SH600356.
+Creat table SH600357.
+Creat table SH600358.
+Creat table SH600359.
+Creat table SH600360.
+Creat table SH600361.
+Creat table SH600362.
+Creat table SH600363.
+Creat table SH600365.
+Creat table SH600366.
+Creat table SH600367.
+Creat table SH600368.
+Creat table SH600369.
+Creat table SH600370.
+Creat table SH600371.
+Creat table SH600372.
+Creat table SH600373.
+Creat table SH600375.
+Creat table SH600376.
+Creat table SH600377.
+Creat table SH600378.
+Creat table SH600379.
+Creat table SH600380.
+Creat table SH600381.
+Creat table SH600382.
+Creat table SH600383.
+Creat table SH600385.
+Creat table SH600386.
+Creat table SH600387.
+Creat table SH600388.
+Creat table SH600389.
+Creat table SH600390.
+Creat table SH600391.
+Creat table SH600392.
+Creat table SH600393.
+Creat table SH600395.
+Creat table SH600396.
+Creat table SH600397.
+Creat table SH600398.
+Creat table SH600399.
+Creat table SH600400.
+Creat table SH600401.
+Creat table SH600403.
+Creat table SH600405.
+Creat table SH600406.
+Creat table SH600408.
+Creat table SH600409.
+Creat table SH600410.
+Creat table SH600415.
+Creat table SH600416.
+Creat table SH600418.
+Creat table SH600419.
+Creat table SH600420.
+Creat table SH600421.
+Creat table SH600422.
+Creat table SH600423.
+Creat table SH600425.
+Creat table SH600426.
+Creat table SH600428.
+Creat table SH600429.
+Creat table SH600432.
+Creat table SH600433.
+Creat table SH600435.
+Creat table SH600436.
+Creat table SH600438.
+Creat table SH600439.
+Creat table SH600444.
+Creat table SH600446.
+Creat table SH600448.
+Creat table SH600449.
+Creat table SH600452.
+Creat table SH600455.
+Creat table SH600456.
+Creat table SH600458.
+Creat table SH600459.
+Creat table SH600460.
+Creat table SH600461.
+Creat table SH600462.
+Creat table SH600463.
+Creat table SH600466.
+Creat table SH600467.
+Creat table SH600468.
+Creat table SH600469.
+Creat table SH600470.
+Creat table SH600472.
+Creat table SH600475.
+Creat table SH600476.
+Creat table SH600477.
+Creat table SH600478.
+Creat table SH600479.
+Creat table SH600480.
+Creat table SH600481.
+Creat table SH600482.
+Creat table SH600483.
+Creat table SH600485.
+Creat table SH600486.
+Creat table SH600487.
+Creat table SH600488.
+Creat table SH600489.
+Creat table SH600490.
+Creat table SH600491.
+Creat table SH600493.
+Creat table SH600495.
+Creat table SH600496.
+Creat table SH600497.
+Creat table SH600498.
+Creat table SH600499.
+Creat table SH600500.
+Creat table SH600501.
+Creat table SH600502.
+Creat table SH600503.
+Creat table SH600505.
+Creat table SH600506.
+Creat table SH600507.
+Creat table SH600508.
+Creat table SH600509.
+Creat table SH600510.
+Creat table SH600511.
+Creat table SH600512.
+Creat table SH600513.
+Creat table SH600515.
+Creat table SH600516.
+Creat table SH600517.
+Creat table SH600518.
+Creat table SH600519.
+Creat table SH600520.
+Creat table SH600521.
+Creat table SH600522.
+Creat table SH600523.
+Creat table SH600525.
+Creat table SH600526.
+Creat table SH600527.
+Creat table SH600528.
+Creat table SH600529.
+Creat table SH600530.
+Creat table SH600531.
+Creat table SH600532.
+Creat table SH600533.
+Creat table SH600535.
+Creat table SH600536.
+Creat table SH600537.
+Creat table SH600538.
+Creat table SH600539.
+Creat table SH600540.
+Creat table SH600543.
+Creat table SH600545.
+Creat table SH600546.
+Creat table SH600547.
+Creat table SH600548.
+Creat table SH600549.
+Creat table SH600550.
+Creat table SH600551.
+Creat table SH600552.
+Creat table SH600553.
+Creat table SH600555.
+Creat table SH600556.
+Creat table SH600557.
+Creat table SH600558.
+Creat table SH600559.
+Creat table SH600560.
+Creat table SH600561.
+Creat table SH600562.
+Creat table SH600563.
+Creat table SH600565.
+Creat table SH600566.
+Creat table SH600567.
+Creat table SH600568.
+Creat table SH600569.
+Creat table SH600570.
+Creat table SH600571.
+Creat table SH600572.
+Creat table SH600573.
+Creat table SH600575.
+Creat table SH600576.
+Creat table SH600577.
+Creat table SH600578.
+Creat table SH600579.
+Creat table SH600580.
+Creat table SH600581.
+Creat table SH600582.
+Creat table SH600583.
+Creat table SH600584.
+Creat table SH600585.
+Creat table SH600586.
+Creat table SH600587.
+Creat table SH600588.
+Creat table SH600589.
+Creat table SH600590.
+Creat table SH600591.
+Creat table SH600592.
+Creat table SH600593.
+Creat table SH600594.
+Creat table SH600595.
+Creat table SH600596.
+Creat table SH600597.
+Creat table SH600598.
+Creat table SH600599.
+Creat table SH600600.
+Creat table SH600601.
+Creat table SH600602.
+Creat table SH600603.
+Creat table SH600604.
+Creat table SH600605.
+Creat table SH600606.
+Creat table SH600607.
+Creat table SH600608.
+Creat table SH600609.
+Creat table SH600610.
+Creat table SH600611.
+Creat table SH600612.
+Creat table SH600613.
+Creat table SH600614.
+Creat table SH600615.
+Creat table SH600616.
+Creat table SH600617.
+Creat table SH600618.
+Creat table SH600619.
+Creat table SH600620.
+Creat table SH600621.
+Creat table SH600622.
+Creat table SH600623.
+Creat table SH600624.
+Creat table SH600625.
+Creat table SH600626.
+Creat table SH600627.
+Creat table SH600628.
+Creat table SH600629.
+Creat table SH600630.
+Creat table SH600631.
+Creat table SH600632.
+Creat table SH600633.
+Creat table SH600634.
+Creat table SH600635.
+Creat table SH600636.
+Creat table SH600637.
+Creat table SH600638.
+Creat table SH600639.
+Creat table SH600640.
+Creat table SH600641.
+Creat table SH600642.
+Creat table SH600643.
+Creat table SH600644.
+Creat table SH600645.
+Creat table SH600646.
+Creat table SH600647.
+Creat table SH600648.
+Creat table SH600649.
+Creat table SH600650.
+Creat table SH600651.
+Creat table SH600652.
+Creat table SH600653.
+Creat table SH600654.
+Creat table SH600655.
+Creat table SH600656.
+Creat table SH600657.
+Creat table SH600658.
+Creat table SH600659.
+Creat table SH600660.
+Creat table SH600661.
+Creat table SH600662.
+Creat table SH600663.
+Creat table SH600664.
+Creat table SH600665.
+Creat table SH600666.
+Creat table SH600667.
+Creat table SH600668.
+Creat table SH600669.
+Creat table SH600670.
+Creat table SH600671.
+Creat table SH600672.
+Creat table SH600673.
+Creat table SH600674.
+Creat table SH600675.
+Creat table SH600676.
+Creat table SH600677.
+Creat table SH600678.
+Creat table SH600679.
+Creat table SH600680.
+Creat table SH600681.
+Creat table SH600682.
+Creat table SH600683.
+Creat table SH600684.
+Creat table SH600685.
+Creat table SH600686.
+Creat table SH600687.
+Creat table SH600688.
+Creat table SH600689.
+Creat table SH600690.
+Creat table SH600691.
+Creat table SH600692.
+Creat table SH600693.
+Creat table SH600694.
+Creat table SH600695.
+Creat table SH600696.
+Creat table SH600697.
+Creat table SH600698.
+Creat table SH600699.
+Creat table SH600700.
+Creat table SH600701.
+Creat table SH600702.
+Creat table SH600703.
+Creat table SH600704.
+Creat table SH600705.
+Creat table SH600706.
+Creat table SH600707.
+Creat table SH600708.
+Creat table SH600709.
+Creat table SH600710.
+Creat table SH600711.
+Creat table SH600712.
+Creat table SH600713.
+Creat table SH600714.
+Creat table SH600715.
+Creat table SH600716.
+Creat table SH600717.
+Creat table SH600718.
+Creat table SH600719.
+Creat table SH600720.
+Creat table SH600721.
+Creat table SH600722.
+Creat table SH600723.
+Creat table SH600724.
+Creat table SH600725.
+Creat table SH600726.
+Creat table SH600727.
+Creat table SH600728.
+Creat table SH600729.
+Creat table SH600730.
+Creat table SH600731.
+Creat table SH600732.
+Creat table SH600733.
+Creat table SH600734.
+Creat table SH600735.
+Creat table SH600736.
+Creat table SH600737.
+Creat table SH600738.
+Creat table SH600739.
+Creat table SH600740.
+Creat table SH600741.
+Creat table SH600742.
+Creat table SH600743.
+Creat table SH600744.
+Creat table SH600745.
+Creat table SH600746.
+Creat table SH600747.
+Creat table SH600748.
+Creat table SH600749.
+Creat table SH600750.
+Creat table SH600751.
+Creat table SH600752.
+Creat table SH600753.
+Creat table SH600754.
+Creat table SH600755.
+Creat table SH600756.
+Creat table SH600757.
+Creat table SH600758.
+Creat table SH600759.
+Creat table SH600760.
+Creat table SH600761.
+Creat table SH600762.
+Creat table SH600763.
+Creat table SH600764.
+Creat table SH600765.
+Creat table SH600766.
+Creat table SH600767.
+Creat table SH600768.
+Creat table SH600769.
+Creat table SH600770.
+Creat table SH600771.
+Creat table SH600772.
+Creat table SH600773.
+Creat table SH600774.
+Creat table SH600775.
+Creat table SH600776.
+Creat table SH600777.
+Creat table SH600778.
+Creat table SH600779.
+Creat table SH600780.
+Creat table SH600781.
+Creat table SH600782.
+Creat table SH600783.
+Creat table SH600784.
+Creat table SH600785.
+Creat table SH600786.
+Creat table SH600787.
+Creat table SH600788.
+Creat table SH600789.
+Creat table SH600790.
+Creat table SH600791.
+Creat table SH600792.
+Creat table SH600793.
+Creat table SH600794.
+Creat table SH600795.
+Creat table SH600796.
+Creat table SH600797.
+Creat table SH600798.
+Creat table SH600799.
+Creat table SH600800.
+Creat table SH600801.
+Creat table SH600802.
+Creat table SH600803.
+Creat table SH600804.
+Creat table SH600805.
+Creat table SH600806.
+Creat table SH600807.
+Creat table SH600808.
+Creat table SH600809.
+Creat table SH600810.
+Creat table SH600811.
+Creat table SH600812.
+Creat table SH600813.
+Creat table SH600814.
+Creat table SH600815.
+Creat table SH600816.
+Creat table SH600817.
+Creat table SH600818.
+Creat table SH600819.
+Creat table SH600820.
+Creat table SH600821.
+Creat table SH600822.
+Creat table SH600823.
+Creat table SH600824.
+Creat table SH600825.
+Creat table SH600826.
+Creat table SH600827.
+Creat table SH600828.
+Creat table SH600829.
+Creat table SH600830.
+Creat table SH600831.
+Creat table SH600832.
+Creat table SH600833.
+Creat table SH600834.
+Creat table SH600835.
+Creat table SH600836.
+Creat table SH600837.
+Creat table SH600838.
+Creat table SH600839.
+Creat table SH600840.
+Creat table SH600841.
+Creat table SH600842.
+Creat table SH600843.
+Creat table SH600844.
+Creat table SH600845.
+Creat table SH600846.
+Creat table SH600847.
+Creat table SH600848.
+Creat table SH600849.
+Creat table SH600850.
+Creat table SH600851.
+Creat table SH600852.
+Creat table SH600853.
+Creat table SH600854.
+Creat table SH600855.
+Creat table SH600856.
+Creat table SH600857.
+Creat table SH600858.
+Creat table SH600859.
+Creat table SH600860.
+Creat table SH600861.
+Creat table SH600862.
+Creat table SH600863.
+Creat table SH600864.
+Creat table SH600865.
+Creat table SH600866.
+Creat table SH600867.
+Creat table SH600868.
+Creat table SH600869.
+Creat table SH600870.
+Creat table SH600871.
+Creat table SH600872.
+Creat table SH600873.
+Creat table SH600874.
+Creat table SH600875.
+Creat table SH600876.
+Creat table SH600877.
+Creat table SH600878.
+Creat table SH600879.
+Creat table SH600880.
+Creat table SH600881.
+Creat table SH600882.
+Creat table SH600883.
+Creat table SH600884.
+Creat table SH600885.
+Creat table SH600886.
+Creat table SH600887.
+Creat table SH600888.
+Creat table SH600889.
+Creat table SH600890.
+Creat table SH600891.
+Creat table SH600892.
+Creat table SH600893.
+Creat table SH600894.
+Creat table SH600895.
+Creat table SH600896.
+Creat table SH600897.
+Creat table SH600898.
+Creat table SH600899.
+Creat table SH600900.
+Creat table SH600901.
+Creat table SH600903.
+Creat table SH600908.
+Creat table SH600909.
+Creat table SH600917.
+Creat table SH600919.
+Creat table SH600926.
+Creat table SH600928.
+Creat table SH600929.
+Creat table SH600933.
+Creat table SH600936.
+Creat table SH600939.
+Creat table SH600958.
+Creat table SH600959.
+Creat table SH600960.
+Creat table SH600961.
+Creat table SH600962.
+Creat table SH600963.
+Creat table SH600965.
+Creat table SH600966.
+Creat table SH600967.
+Creat table SH600968.
+Creat table SH600969.
+Creat table SH600970.
+Creat table SH600971.
+Creat table SH600973.
+Creat table SH600975.
+Creat table SH600976.
+Creat table SH600977.
+Creat table SH600978.
+Creat table SH600979.
+Creat table SH600980.
+Creat table SH600981.
+Creat table SH600982.
+Creat table SH600983.
+Creat table SH600984.
+Creat table SH600985.
+Creat table SH600986.
+Creat table SH600987.
+Creat table SH600988.
+Creat table SH600989.
+Creat table SH600990.
+Creat table SH600991.
+Creat table SH600992.
+Creat table SH600993.
+Creat table SH600995.
+Creat table SH600996.
+Creat table SH600997.
+Creat table SH600998.
+Creat table SH600999.
+Creat table SH601000.
+Creat table SH601001.
+Creat table SH601002.
+Creat table SH601003.
+Creat table SH601005.
+Creat table SH601006.
+Creat table SH601007.
+Creat table SH601008.
+Creat table SH601009.
+Creat table SH601010.
+Creat table SH601011.
+Creat table SH601012.
+Creat table SH601015.
+Creat table SH601016.
+Creat table SH601018.
+Creat table SH601019.
+Creat table SH601020.
+Creat table SH601021.
+Creat table SH601028.
+Creat table SH601038.
+Creat table SH601058.
+Creat table SH601066.
+Creat table SH601068.
+Creat table SH601069.
+Creat table SH601086.
+Creat table SH601088.
+Creat table SH601098.
+Creat table SH601099.
+Creat table SH601100.
+Creat table SH601101.
+Creat table SH601106.
+Creat table SH601107.
+Creat table SH601108.
+Creat table SH601111.
+Creat table SH601113.
+Creat table SH601116.
+Creat table SH601117.
+Creat table SH601118.
+Creat table SH601126.
+Creat table SH601127.
+Creat table SH601128.
+Creat table SH601137.
+Creat table SH601138.
+Creat table SH601139.
+Creat table SH601155.
+Creat table SH601158.
+Creat table SH601162.
+Creat table SH601163.
+Creat table SH601166.
+Creat table SH601168.
+Creat table SH601169.
+Creat table SH601177.
+Creat table SH601179.
+Creat table SH601186.
+Creat table SH601188.
+Creat table SH601198.
+Creat table SH601199.
+Creat table SH601200.
+Creat table SH601208.
+Creat table SH601211.
+Creat table SH601212.
+Creat table SH601216.
+Creat table SH601218.
+Creat table SH601222.
+Creat table SH601225.
+Creat table SH601226.
+Creat table SH601228.
+Creat table SH601229.
+Creat table SH601231.
+Creat table SH601233.
+Creat table SH601236.
+Creat table SH601238.
+Creat table SH601258.
+Creat table SH601268.
+Creat table SH601288.
+Creat table SH601298.
+Creat table SH601299.
+Creat table SH601311.
+Creat table SH601313.
+Creat table SH601318.
+Creat table SH601319.
+Creat table SH601326.
+Creat table SH601328.
+Creat table SH601330.
+Creat table SH601333.
+Creat table SH601336.
+Creat table SH601339.
+Creat table SH601360.
+Creat table SH601366.
+Creat table SH601368.
+Creat table SH601369.
+Creat table SH601375.
+Creat table SH601377.
+Creat table SH601388.
+Creat table SH601390.
+Creat table SH601398.
+Creat table SH601500.
+Creat table SH601515.
+Creat table SH601518.
+Creat table SH601519.
+Creat table SH601555.
+Creat table SH601558.
+Creat table SH601566.
+Creat table SH601567.
+Creat table SH601577.
+Creat table SH601579.
+Creat table SH601588.
+Creat table SH601595.
+Creat table SH601598.
+Creat table SH601599.
+Creat table SH601600.
+Creat table SH601601.
+Creat table SH601606.
+Creat table SH601607.
+Creat table SH601608.
+Creat table SH601611.
+Creat table SH601615.
+Creat table SH601616.
+Creat table SH601618.
+Creat table SH601619.
+Creat table SH601628.
+Creat table SH601633.
+Creat table SH601636.
+Creat table SH601666.
+Creat table SH601668.
+Creat table SH601669.
+Creat table SH601677.
+Creat table SH601678.
+Creat table SH601688.
+Creat table SH601689.
+Creat table SH601698.
+Creat table SH601699.
+Creat table SH601700.
+Creat table SH601717.
+Creat table SH601718.
+Creat table SH601727.
+Creat table SH601766.
+Creat table SH601777.
+Creat table SH601788.
+Creat table SH601789.
+Creat table SH601798.
+Creat table SH601799.
+Creat table SH601800.
+Creat table SH601801.
+Creat table SH601808.
+Creat table SH601811.
+Creat table SH601818.
+Creat table SH601828.
+Creat table SH601838.
+Creat table SH601857.
+Creat table SH601858.
+Creat table SH601860.
+Creat table SH601865.
+Creat table SH601866.
+Creat table SH601869.
+Creat table SH601872.
+Creat table SH601877.
+Creat table SH601878.
+Creat table SH601880.
+Creat table SH601881.
+Creat table SH601882.
+Creat table SH601886.
+Creat table SH601888.
+Creat table SH601890.
+Creat table SH601898.
+Creat table SH601899.
+Creat table SH601900.
+Creat table SH601901.
+Creat table SH601908.
+Creat table SH601918.
+Creat table SH601919.
+Creat table SH601928.
+Creat table SH601929.
+Creat table SH601933.
+Creat table SH601939.
+Creat table SH601949.
+Creat table SH601952.
+Creat table SH601958.
+Creat table SH601965.
+Creat table SH601966.
+Creat table SH601968.
+Creat table SH601969.
+Creat table SH601975.
+Creat table SH601985.
+Creat table SH601988.
+Creat table SH601989.
+Creat table SH601990.
+Creat table SH601991.
+Creat table SH601992.
+Creat table SH601996.
+Creat table SH601997.
+Creat table SH601998.
+Creat table SH601999.
+Creat table SH603000.
+Creat table SH603001.
+Creat table SH603002.
+Creat table SH603003.
+Creat table SH603005.
+Creat table SH603006.
+Creat table SH603007.
+Creat table SH603008.
+Creat table SH603009.
+Creat table SH603010.
+Creat table SH603011.
+Creat table SH603012.
+Creat table SH603013.
+Creat table SH603015.
+Creat table SH603016.
+Creat table SH603017.
+Creat table SH603018.
+Creat table SH603019.
+Creat table SH603020.
+Creat table SH603021.
+Creat table SH603022.
+Creat table SH603023.
+Creat table SH603025.
+Creat table SH603026.
+Creat table SH603027.
+Creat table SH603028.
+Creat table SH603029.
+Creat table SH603030.
+Creat table SH603031.
+Creat table SH603032.
+Creat table SH603033.
+Creat table SH603035.
+Creat table SH603036.
+Creat table SH603037.
+Creat table SH603038.
+Creat table SH603039.
+Creat table SH603040.
+Creat table SH603041.
+Creat table SH603042.
+Creat table SH603043.
+Creat table SH603045.
+Creat table SH603050.
+Creat table SH603055.
+Creat table SH603056.
+Creat table SH603058.
+Creat table SH603059.
+Creat table SH603060.
+Creat table SH603063.
+Creat table SH603066.
+Creat table SH603067.
+Creat table SH603068.
+Creat table SH603069.
+Creat table SH603076.
+Creat table SH603077.
+Creat table SH603078.
+Creat table SH603079.
+Creat table SH603080.
+Creat table SH603081.
+Creat table SH603083.
+Creat table SH603085.
+Creat table SH603086.
+Creat table SH603088.
+Creat table SH603089.
+Creat table SH603090.
+Creat table SH603093.
+Creat table SH603096.
+Creat table SH603098.
+Creat table SH603099.
+Creat table SH603100.
+Creat table SH603101.
+Creat table SH603103.
+Creat table SH603105.
+Creat table SH603106.
+Creat table SH603108.
+Creat table SH603110.
+Creat table SH603111.
+Creat table SH603113.
+Creat table SH603115.
+Creat table SH603116.
+Creat table SH603117.
+Creat table SH603118.
+Creat table SH603121.
+Creat table SH603123.
+Creat table SH603126.
+Creat table SH603127.
+Creat table SH603128.
+Creat table SH603129.
+Creat table SH603131.
+Creat table SH603133.
+Creat table SH603136.
+Creat table SH603138.
+Creat table SH603139.
+Creat table SH603156.
+Creat table SH603157.
+Creat table SH603158.
+Creat table SH603159.
+Creat table SH603160.
+Creat table SH603161.
+Creat table SH603165.
+Creat table SH603166.
+Creat table SH603167.
+Creat table SH603168.
+Creat table SH603169.
+Creat table SH603177.
+Creat table SH603178.
+Creat table SH603179.
+Creat table SH603180.
+Creat table SH603181.
+Creat table SH603183.
+Creat table SH603185.
+Creat table SH603186.
+Creat table SH603187.
+Creat table SH603188.
+Creat table SH603189.
+Creat table SH603192.
+Creat table SH603196.
+Creat table SH603197.
+Creat table SH603198.
+Creat table SH603199.
+Creat table SH603200.
+Creat table SH603203.
+Creat table SH603208.
+Creat table SH603214.
+Creat table SH603217.
+Creat table SH603218.
+Creat table SH603220.
+Creat table SH603222.
+Creat table SH603223.
+Creat table SH603225.
+Creat table SH603226.
+Creat table SH603227.
+Creat table SH603228.
+Creat table SH603229.
+Creat table SH603232.
+Creat table SH603233.
+Creat table SH603236.
+Creat table SH603238.
+Creat table SH603239.
+Creat table SH603256.
+Creat table SH603258.
+Creat table SH603259.
+Creat table SH603260.
+Creat table SH603266.
+Creat table SH603267.
+Creat table SH603268.
+Creat table SH603269.
+Creat table SH603277.
+Creat table SH603278.
+Creat table SH603279.
+Creat table SH603283.
+Creat table SH603286.
+Creat table SH603288.
+Creat table SH603289.
+Creat table SH603297.
+Creat table SH603298.
+Creat table SH603299.
+Creat table SH603300.
+Creat table SH603301.
+Creat table SH603303.
+Creat table SH603305.
+Creat table SH603306.
+Creat table SH603308.
+Creat table SH603309.
+Creat table SH603311.
+Creat table SH603313.
+Creat table SH603315.
+Creat table SH603316.
+Creat table SH603317.
+Creat table SH603318.
+Creat table SH603319.
+Creat table SH603320.
+Creat table SH603321.
+Creat table SH603322.
+Creat table SH603323.
+Creat table SH603326.
+Creat table SH603327.
+Creat table SH603328.
+Creat table SH603329.
+Creat table SH603330.
+Creat table SH603331.
+Creat table SH603332.
+Creat table SH603333.
+Creat table SH603335.
+Creat table SH603336.
+Creat table SH603337.
+Creat table SH603338.
+Creat table SH603339.
+Creat table SH603345.
+Creat table SH603348.
+Creat table SH603351.
+Creat table SH603355.
+Creat table SH603356.
+Creat table SH603357.
+Creat table SH603358.
+Creat table SH603359.
+Creat table SH603360.
+Creat table SH603363.
+Creat table SH603365.
+Creat table SH603366.
+Creat table SH603367.
+Creat table SH603368.
+Creat table SH603369.
+Creat table SH603377.
+Creat table SH603378.
+Creat table SH603379.
+Creat table SH603380.
+Creat table SH603383.
+Creat table SH603385.
+Creat table SH603386.
+Creat table SH603387.
+Creat table SH603388.
+Creat table SH603389.
+Creat table SH603393.
+Creat table SH603396.
+Creat table SH603398.
+Creat table SH603399.
+Creat table SH603416.
+Creat table SH603421.
+Creat table SH603429.
+Creat table SH603444.
+Creat table SH603456.
+Creat table SH603458.
+Creat table SH603466.
+Creat table SH603477.
+Creat table SH603486.
+Creat table SH603488.
+Creat table SH603496.
+Creat table SH603499.
+Creat table SH603500.
+Creat table SH603501.
+Creat table SH603505.
+Creat table SH603506.
+Creat table SH603507.
+Creat table SH603508.
+Creat table SH603515.
+Creat table SH603516.
+Creat table SH603517.
+Creat table SH603518.
+Creat table SH603519.
+Creat table SH603520.
+Creat table SH603527.
+Creat table SH603528.
+Creat table SH603530.
+Creat table SH603533.
+Creat table SH603535.
+Creat table SH603536.
+Creat table SH603538.
+Creat table SH603555.
+Creat table SH603556.
+Creat table SH603557.
+Creat table SH603558.
+Creat table SH603559.
+Creat table SH603566.
+Creat table SH603567.
+Creat table SH603568.
+Creat table SH603569.
+Creat table SH603577.
+Creat table SH603578.
+Creat table SH603579.
+Creat table SH603580.
+Creat table SH603583.
+Creat table SH603585.
+Creat table SH603586.
+Creat table SH603587.
+Creat table SH603588.
+Creat table SH603589.
+Creat table SH603590.
+Creat table SH603595.
+Creat table SH603596.
+Creat table SH603598.
+Creat table SH603599.
+Creat table SH603600.
+Creat table SH603601.
+Creat table SH603602.
+Creat table SH603603.
+Creat table SH603605.
+Creat table SH603606.
+Creat table SH603607.
+Creat table SH603608.
+Creat table SH603609.
+Creat table SH603611.
+Creat table SH603612.
+Creat table SH603613.
+Creat table SH603615.
+Creat table SH603616.
+Creat table SH603617.
+Creat table SH603618.
+Creat table SH603619.
+Creat table SH603626.
+Creat table SH603628.
+Creat table SH603629.
+Creat table SH603630.
+Creat table SH603633.
+Creat table SH603636.
+Creat table SH603637.
+Creat table SH603638.
+Creat table SH603639.
+Creat table SH603648.
+Creat table SH603650.
+Creat table SH603655.
+Creat table SH603656.
+Creat table SH603657.
+Creat table SH603658.
+Creat table SH603659.
+Creat table SH603660.
+Creat table SH603661.
+Creat table SH603662.
+Creat table SH603663.
+Creat table SH603665.
+Creat table SH603666.
+Creat table SH603667.
+Creat table SH603668.
+Creat table SH603669.
+Creat table SH603676.
+Creat table SH603677.
+Creat table SH603678.
+Creat table SH603679.
+Creat table SH603680.
+Creat table SH603681.
+Creat table SH603683.
+Creat table SH603685.
+Creat table SH603686.
+Creat table SH603687.
+Creat table SH603688.
+Creat table SH603689.
+Creat table SH603690.
+Creat table SH603693.
+Creat table SH603696.
+Creat table SH603697.
+Creat table SH603698.
+Creat table SH603699.
+Creat table SH603700.
+Creat table SH603701.
+Creat table SH603703.
+Creat table SH603706.
+Creat table SH603707.
+Creat table SH603708.
+Creat table SH603709.
+Creat table SH603711.
+Creat table SH603712.
+Creat table SH603713.
+Creat table SH603716.
+Creat table SH603717.
+Creat table SH603718.
+Creat table SH603721.
+Creat table SH603722.
+Creat table SH603725.
+Creat table SH603726.
+Creat table SH603727.
+Creat table SH603728.
+Creat table SH603729.
+Creat table SH603730.
+Creat table SH603733.
+Creat table SH603737.
+Creat table SH603738.
+Creat table SH603739.
+Creat table SH603755.
+Creat table SH603757.
+Creat table SH603758.
+Creat table SH603766.
+Creat table SH603767.
+Creat table SH603768.
+Creat table SH603773.
+Creat table SH603776.
+Creat table SH603777.
+Creat table SH603778.
+Creat table SH603779.
+Creat table SH603787.
+Creat table SH603788.
+Creat table SH603789.
+Creat table SH603790.
+Creat table SH603797.
+Creat table SH603798.
+Creat table SH603799.
+Creat table SH603800.
+Creat table SH603801.
+Creat table SH603803.
+Creat table SH603806.
+Creat table SH603808.
+Creat table SH603809.
+Creat table SH603810.
+Creat table SH603811.
+Creat table SH603813.
+Creat table SH603816.
+Creat table SH603817.
+Creat table SH603818.
+Creat table SH603819.
+Creat table SH603822.
+Creat table SH603823.
+Creat table SH603825.
+Creat table SH603826.
+Creat table SH603828.
+Creat table SH603829.
+Creat table SH603833.
+Creat table SH603838.
+Creat table SH603839.
+Creat table SH603843.
+Creat table SH603848.
+Creat table SH603855.
+Creat table SH603856.
+Creat table SH603858.
+Creat table SH603859.
+Creat table SH603860.
+Creat table SH603861.
+Creat table SH603863.
+Creat table SH603866.
+Creat table SH603867.
+Creat table SH603868.
+Creat table SH603869.
+Creat table SH603871.
+Creat table SH603876.
+Creat table SH603877.
+Creat table SH603878.
+Creat table SH603879.
+Creat table SH603880.
+Creat table SH603881.
+Creat table SH603882.
+Creat table SH603883.
+Creat table SH603885.
+Creat table SH603886.
+Creat table SH603887.
+Creat table SH603888.
+Creat table SH603889.
+Creat table SH603890.
+Creat table SH603895.
+Creat table SH603896.
+Creat table SH603897.
+Creat table SH603898.
+Creat table SH603899.
+Creat table SH603900.
+Creat table SH603901.
+Creat table SH603903.
+Creat table SH603906.
+Creat table SH603908.
+Creat table SH603909.
+Creat table SH603912.
+Creat table SH603915.
+Creat table SH603916.
+Creat table SH603917.
+Creat table SH603918.
+Creat table SH603919.
+Creat table SH603920.
+Creat table SH603922.
+Creat table SH603926.
+Creat table SH603927.
+Creat table SH603928.
+Creat table SH603929.
+Creat table SH603933.
+Creat table SH603936.
+Creat table SH603937.
+Creat table SH603938.
+Creat table SH603939.
+Creat table SH603955.
+Creat table SH603956.
+Creat table SH603958.
+Creat table SH603959.
+Creat table SH603960.
+Creat table SH603963.
+Creat table SH603966.
+Creat table SH603967.
+Creat table SH603968.
+Creat table SH603969.
+Creat table SH603970.
+Creat table SH603976.
+Creat table SH603977.
+Creat table SH603978.
+Creat table SH603979.
+Creat table SH603980.
+Creat table SH603982.
+Creat table SH603983.
+Creat table SH603985.
+Creat table SH603986.
+Creat table SH603987.
+Creat table SH603988.
+Creat table SH603989.
+Creat table SH603990.
+Creat table SH603991.
+Creat table SH603992.
+Creat table SH603993.
+Creat table SH603996.
+Creat table SH603997.
+Creat table SH603998.
+Creat table SH603999.
+Creat table SZ000001.
+Creat table SZ000002.
+Creat table SZ000003.
+Creat table SZ000004.
+Creat table SZ000005.
+Creat table SZ000006.
+Creat table SZ000007.
+Creat table SZ000008.
+Creat table SZ000009.
+Creat table SZ000010.
+Creat table SZ000011.
+Creat table SZ000012.
+Creat table SZ000013.
+Creat table SZ000014.
+Creat table SZ000015.
+Creat table SZ000016.
+Creat table SZ000017.
+Creat table SZ000018.
+Creat table SZ000019.
+Creat table SZ000020.
+Creat table SZ000021.
+Creat table SZ000022.
+Creat table SZ000023.
+Creat table SZ000024.
+Creat table SZ000025.
+Creat table SZ000026.
+Creat table SZ000027.
+Creat table SZ000028.
+Creat table SZ000029.
+Creat table SZ000030.
+Creat table SZ000031.
+Creat table SZ000032.
+Creat table SZ000033.
+Creat table SZ000034.
+Creat table SZ000035.
+Creat table SZ000036.
+Creat table SZ000037.
+Creat table SZ000038.
+Creat table SZ000039.
+Creat table SZ000040.
+Creat table SZ000042.
+Creat table SZ000043.
+Creat table SZ000045.
+Creat table SZ000046.
+Creat table SZ000047.
+Creat table SZ000048.
+Creat table SZ000049.
+Creat table SZ000050.
+Creat table SZ000055.
+Creat table SZ000056.
+Creat table SZ000058.
+Creat table SZ000059.
+Creat table SZ000060.
+Creat table SZ000061.
+Creat table SZ000062.
+Creat table SZ000063.
+Creat table SZ000065.
+Creat table SZ000066.
+Creat table SZ000068.
+Creat table SZ000069.
+Creat table SZ000070.
+Creat table SZ000078.
+Creat table SZ000088.
+Creat table SZ000089.
+Creat table SZ000090.
+Creat table SZ000096.
+Creat table SZ000099.
+Creat table SZ000100.
+Creat table SZ000150.
+Creat table SZ000151.
+Creat table SZ000153.
+Creat table SZ000155.
+Creat table SZ000156.
+Creat table SZ000157.
+Creat table SZ000158.
+Creat table SZ000159.
+Creat table SZ000166.
+Creat table SZ000301.
+Creat table SZ000333.
+Creat table SZ000338.
+Creat table SZ000400.
+Creat table SZ000401.
+Creat table SZ000402.
+Creat table SZ000403.
+Creat table SZ000404.
+Creat table SZ000405.
+Creat table SZ000406.
+Creat table SZ000407.
+Creat table SZ000408.
+Creat table SZ000409.
+Creat table SZ000410.
+Creat table SZ000411.
+Creat table SZ000412.
+Creat table SZ000413.
+Creat table SZ000415.
+Creat table SZ000416.
+Creat table SZ000417.
+Creat table SZ000418.
+Creat table SZ000419.
+Creat table SZ000420.
+Creat table SZ000421.
+Creat table SZ000422.
+Creat table SZ000423.
+Creat table SZ000425.
+Creat table SZ000426.
+Creat table SZ000428.
+Creat table SZ000429.
+Creat table SZ000430.
+Creat table SZ000488.
+Creat table SZ000498.
+Creat table SZ000501.
+Creat table SZ000502.
+Creat table SZ000503.
+Creat table SZ000504.
+Creat table SZ000505.
+Creat table SZ000506.
+Creat table SZ000507.
+Creat table SZ000508.
+Creat table SZ000509.
+Creat table SZ000510.
+Creat table SZ000511.
+Creat table SZ000513.
+Creat table SZ000514.
+Creat table SZ000515.
+Creat table SZ000516.
+Creat table SZ000517.
+Creat table SZ000518.
+Creat table SZ000519.
+Creat table SZ000520.
+Creat table SZ000521.
+Creat table SZ000522.
+Creat table SZ000523.
+Creat table SZ000524.
+Creat table SZ000525.
+Creat table SZ000526.
+Creat table SZ000527.
+Creat table SZ000528.
+Creat table SZ000529.
+Creat table SZ000530.
+Creat table SZ000531.
+Creat table SZ000532.
+Creat table SZ000533.
+Creat table SZ000534.
+Creat table SZ000535.
+Creat table SZ000536.
+Creat table SZ000537.
+Creat table SZ000538.
+Creat table SZ000539.
+Creat table SZ000540.
+Creat table SZ000541.
+Creat table SZ000542.
+Creat table SZ000543.
+Creat table SZ000544.
+Creat table SZ000545.
+Creat table SZ000546.
+Creat table SZ000547.
+Creat table SZ000548.
+Creat table SZ000549.
+Creat table SZ000550.
+Creat table SZ000551.
+Creat table SZ000552.
+Creat table SZ000553.
+Creat table SZ000554.
+Creat table SZ000555.
+Creat table SZ000556.
+Creat table SZ000557.
+Creat table SZ000558.
+Creat table SZ000559.
+Creat table SZ000560.
+Creat table SZ000561.
+Creat table SZ000562.
+Creat table SZ000563.
+Creat table SZ000564.
+Creat table SZ000565.
+Creat table SZ000566.
+Creat table SZ000567.
+Creat table SZ000568.
+Creat table SZ000569.
+Creat table SZ000570.
+Creat table SZ000571.
+Creat table SZ000572.
+Creat table SZ000573.
+Creat table SZ000576.
+Creat table SZ000578.
+Creat table SZ000581.
+Creat table SZ000582.
+Creat table SZ000583.
+Creat table SZ000584.
+Creat table SZ000585.
+Creat table SZ000586.
+Creat table SZ000587.
+Creat table SZ000588.
+Creat table SZ000589.
+Creat table SZ000590.
+Creat table SZ000591.
+Creat table SZ000592.
+Creat table SZ000593.
+Creat table SZ000594.
+Creat table SZ000595.
+Creat table SZ000596.
+Creat table SZ000597.
+Creat table SZ000598.
+Creat table SZ000599.
+Creat table SZ000600.
+Creat table SZ000601.
+Creat table SZ000602.
+Creat table SZ000603.
+Creat table SZ000605.
+Creat table SZ000606.
+Creat table SZ000607.
+Creat table SZ000608.
+Creat table SZ000609.
+Creat table SZ000610.
+Creat table SZ000611.
+Creat table SZ000612.
+Creat table SZ000613.
+Creat table SZ000615.
+Creat table SZ000616.
+Creat table SZ000617.
+Creat table SZ000618.
+Creat table SZ000619.
+Creat table SZ000620.
+Creat table SZ000621.
+Creat table SZ000622.
+Creat table SZ000623.
+Creat table SZ000625.
+Creat table SZ000626.
+Creat table SZ000627.
+Creat table SZ000628.
+Creat table SZ000629.
+Creat table SZ000630.
+Creat table SZ000631.
+Creat table SZ000632.
+Creat table SZ000633.
+Creat table SZ000635.
+Creat table SZ000636.
+Creat table SZ000637.
+Creat table SZ000638.
+Creat table SZ000639.
+Creat table SZ000650.
+Creat table SZ000651.
+Creat table SZ000652.
+Creat table SZ000653.
+Creat table SZ000655.
+Creat table SZ000656.
+Creat table SZ000657.
+Creat table SZ000658.
+Creat table SZ000659.
+Creat table SZ000660.
+Creat table SZ000661.
+Creat table SZ000662.
+Creat table SZ000663.
+Creat table SZ000665.
+Creat table SZ000666.
+Creat table SZ000667.
+Creat table SZ000668.
+Creat table SZ000669.
+Creat table SZ000670.
+Creat table SZ000671.
+Creat table SZ000672.
+Creat table SZ000673.
+Creat table SZ000675.
+Creat table SZ000676.
+Creat table SZ000677.
+Creat table SZ000678.
+Creat table SZ000679.
+Creat table SZ000680.
+Creat table SZ000681.
+Creat table SZ000682.
+Creat table SZ000683.
+Creat table SZ000685.
+Creat table SZ000686.
+Creat table SZ000687.
+Creat table SZ000688.
+Creat table SZ000689.
+Creat table SZ000690.
+Creat table SZ000691.
+Creat table SZ000692.
+Creat table SZ000693.
+Creat table SZ000695.
+Creat table SZ000697.
+Creat table SZ000698.
+Creat table SZ000699.
+Creat table SZ000700.
+Creat table SZ000701.
+Creat table SZ000702.
+Creat table SZ000703.
+Creat table SZ000705.
+Creat table SZ000707.
+Creat table SZ000708.
+Creat table SZ000709.
+Creat table SZ000710.
+Creat table SZ000711.
+Creat table SZ000712.
+Creat table SZ000713.
+Creat table SZ000715.
+Creat table SZ000716.
+Creat table SZ000717.
+Creat table SZ000718.
+Creat table SZ000719.
+Creat table SZ000720.
+Creat table SZ000721.
+Creat table SZ000722.
+Creat table SZ000723.
+Creat table SZ000725.
+Creat table SZ000726.
+Creat table SZ000727.
+Creat table SZ000728.
+Creat table SZ000729.
+Creat table SZ000730.
+Creat table SZ000731.
+Creat table SZ000732.
+Creat table SZ000733.
+Creat table SZ000735.
+Creat table SZ000736.
+Creat table SZ000737.
+Creat table SZ000738.
+Creat table SZ000739.
+Creat table SZ000748.
+Creat table SZ000750.
+Creat table SZ000751.
+Creat table SZ000752.
+Creat table SZ000753.
+Creat table SZ000755.
+Creat table SZ000756.
+Creat table SZ000757.
+Creat table SZ000758.
+Creat table SZ000759.
+Creat table SZ000760.
+Creat table SZ000761.
+Creat table SZ000762.
+Creat table SZ000763.
+Creat table SZ000765.
+Creat table SZ000766.
+Creat table SZ000767.
+Creat table SZ000768.
+Creat table SZ000769.
+Creat table SZ000776.
+Creat table SZ000777.
+Creat table SZ000778.
+Creat table SZ000779.
+Creat table SZ000780.
+Creat table SZ000782.
+Creat table SZ000783.
+Creat table SZ000785.
+Creat table SZ000786.
+Creat table SZ000787.
+Creat table SZ000788.
+Creat table SZ000789.
+Creat table SZ000790.
+Creat table SZ000791.
+Creat table SZ000792.
+Creat table SZ000793.
+Creat table SZ000795.
+Creat table SZ000796.
+Creat table SZ000797.
+Creat table SZ000798.
+Creat table SZ000799.
+Creat table SZ000800.
+Creat table SZ000801.
+Creat table SZ000802.
+Creat table SZ000803.
+Creat table SZ000805.
+Creat table SZ000806.
+Creat table SZ000807.
+Creat table SZ000809.
+Creat table SZ000810.
+Creat table SZ000811.
+Creat table SZ000812.
+Creat table SZ000813.
+Creat table SZ000815.
+Creat table SZ000816.
+Creat table SZ000817.
+Creat table SZ000818.
+Creat table SZ000819.
+Creat table SZ000820.
+Creat table SZ000821.
+Creat table SZ000822.
+Creat table SZ000823.
+Creat table SZ000825.
+Creat table SZ000826.
+Creat table SZ000827.
+Creat table SZ000828.
+Creat table SZ000829.
+Creat table SZ000830.
+Creat table SZ000831.
+Creat table SZ000832.
+Creat table SZ000833.
+Creat table SZ000835.
+Creat table SZ000836.
+Creat table SZ000837.
+Creat table SZ000838.
+Creat table SZ000839.
+Creat table SZ000848.
+Creat table SZ000850.
+Creat table SZ000851.
+Creat table SZ000852.
+Creat table SZ000856.
+Creat table SZ000858.
+Creat table SZ000859.
+Creat table SZ000860.
+Creat table SZ000861.
+Creat table SZ000862.
+Creat table SZ000863.
+Creat table SZ000866.
+Creat table SZ000868.
+Creat table SZ000869.
+Creat table SZ000875.
+Creat table SZ000876.
+Creat table SZ000877.
+Creat table SZ000878.
+Creat table SZ000880.
+Creat table SZ000881.
+Creat table SZ000882.
+Creat table SZ000883.
+Creat table SZ000885.
+Creat table SZ000886.
+Creat table SZ000887.
+Creat table SZ000888.
+Creat table SZ000889.
+Creat table SZ000890.
+Creat table SZ000892.
+Creat table SZ000893.
+Creat table SZ000895.
+Creat table SZ000897.
+Creat table SZ000898.
+Creat table SZ000899.
+Creat table SZ000900.
+Creat table SZ000901.
+Creat table SZ000902.
+Creat table SZ000903.
+Creat table SZ000905.
+Creat table SZ000906.
+Creat table SZ000908.
+Creat table SZ000909.
+Creat table SZ000910.
+Creat table SZ000911.
+Creat table SZ000912.
+Creat table SZ000913.
+Creat table SZ000915.
+Creat table SZ000916.
+Creat table SZ000917.
+Creat table SZ000918.
+Creat table SZ000919.
+Creat table SZ000920.
+Creat table SZ000921.
+Creat table SZ000922.
+Creat table SZ000923.
+Creat table SZ000925.
+Creat table SZ000926.
+Creat table SZ000927.
+Creat table SZ000928.
+Creat table SZ000929.
+Creat table SZ000930.
+Creat table SZ000931.
+Creat table SZ000932.
+Creat table SZ000933.
+Creat table SZ000935.
+Creat table SZ000936.
+Creat table SZ000937.
+Creat table SZ000938.
+Creat table SZ000939.
+Creat table SZ000948.
+Creat table SZ000949.
+Creat table SZ000950.
+Creat table SZ000951.
+Creat table SZ000952.
+Creat table SZ000953.
+Creat table SZ000955.
+Creat table SZ000956.
+Creat table SZ000957.
+Creat table SZ000958.
+Creat table SZ000959.
+Creat table SZ000960.
+Creat table SZ000961.
+Creat table SZ000962.
+Creat table SZ000963.
+Creat table SZ000965.
+Creat table SZ000966.
+Creat table SZ000967.
+Creat table SZ000968.
+Creat table SZ000969.
+Creat table SZ000970.
+Creat table SZ000971.
+Creat table SZ000972.
+Creat table SZ000973.
+Creat table SZ000975.
+Creat table SZ000976.
+Creat table SZ000977.
+Creat table SZ000978.
+Creat table SZ000979.
+Creat table SZ000980.
+Creat table SZ000981.
+Creat table SZ000982.
+Creat table SZ000983.
+Creat table SZ000985.
+Creat table SZ000987.
+Creat table SZ000988.
+Creat table SZ000989.
+Creat table SZ000990.
+Creat table SZ000993.
+Creat table SZ000995.
+Creat table SZ000996.
+Creat table SZ000997.
+Creat table SZ000998.
+Creat table SZ000999.
+Creat table SZ002001.
+Creat table SZ002002.
+Creat table SZ002003.
+Creat table SZ002004.
+Creat table SZ002005.
+Creat table SZ002006.
+Creat table SZ002007.
+Creat table SZ002008.
+Creat table SZ002009.
+Creat table SZ002010.
+Creat table SZ002011.
+Creat table SZ002012.
+Creat table SZ002013.
+Creat table SZ002014.
+Creat table SZ002015.
+Creat table SZ002016.
+Creat table SZ002017.
+Creat table SZ002018.
+Creat table SZ002019.
+Creat table SZ002020.
+Creat table SZ002021.
+Creat table SZ002022.
+Creat table SZ002023.
+Creat table SZ002024.
+Creat table SZ002025.
+Creat table SZ002026.
+Creat table SZ002027.
+Creat table SZ002028.
+Creat table SZ002029.
+Creat table SZ002030.
+Creat table SZ002031.
+Creat table SZ002032.
+Creat table SZ002033.
+Creat table SZ002034.
+Creat table SZ002035.
+Creat table SZ002036.
+Creat table SZ002037.
+Creat table SZ002038.
+Creat table SZ002039.
+Creat table SZ002040.
+Creat table SZ002041.
+Creat table SZ002042.
+Creat table SZ002043.
+Creat table SZ002044.
+Creat table SZ002045.
+Creat table SZ002046.
+Creat table SZ002047.
+Creat table SZ002048.
+Creat table SZ002049.
+Creat table SZ002050.
+Creat table SZ002051.
+Creat table SZ002052.
+Creat table SZ002053.
+Creat table SZ002054.
+Creat table SZ002055.
+Creat table SZ002056.
+Creat table SZ002057.
+Creat table SZ002058.
+Creat table SZ002059.
+Creat table SZ002060.
+Creat table SZ002061.
+Creat table SZ002062.
+Creat table SZ002063.
+Creat table SZ002064.
+Creat table SZ002065.
+Creat table SZ002066.
+Creat table SZ002067.
+Creat table SZ002068.
+Creat table SZ002069.
+Creat table SZ002070.
+Creat table SZ002071.
+Creat table SZ002072.
+Creat table SZ002073.
+Creat table SZ002074.
+Creat table SZ002075.
+Creat table SZ002076.
+Creat table SZ002077.
+Creat table SZ002078.
+Creat table SZ002079.
+Creat table SZ002080.
+Creat table SZ002081.
+Creat table SZ002082.
+Creat table SZ002083.
+Creat table SZ002084.
+Creat table SZ002085.
+Creat table SZ002086.
+Creat table SZ002087.
+Creat table SZ002088.
+Creat table SZ002089.
+Creat table SZ002090.
+Creat table SZ002091.
+Creat table SZ002092.
+Creat table SZ002093.
+Creat table SZ002094.
+Creat table SZ002095.
+Creat table SZ002096.
+Creat table SZ002097.
+Creat table SZ002098.
+Creat table SZ002099.
+Creat table SZ002100.
+Creat table SZ002101.
+Creat table SZ002102.
+Creat table SZ002103.
+Creat table SZ002104.
+Creat table SZ002105.
+Creat table SZ002106.
+Creat table SZ002107.
+Creat table SZ002108.
+Creat table SZ002109.
+Creat table SZ002110.
+Creat table SZ002111.
+Creat table SZ002112.
+Creat table SZ002113.
+Creat table SZ002114.
+Creat table SZ002115.
+Creat table SZ002116.
+Creat table SZ002117.
+Creat table SZ002118.
+Creat table SZ002119.
+Creat table SZ002120.
+Creat table SZ002121.
+Creat table SZ002122.
+Creat table SZ002123.
+Creat table SZ002124.
+Creat table SZ002125.
+Creat table SZ002126.
+Creat table SZ002127.
+Creat table SZ002128.
+Creat table SZ002129.
+Creat table SZ002130.
+Creat table SZ002131.
+Creat table SZ002132.
+Creat table SZ002133.
+Creat table SZ002134.
+Creat table SZ002135.
+Creat table SZ002136.
+Creat table SZ002137.
+Creat table SZ002138.
+Creat table SZ002139.
+Creat table SZ002140.
+Creat table SZ002141.
+Creat table SZ002142.
+Creat table SZ002143.
+Creat table SZ002144.
+Creat table SZ002145.
+Creat table SZ002146.
+Creat table SZ002147.
+Creat table SZ002148.
+Creat table SZ002149.
+Creat table SZ002150.
+Creat table SZ002151.
+Creat table SZ002152.
+Creat table SZ002153.
+Creat table SZ002154.
+Creat table SZ002155.
+Creat table SZ002156.
+Creat table SZ002157.
+Creat table SZ002158.
+Creat table SZ002159.
+Creat table SZ002160.
+Creat table SZ002161.
+Creat table SZ002162.
+Creat table SZ002163.
+Creat table SZ002164.
+Creat table SZ002165.
+Creat table SZ002166.
+Creat table SZ002167.
+Creat table SZ002168.
+Creat table SZ002169.
+Creat table SZ002170.
+Creat table SZ002171.
+Creat table SZ002172.
+Creat table SZ002173.
+Creat table SZ002174.
+Creat table SZ002175.
+Creat table SZ002176.
+Creat table SZ002177.
+Creat table SZ002178.
+Creat table SZ002179.
+Creat table SZ002180.
+Creat table SZ002181.
+Creat table SZ002182.
+Creat table SZ002183.
+Creat table SZ002184.
+Creat table SZ002185.
+Creat table SZ002186.
+Creat table SZ002187.
+Creat table SZ002188.
+Creat table SZ002189.
+Creat table SZ002190.
+Creat table SZ002191.
+Creat table SZ002192.
+Creat table SZ002193.
+Creat table SZ002194.
+Creat table SZ002195.
+Creat table SZ002196.
+Creat table SZ002197.
+Creat table SZ002198.
+Creat table SZ002199.
+Creat table SZ002200.
+Creat table SZ002201.
+Creat table SZ002202.
+Creat table SZ002203.
+Creat table SZ002204.
+Creat table SZ002205.
+Creat table SZ002206.
+Creat table SZ002207.
+Creat table SZ002208.
+Creat table SZ002209.
+Creat table SZ002210.
+Creat table SZ002211.
+Creat table SZ002212.
+Creat table SZ002213.
+Creat table SZ002214.
+Creat table SZ002215.
+Creat table SZ002216.
+Creat table SZ002217.
+Creat table SZ002218.
+Creat table SZ002219.
+Creat table SZ002220.
+Creat table SZ002221.
+Creat table SZ002222.
+Creat table SZ002223.
+Creat table SZ002224.
+Creat table SZ002225.
+Creat table SZ002226.
+Creat table SZ002227.
+Creat table SZ002228.
+Creat table SZ002229.
+Creat table SZ002230.
+Creat table SZ002231.
+Creat table SZ002232.
+Creat table SZ002233.
+Creat table SZ002234.
+Creat table SZ002235.
+Creat table SZ002236.
+Creat table SZ002237.
+Creat table SZ002238.
+Creat table SZ002239.
+Creat table SZ002240.
+Creat table SZ002241.
+Creat table SZ002242.
+Creat table SZ002243.
+Creat table SZ002244.
+Creat table SZ002245.
+Creat table SZ002246.
+Creat table SZ002247.
+Creat table SZ002248.
+Creat table SZ002249.
+Creat table SZ002250.
+Creat table SZ002251.
+Creat table SZ002252.
+Creat table SZ002253.
+Creat table SZ002254.
+Creat table SZ002255.
+Creat table SZ002256.
+Creat table SZ002258.
+Creat table SZ002259.
+Creat table SZ002260.
+Creat table SZ002261.
+Creat table SZ002262.
+Creat table SZ002263.
+Creat table SZ002264.
+Creat table SZ002265.
+Creat table SZ002266.
+Creat table SZ002267.
+Creat table SZ002268.
+Creat table SZ002269.
+Creat table SZ002270.
+Creat table SZ002271.
+Creat table SZ002272.
+Creat table SZ002273.
+Creat table SZ002274.
+Creat table SZ002275.
+Creat table SZ002276.
+Creat table SZ002277.
+Creat table SZ002278.
+Creat table SZ002279.
+Creat table SZ002280.
+Creat table SZ002281.
+Creat table SZ002282.
+Creat table SZ002283.
+Creat table SZ002284.
+Creat table SZ002285.
+Creat table SZ002286.
+Creat table SZ002287.
+Creat table SZ002288.
+Creat table SZ002289.
+Creat table SZ002290.
+Creat table SZ002291.
+Creat table SZ002292.
+Creat table SZ002293.
+Creat table SZ002294.
+Creat table SZ002295.
+Creat table SZ002296.
+Creat table SZ002297.
+Creat table SZ002298.
+Creat table SZ002299.
+Creat table SZ002300.
+Creat table SZ002301.
+Creat table SZ002302.
+Creat table SZ002303.
+Creat table SZ002304.
+Creat table SZ002305.
+Creat table SZ002306.
+Creat table SZ002307.
+Creat table SZ002308.
+Creat table SZ002309.
+Creat table SZ002310.
+Creat table SZ002311.
+Creat table SZ002312.
+Creat table SZ002313.
+Creat table SZ002314.
+Creat table SZ002315.
+Creat table SZ002316.
+Creat table SZ002317.
+Creat table SZ002318.
+Creat table SZ002319.
+Creat table SZ002320.
+Creat table SZ002321.
+Creat table SZ002322.
+Creat table SZ002323.
+Creat table SZ002324.
+Creat table SZ002325.
+Creat table SZ002326.
+Creat table SZ002327.
+Creat table SZ002328.
+Creat table SZ002329.
+Creat table SZ002330.
+Creat table SZ002331.
+Creat table SZ002332.
+Creat table SZ002333.
+Creat table SZ002334.
+Creat table SZ002335.
+Creat table SZ002336.
+Creat table SZ002337.
+Creat table SZ002338.
+Creat table SZ002339.
+Creat table SZ002340.
+Creat table SZ002341.
+Creat table SZ002342.
+Creat table SZ002343.
+Creat table SZ002344.
+Creat table SZ002345.
+Creat table SZ002346.
+Creat table SZ002347.
+Creat table SZ002348.
+Creat table SZ002349.
+Creat table SZ002350.
+Creat table SZ002351.
+Creat table SZ002352.
+Creat table SZ002353.
+Creat table SZ002354.
+Creat table SZ002355.
+Creat table SZ002356.
+Creat table SZ002357.
+Creat table SZ002358.
+Creat table SZ002359.
+Creat table SZ002360.
+Creat table SZ002361.
+Creat table SZ002362.
+Creat table SZ002363.
+Creat table SZ002364.
+Creat table SZ002365.
+Creat table SZ002366.
+Creat table SZ002367.
+Creat table SZ002368.
+Creat table SZ002369.
+Creat table SZ002370.
+Creat table SZ002371.
+Creat table SZ002372.
+Creat table SZ002373.
+Creat table SZ002374.
+Creat table SZ002375.
+Creat table SZ002376.
+Creat table SZ002377.
+Creat table SZ002378.
+Creat table SZ002379.
+Creat table SZ002380.
+Creat table SZ002381.
+Creat table SZ002382.
+Creat table SZ002383.
+Creat table SZ002384.
+Creat table SZ002385.
+Creat table SZ002386.
+Creat table SZ002387.
+Creat table SZ002388.
+Creat table SZ002389.
+Creat table SZ002390.
+Creat table SZ002391.
+Creat table SZ002392.
+Creat table SZ002393.
+Creat table SZ002394.
+Creat table SZ002395.
+Creat table SZ002396.
+Creat table SZ002397.
+Creat table SZ002398.
+Creat table SZ002399.
+Creat table SZ002400.
+Creat table SZ002401.
+Creat table SZ002402.
+Creat table SZ002403.
+Creat table SZ002404.
+Creat table SZ002405.
+Creat table SZ002406.
+Creat table SZ002407.
+Creat table SZ002408.
+Creat table SZ002409.
+Creat table SZ002410.
+Creat table SZ002411.
+Creat table SZ002412.
+Creat table SZ002413.
+Creat table SZ002414.
+Creat table SZ002415.
+Creat table SZ002416.
+Creat table SZ002417.
+Creat table SZ002418.
+Creat table SZ002419.
+Creat table SZ002420.
+Creat table SZ002421.
+Creat table SZ002422.
+Creat table SZ002423.
+Creat table SZ002424.
+Creat table SZ002425.
+Creat table SZ002426.
+Creat table SZ002427.
+Creat table SZ002428.
+Creat table SZ002429.
+Creat table SZ002430.
+Creat table SZ002431.
+Creat table SZ002432.
+Creat table SZ002433.
+Creat table SZ002434.
+Creat table SZ002435.
+Creat table SZ002436.
+Creat table SZ002437.
+Creat table SZ002438.
+Creat table SZ002439.
+Creat table SZ002440.
+Creat table SZ002441.
+Creat table SZ002442.
+Creat table SZ002443.
+Creat table SZ002444.
+Creat table SZ002445.
+Creat table SZ002446.
+Creat table SZ002447.
+Creat table SZ002448.
+Creat table SZ002449.
+Creat table SZ002450.
+Creat table SZ002451.
+Creat table SZ002452.
+Creat table SZ002453.
+Creat table SZ002454.
+Creat table SZ002455.
+Creat table SZ002456.
+Creat table SZ002457.
+Creat table SZ002458.
+Creat table SZ002459.
+Creat table SZ002460.
+Creat table SZ002461.
+Creat table SZ002462.
+Creat table SZ002463.
+Creat table SZ002464.
+Creat table SZ002465.
+Creat table SZ002466.
+Creat table SZ002467.
+Creat table SZ002468.
+Creat table SZ002469.
+Creat table SZ002470.
+Creat table SZ002471.
+Creat table SZ002472.
+Creat table SZ002473.
+Creat table SZ002474.
+Creat table SZ002475.
+Creat table SZ002476.
+Creat table SZ002477.
+Creat table SZ002478.
+Creat table SZ002479.
+Creat table SZ002480.
+Creat table SZ002481.
+Creat table SZ002482.
+Creat table SZ002483.
+Creat table SZ002484.
+Creat table SZ002485.
+Creat table SZ002486.
+Creat table SZ002487.
+Creat table SZ002488.
+Creat table SZ002489.
+Creat table SZ002490.
+Creat table SZ002491.
+Creat table SZ002492.
+Creat table SZ002493.
+Creat table SZ002494.
+Creat table SZ002495.
+Creat table SZ002496.
+Creat table SZ002497.
+Creat table SZ002498.
+Creat table SZ002499.
+Creat table SZ002500.
+Creat table SZ002501.
+Creat table SZ002502.
+Creat table SZ002503.
+Creat table SZ002504.
+Creat table SZ002505.
+Creat table SZ002506.
+Creat table SZ002507.
+Creat table SZ002508.
+Creat table SZ002509.
+Creat table SZ002510.
+Creat table SZ002511.
+Creat table SZ002512.
+Creat table SZ002513.
+Creat table SZ002514.
+Creat table SZ002515.
+Creat table SZ002516.
+Creat table SZ002517.
+Creat table SZ002518.
+Creat table SZ002519.
+Creat table SZ002520.
+Creat table SZ002521.
+Creat table SZ002522.
+Creat table SZ002523.
+Creat table SZ002524.
+Creat table SZ002526.
+Creat table SZ002527.
+Creat table SZ002528.
+Creat table SZ002529.
+Creat table SZ002530.
+Creat table SZ002531.
+Creat table SZ002532.
+Creat table SZ002533.
+Creat table SZ002534.
+Creat table SZ002535.
+Creat table SZ002536.
+Creat table SZ002537.
+Creat table SZ002538.
+Creat table SZ002539.
+Creat table SZ002540.
+Creat table SZ002541.
+Creat table SZ002542.
+Creat table SZ002543.
+Creat table SZ002544.
+Creat table SZ002545.
+Creat table SZ002546.
+Creat table SZ002547.
+Creat table SZ002548.
+Creat table SZ002549.
+Creat table SZ002550.
+Creat table SZ002551.
+Creat table SZ002552.
+Creat table SZ002553.
+Creat table SZ002554.
+Creat table SZ002555.
+Creat table SZ002556.
+Creat table SZ002557.
+Creat table SZ002558.
+Creat table SZ002559.
+Creat table SZ002560.
+Creat table SZ002561.
+Creat table SZ002562.
+Creat table SZ002563.
+Creat table SZ002564.
+Creat table SZ002565.
+Creat table SZ002566.
+Creat table SZ002567.
+Creat table SZ002568.
+Creat table SZ002569.
+Creat table SZ002570.
+Creat table SZ002571.
+Creat table SZ002572.
+Creat table SZ002573.
+Creat table SZ002574.
+Creat table SZ002575.
+Creat table SZ002576.
+Creat table SZ002577.
+Creat table SZ002578.
+Creat table SZ002579.
+Creat table SZ002580.
+Creat table SZ002581.
+Creat table SZ002582.
+Creat table SZ002583.
+Creat table SZ002584.
+Creat table SZ002585.
+Creat table SZ002586.
+Creat table SZ002587.
+Creat table SZ002588.
+Creat table SZ002589.
+Creat table SZ002590.
+Creat table SZ002591.
+Creat table SZ002592.
+Creat table SZ002593.
+Creat table SZ002594.
+Creat table SZ002595.
+Creat table SZ002596.
+Creat table SZ002597.
+Creat table SZ002598.
+Creat table SZ002599.
+Creat table SZ002600.
+Creat table SZ002601.
+Creat table SZ002602.
+Creat table SZ002603.
+Creat table SZ002604.
+Creat table SZ002605.
+Creat table SZ002606.
+Creat table SZ002607.
+Creat table SZ002608.
+Creat table SZ002609.
+Creat table SZ002610.
+Creat table SZ002611.
+Creat table SZ002612.
+Creat table SZ002613.
+Creat table SZ002614.
+Creat table SZ002615.
+Creat table SZ002616.
+Creat table SZ002617.
+Creat table SZ002618.
+Creat table SZ002619.
+Creat table SZ002620.
+Creat table SZ002621.
+Creat table SZ002622.
+Creat table SZ002623.
+Creat table SZ002624.
+Creat table SZ002625.
+Creat table SZ002626.
+Creat table SZ002627.
+Creat table SZ002628.
+Creat table SZ002629.
+Creat table SZ002630.
+Creat table SZ002631.
+Creat table SZ002632.
+Creat table SZ002633.
+Creat table SZ002634.
+Creat table SZ002635.
+Creat table SZ002636.
+Creat table SZ002637.
+Creat table SZ002638.
+Creat table SZ002639.
+Creat table SZ002640.
+Creat table SZ002641.
+Creat table SZ002642.
+Creat table SZ002643.
+Creat table SZ002644.
+Creat table SZ002645.
+Creat table SZ002646.
+Creat table SZ002647.
+Creat table SZ002648.
+Creat table SZ002649.
+Creat table SZ002650.
+Creat table SZ002651.
+Creat table SZ002652.
+Creat table SZ002653.
+Creat table SZ002654.
+Creat table SZ002655.
+Creat table SZ002656.
+Creat table SZ002657.
+Creat table SZ002658.
+Creat table SZ002659.
+Creat table SZ002660.
+Creat table SZ002661.
+Creat table SZ002662.
+Creat table SZ002663.
+Creat table SZ002664.
+Creat table SZ002665.
+Creat table SZ002666.
+Creat table SZ002667.
+Creat table SZ002668.
+Creat table SZ002669.
+Creat table SZ002670.
+Creat table SZ002671.
+Creat table SZ002672.
+Creat table SZ002673.
+Creat table SZ002674.
+Creat table SZ002675.
+Creat table SZ002676.
+Creat table SZ002677.
+Creat table SZ002678.
+Creat table SZ002679.
+Creat table SZ002680.
+Creat table SZ002681.
+Creat table SZ002682.
+Creat table SZ002683.
+Creat table SZ002684.
+Creat table SZ002685.
+Creat table SZ002686.
+Creat table SZ002687.
+Creat table SZ002688.
+Creat table SZ002689.
+Creat table SZ002690.
+Creat table SZ002691.
+Creat table SZ002692.
+Creat table SZ002693.
+Creat table SZ002694.
+Creat table SZ002695.
+Creat table SZ002696.
+Creat table SZ002697.
+Creat table SZ002698.
+Creat table SZ002699.
+Creat table SZ002700.
+Creat table SZ002701.
+Creat table SZ002702.
+Creat table SZ002703.
+Creat table SZ002705.
+Creat table SZ002706.
+Creat table SZ002707.
+Creat table SZ002708.
+Creat table SZ002709.
+Creat table SZ002711.
+Creat table SZ002712.
+Creat table SZ002713.
+Creat table SZ002714.
+Creat table SZ002715.
+Creat table SZ002716.
+Creat table SZ002717.
+Creat table SZ002718.
+Creat table SZ002719.
+Creat table SZ002721.
+Creat table SZ002722.
+Creat table SZ002723.
+Creat table SZ002724.
+Creat table SZ002725.
+Creat table SZ002726.
+Creat table SZ002727.
+Creat table SZ002728.
+Creat table SZ002729.
+Creat table SZ002730.
+Creat table SZ002731.
+Creat table SZ002732.
+Creat table SZ002733.
+Creat table SZ002734.
+Creat table SZ002735.
+Creat table SZ002736.
+Creat table SZ002737.
+Creat table SZ002738.
+Creat table SZ002739.
+Creat table SZ002740.
+Creat table SZ002741.
+Creat table SZ002742.
+Creat table SZ002743.
+Creat table SZ002745.
+Creat table SZ002746.
+Creat table SZ002747.
+Creat table SZ002748.
+Creat table SZ002749.
+Creat table SZ002750.
+Creat table SZ002751.
+Creat table SZ002752.
+Creat table SZ002753.
+Creat table SZ002755.
+Creat table SZ002756.
+Creat table SZ002757.
+Creat table SZ002758.
+Creat table SZ002759.
+Creat table SZ002760.
+Creat table SZ002761.
+Creat table SZ002762.
+Creat table SZ002763.
+Creat table SZ002765.
+Creat table SZ002766.
+Creat table SZ002767.
+Creat table SZ002768.
+Creat table SZ002769.
+Creat table SZ002770.
+Creat table SZ002771.
+Creat table SZ002772.
+Creat table SZ002773.
+Creat table SZ002774.
+Creat table SZ002775.
+Creat table SZ002776.
+Creat table SZ002777.
+Creat table SZ002778.
+Creat table SZ002779.
+Creat table SZ002780.
+Creat table SZ002781.
+Creat table SZ002782.
+Creat table SZ002783.
+Creat table SZ002785.
+Creat table SZ002786.
+Creat table SZ002787.
+Creat table SZ002788.
+Creat table SZ002789.
+Creat table SZ002790.
+Creat table SZ002791.
+Creat table SZ002792.
+Creat table SZ002793.
+Creat table SZ002795.
+Creat table SZ002796.
+Creat table SZ002797.
+Creat table SZ002798.
+Creat table SZ002799.
+Creat table SZ002800.
+Creat table SZ002801.
+Creat table SZ002802.
+Creat table SZ002803.
+Creat table SZ002805.
+Creat table SZ002806.
+Creat table SZ002807.
+Creat table SZ002808.
+Creat table SZ002809.
+Creat table SZ002810.
+Creat table SZ002811.
+Creat table SZ002812.
+Creat table SZ002813.
+Creat table SZ002815.
+Creat table SZ002816.
+Creat table SZ002817.
+Creat table SZ002818.
+Creat table SZ002819.
+Creat table SZ002820.
+Creat table SZ002821.
+Creat table SZ002822.
+Creat table SZ002823.
+Creat table SZ002824.
+Creat table SZ002825.
+Creat table SZ002826.
+Creat table SZ002827.
+Creat table SZ002828.
+Creat table SZ002829.
+Creat table SZ002830.
+Creat table SZ002831.
+Creat table SZ002832.
+Creat table SZ002833.
+Creat table SZ002835.
+Creat table SZ002836.
+Creat table SZ002837.
+Creat table SZ002838.
+Creat table SZ002839.
+Creat table SZ002840.
+Creat table SZ002841.
+Creat table SZ002842.
+Creat table SZ002843.
+Creat table SZ002845.
+Creat table SZ002846.
+Creat table SZ002847.
+Creat table SZ002848.
+Creat table SZ002849.
+Creat table SZ002850.
+Creat table SZ002851.
+Creat table SZ002852.
+Creat table SZ002853.
+Creat table SZ002855.
+Creat table SZ002856.
+Creat table SZ002857.
+Creat table SZ002858.
+Creat table SZ002859.
+Creat table SZ002860.
+Creat table SZ002861.
+Creat table SZ002862.
+Creat table SZ002863.
+Creat table SZ002864.
+Creat table SZ002865.
+Creat table SZ002866.
+Creat table SZ002867.
+Creat table SZ002868.
+Creat table SZ002869.
+Creat table SZ002870.
+Creat table SZ002871.
+Creat table SZ002872.
+Creat table SZ002873.
+Creat table SZ002875.
+Creat table SZ002876.
+Creat table SZ002877.
+Creat table SZ002878.
+Creat table SZ002879.
+Creat table SZ002880.
+Creat table SZ002881.
+Creat table SZ002882.
+Creat table SZ002883.
+Creat table SZ002884.
+Creat table SZ002885.
+Creat table SZ002886.
+Creat table SZ002887.
+Creat table SZ002888.
+Creat table SZ002889.
+Creat table SZ002890.
+Creat table SZ002891.
+Creat table SZ002892.
+Creat table SZ002893.
+Creat table SZ002895.
+Creat table SZ002896.
+Creat table SZ002897.
+Creat table SZ002898.
+Creat table SZ002899.
+Creat table SZ002900.
+Creat table SZ002901.
+Creat table SZ002902.
+Creat table SZ002903.
+Creat table SZ002905.
+Creat table SZ002906.
+Creat table SZ002907.
+Creat table SZ002908.
+Creat table SZ002909.
+Creat table SZ002910.
+Creat table SZ002911.
+Creat table SZ002912.
+Creat table SZ002913.
+Creat table SZ002915.
+Creat table SZ002916.
+Creat table SZ002917.
+Creat table SZ002918.
+Creat table SZ002919.
+Creat table SZ002920.
+Creat table SZ002921.
+Creat table SZ002922.
+Creat table SZ002923.
+Creat table SZ002925.
+Creat table SZ002926.
+Creat table SZ002927.
+Creat table SZ002928.
+Creat table SZ002929.
+Creat table SZ002930.
+Creat table SZ002931.
+Creat table SZ002932.
+Creat table SZ002933.
+Creat table SZ002935.
+Creat table SZ002936.
+Creat table SZ002937.
+Creat table SZ002938.
+Creat table SZ002939.
+Creat table SZ002940.
+Creat table SZ002941.
+Creat table SZ002942.
+Creat table SZ002943.
+Creat table SZ002945.
+Creat table SZ002946.
+Creat table SZ002947.
+Creat table SZ002948.
+Creat table SZ002949.
+Creat table SZ002950.
+Creat table SZ002951.
+Creat table SZ002952.
+Creat table SZ002953.
+Creat table SZ002955.
+Creat table SZ002956.
+Creat table SZ002957.
+Creat table SZ002958.
+Creat table SZ002959.
+Creat table SZ002960.
+Creat table SZ002961.
+Creat table SZ002966.
+Creat table SZ200002.
+Creat table SZ200003.
+Creat table SZ200011.
+Creat table SZ200012.
+Creat table SZ200013.
+Creat table SZ200015.
+Creat table SZ200016.
+Creat table SZ200017.
+Creat table SZ200018.
+Creat table SZ200019.
+Creat table SZ200020.
+Creat table SZ200022.
+Creat table SZ200024.
+Creat table SZ200025.
+Creat table SZ200026.
+Creat table SZ200028.
+Creat table SZ200029.
+Creat table SZ200030.
+Creat table SZ200037.
+Creat table SZ200039.
+Creat table SZ200041.
+Creat table SZ200045.
+Creat table SZ200053.
+Creat table SZ200054.
+Creat table SZ200055.
+Creat table SZ200056.
+Creat table SZ200057.
+Creat table SZ200058.
+Creat table SZ200152.
+Creat table SZ200160.
+Creat table SZ200168.
+Creat table SZ200413.
+Creat table SZ200418.
+Creat table SZ200429.
+Creat table SZ200468.
+Creat table SZ200488.
+Creat table SZ200505.
+Creat table SZ200512.
+Creat table SZ200513.
+Creat table SZ200521.
+Creat table SZ200530.
+Creat table SZ200539.
+Creat table SZ200541.
+Creat table SZ200550.
+Creat table SZ200553.
+Creat table SZ200570.
+Creat table SZ200581.
+Creat table SZ200596.
+Creat table SZ200613.
+Creat table SZ200625.
+Creat table SZ200706.
+Creat table SZ200725.
+Creat table SZ200726.
+Creat table SZ200761.
+Creat table SZ200770.
+Creat table SZ200771.
+Creat table SZ200869.
+Creat table SZ200986.
+Creat table SZ200992.
+Creat table SZ300001.
+Creat table SZ300002.
+Creat table SZ300003.
+Creat table SZ300004.
+Creat table SZ300005.
+Creat table SZ300006.
+Creat table SZ300007.
+Creat table SZ300008.
+Creat table SZ300009.
+Creat table SZ300010.
+Creat table SZ300011.
+Creat table SZ300012.
+Creat table SZ300013.
+Creat table SZ300014.
+Creat table SZ300015.
+Creat table SZ300016.
+Creat table SZ300017.
+Creat table SZ300018.
+Creat table SZ300019.
+Creat table SZ300020.
+Creat table SZ300021.
+Creat table SZ300022.
+Creat table SZ300023.
+Creat table SZ300024.
+Creat table SZ300025.
+Creat table SZ300026.
+Creat table SZ300027.
+Creat table SZ300028.
+Creat table SZ300029.
+Creat table SZ300030.
+Creat table SZ300031.
+Creat table SZ300032.
+Creat table SZ300033.
+Creat table SZ300034.
+Creat table SZ300035.
+Creat table SZ300036.
+Creat table SZ300037.
+Creat table SZ300038.
+Creat table SZ300039.
+Creat table SZ300040.
+Creat table SZ300041.
+Creat table SZ300042.
+Creat table SZ300043.
+Creat table SZ300044.
+Creat table SZ300045.
+Creat table SZ300046.
+Creat table SZ300047.
+Creat table SZ300048.
+Creat table SZ300049.
+Creat table SZ300050.
+Creat table SZ300051.
+Creat table SZ300052.
+Creat table SZ300053.
+Creat table SZ300054.
+Creat table SZ300055.
+Creat table SZ300056.
+Creat table SZ300057.
+Creat table SZ300058.
+Creat table SZ300059.
+Creat table SZ300061.
+Creat table SZ300062.
+Creat table SZ300063.
+Creat table SZ300064.
+Creat table SZ300065.
+Creat table SZ300066.
+Creat table SZ300067.
+Creat table SZ300068.
+Creat table SZ300069.
+Creat table SZ300070.
+Creat table SZ300071.
+Creat table SZ300072.
+Creat table SZ300073.
+Creat table SZ300074.
+Creat table SZ300075.
+Creat table SZ300076.
+Creat table SZ300077.
+Creat table SZ300078.
+Creat table SZ300079.
+Creat table SZ300080.
+Creat table SZ300081.
+Creat table SZ300082.
+Creat table SZ300083.
+Creat table SZ300084.
+Creat table SZ300085.
+Creat table SZ300086.
+Creat table SZ300087.
+Creat table SZ300088.
+Creat table SZ300089.
+Creat table SZ300090.
+Creat table SZ300091.
+Creat table SZ300092.
+Creat table SZ300093.
+Creat table SZ300094.
+Creat table SZ300095.
+Creat table SZ300096.
+Creat table SZ300097.
+Creat table SZ300098.
+Creat table SZ300099.
+Creat table SZ300100.
+Creat table SZ300101.
+Creat table SZ300102.
+Creat table SZ300103.
+Creat table SZ300104.
+Creat table SZ300105.
+Creat table SZ300106.
+Creat table SZ300107.
+Creat table SZ300108.
+Creat table SZ300109.
+Creat table SZ300110.
+Creat table SZ300111.
+Creat table SZ300112.
+Creat table SZ300113.
+Creat table SZ300114.
+Creat table SZ300115.
+Creat table SZ300116.
+Creat table SZ300117.
+Creat table SZ300118.
+Creat table SZ300119.
+Creat table SZ300120.
+Creat table SZ300121.
+Creat table SZ300122.
+Creat table SZ300123.
+Creat table SZ300124.
+Creat table SZ300125.
+Creat table SZ300126.
+Creat table SZ300127.
+Creat table SZ300128.
+Creat table SZ300129.
+Creat table SZ300130.
+Creat table SZ300131.
+Creat table SZ300132.
+Creat table SZ300133.
+Creat table SZ300134.
+Creat table SZ300135.
+Creat table SZ300136.
+Creat table SZ300137.
+Creat table SZ300138.
+Creat table SZ300139.
+Creat table SZ300140.
+Creat table SZ300141.
+Creat table SZ300142.
+Creat table SZ300143.
+Creat table SZ300144.
+Creat table SZ300145.
+Creat table SZ300146.
+Creat table SZ300147.
+Creat table SZ300148.
+Creat table SZ300149.
+Creat table SZ300150.
+Creat table SZ300151.
+Creat table SZ300152.
+Creat table SZ300153.
+Creat table SZ300154.
+Creat table SZ300155.
+Creat table SZ300156.
+Creat table SZ300157.
+Creat table SZ300158.
+Creat table SZ300159.
+Creat table SZ300160.
+Creat table SZ300161.
+Creat table SZ300162.
+Creat table SZ300163.
+Creat table SZ300164.
+Creat table SZ300165.
+Creat table SZ300166.
+Creat table SZ300167.
+Creat table SZ300168.
+Creat table SZ300169.
+Creat table SZ300170.
+Creat table SZ300171.
+Creat table SZ300172.
+Creat table SZ300173.
+Creat table SZ300174.
+Creat table SZ300175.
+Creat table SZ300176.
+Creat table SZ300177.
+Creat table SZ300178.
+Creat table SZ300179.
+Creat table SZ300180.
+Creat table SZ300181.
+Creat table SZ300182.
+Creat table SZ300183.
+Creat table SZ300184.
+Creat table SZ300185.
+Creat table SZ300186.
+Creat table SZ300187.
+Creat table SZ300188.
+Creat table SZ300189.
+Creat table SZ300190.
+Creat table SZ300191.
+Creat table SZ300192.
+Creat table SZ300193.
+Creat table SZ300194.
+Creat table SZ300195.
+Creat table SZ300196.
+Creat table SZ300197.
+Creat table SZ300198.
+Creat table SZ300199.
+Creat table SZ300200.
+Creat table SZ300201.
+Creat table SZ300202.
+Creat table SZ300203.
+Creat table SZ300204.
+Creat table SZ300205.
+Creat table SZ300206.
+Creat table SZ300207.
+Creat table SZ300208.
+Creat table SZ300209.
+Creat table SZ300210.
+Creat table SZ300211.
+Creat table SZ300212.
+Creat table SZ300213.
+Creat table SZ300214.
+Creat table SZ300215.
+Creat table SZ300216.
+Creat table SZ300217.
+Creat table SZ300218.
+Creat table SZ300219.
+Creat table SZ300220.
+Creat table SZ300221.
+Creat table SZ300222.
+Creat table SZ300223.
+Creat table SZ300224.
+Creat table SZ300225.
+Creat table SZ300226.
+Creat table SZ300227.
+Creat table SZ300228.
+Creat table SZ300229.
+Creat table SZ300230.
+Creat table SZ300231.
+Creat table SZ300232.
+Creat table SZ300233.
+Creat table SZ300234.
+Creat table SZ300235.
+Creat table SZ300236.
+Creat table SZ300237.
+Creat table SZ300238.
+Creat table SZ300239.
+Creat table SZ300240.
+Creat table SZ300241.
+Creat table SZ300242.
+Creat table SZ300243.
+Creat table SZ300244.
+Creat table SZ300245.
+Creat table SZ300246.
+Creat table SZ300247.
+Creat table SZ300248.
+Creat table SZ300249.
+Creat table SZ300250.
+Creat table SZ300251.
+Creat table SZ300252.
+Creat table SZ300253.
+Creat table SZ300254.
+Creat table SZ300255.
+Creat table SZ300256.
+Creat table SZ300257.
+Creat table SZ300258.
+Creat table SZ300259.
+Creat table SZ300260.
+Creat table SZ300261.
+Creat table SZ300262.
+Creat table SZ300263.
+Creat table SZ300264.
+Creat table SZ300265.
+Creat table SZ300266.
+Creat table SZ300267.
+Creat table SZ300268.
+Creat table SZ300269.
+Creat table SZ300270.
+Creat table SZ300271.
+Creat table SZ300272.
+Creat table SZ300273.
+Creat table SZ300274.
+Creat table SZ300275.
+Creat table SZ300276.
+Creat table SZ300277.
+Creat table SZ300278.
+Creat table SZ300279.
+Creat table SZ300280.
+Creat table SZ300281.
+Creat table SZ300282.
+Creat table SZ300283.
+Creat table SZ300284.
+Creat table SZ300285.
+Creat table SZ300286.
+Creat table SZ300287.
+Creat table SZ300288.
+Creat table SZ300289.
+Creat table SZ300290.
+Creat table SZ300291.
+Creat table SZ300292.
+Creat table SZ300293.
+Creat table SZ300294.
+Creat table SZ300295.
+Creat table SZ300296.
+Creat table SZ300297.
+Creat table SZ300298.
+Creat table SZ300299.
+Creat table SZ300300.
+Creat table SZ300301.
+Creat table SZ300302.
+Creat table SZ300303.
+Creat table SZ300304.
+Creat table SZ300305.
+Creat table SZ300306.
+Creat table SZ300307.
+Creat table SZ300308.
+Creat table SZ300309.
+Creat table SZ300310.
+Creat table SZ300311.
+Creat table SZ300312.
+Creat table SZ300313.
+Creat table SZ300314.
+Creat table SZ300315.
+Creat table SZ300316.
+Creat table SZ300317.
+Creat table SZ300318.
+Creat table SZ300319.
+Creat table SZ300320.
+Creat table SZ300321.
+Creat table SZ300322.
+Creat table SZ300323.
+Creat table SZ300324.
+Creat table SZ300325.
+Creat table SZ300326.
+Creat table SZ300327.
+Creat table SZ300328.
+Creat table SZ300329.
+Creat table SZ300330.
+Creat table SZ300331.
+Creat table SZ300332.
+Creat table SZ300333.
+Creat table SZ300334.
+Creat table SZ300335.
+Creat table SZ300336.
+Creat table SZ300337.
+Creat table SZ300338.
+Creat table SZ300339.
+Creat table SZ300340.
+Creat table SZ300341.
+Creat table SZ300342.
+Creat table SZ300343.
+Creat table SZ300344.
+Creat table SZ300345.
+Creat table SZ300346.
+Creat table SZ300347.
+Creat table SZ300348.
+Creat table SZ300349.
+Creat table SZ300350.
+Creat table SZ300351.
+Creat table SZ300352.
+Creat table SZ300353.
+Creat table SZ300354.
+Creat table SZ300355.
+Creat table SZ300356.
+Creat table SZ300357.
+Creat table SZ300358.
+Creat table SZ300359.
+Creat table SZ300360.
+Creat table SZ300362.
+Creat table SZ300363.
+Creat table SZ300364.
+Creat table SZ300365.
+Creat table SZ300366.
+Creat table SZ300367.
+Creat table SZ300368.
+Creat table SZ300369.
+Creat table SZ300370.
+Creat table SZ300371.
+Creat table SZ300372.
+Creat table SZ300373.
+Creat table SZ300374.
+Creat table SZ300375.
+Creat table SZ300376.
+Creat table SZ300377.
+Creat table SZ300378.
+Creat table SZ300379.
+Creat table SZ300380.
+Creat table SZ300381.
+Creat table SZ300382.
+Creat table SZ300383.
+Creat table SZ300384.
+Creat table SZ300385.
+Creat table SZ300386.
+Creat table SZ300387.
+Creat table SZ300388.
+Creat table SZ300389.
+Creat table SZ300390.
+Creat table SZ300391.
+Creat table SZ300392.
+Creat table SZ300393.
+Creat table SZ300394.
+Creat table SZ300395.
+Creat table SZ300396.
+Creat table SZ300397.
+Creat table SZ300398.
+Creat table SZ300399.
+Creat table SZ300400.
+Creat table SZ300401.
+Creat table SZ300402.
+Creat table SZ300403.
+Creat table SZ300404.
+Creat table SZ300405.
+Creat table SZ300406.
+Creat table SZ300407.
+Creat table SZ300408.
+Creat table SZ300409.
+Creat table SZ300410.
+Creat table SZ300411.
+Creat table SZ300412.
+Creat table SZ300413.
+Creat table SZ300414.
+Creat table SZ300415.
+Creat table SZ300416.
+Creat table SZ300417.
+Creat table SZ300418.
+Creat table SZ300419.
+Creat table SZ300420.
+Creat table SZ300421.
+Creat table SZ300422.
+Creat table SZ300423.
+Creat table SZ300424.
+Creat table SZ300425.
+Creat table SZ300426.
+Creat table SZ300427.
+Creat table SZ300428.
+Creat table SZ300429.
+Creat table SZ300430.
+Creat table SZ300431.
+Creat table SZ300432.
+Creat table SZ300433.
+Creat table SZ300434.
+Creat table SZ300435.
+Creat table SZ300436.
+Creat table SZ300437.
+Creat table SZ300438.
+Creat table SZ300439.
+Creat table SZ300440.
+Creat table SZ300441.
+Creat table SZ300442.
+Creat table SZ300443.
+Creat table SZ300444.
+Creat table SZ300445.
+Creat table SZ300446.
+Creat table SZ300447.
+Creat table SZ300448.
+Creat table SZ300449.
+Creat table SZ300450.
+Creat table SZ300451.
+Creat table SZ300452.
+Creat table SZ300453.
+Creat table SZ300454.
+Creat table SZ300455.
+Creat table SZ300456.
+Creat table SZ300457.
+Creat table SZ300458.
+Creat table SZ300459.
+Creat table SZ300460.
+Creat table SZ300461.
+Creat table SZ300462.
+Creat table SZ300463.
+Creat table SZ300464.
+Creat table SZ300465.
+Creat table SZ300466.
+Creat table SZ300467.
+Creat table SZ300468.
+Creat table SZ300469.
+Creat table SZ300470.
+Creat table SZ300471.
+Creat table SZ300472.
+Creat table SZ300473.
+Creat table SZ300474.
+Creat table SZ300475.
+Creat table SZ300476.
+Creat table SZ300477.
+Creat table SZ300478.
+Creat table SZ300479.
+Creat table SZ300480.
+Creat table SZ300481.
+Creat table SZ300482.
+Creat table SZ300483.
+Creat table SZ300484.
+Creat table SZ300485.
+Creat table SZ300486.
+Creat table SZ300487.
+Creat table SZ300488.
+Creat table SZ300489.
+Creat table SZ300490.
+Creat table SZ300491.
+Creat table SZ300492.
+Creat table SZ300493.
+Creat table SZ300494.
+Creat table SZ300495.
+Creat table SZ300496.
+Creat table SZ300497.
+Creat table SZ300498.
+Creat table SZ300499.
+Creat table SZ300500.
+Creat table SZ300501.
+Creat table SZ300502.
+Creat table SZ300503.
+Creat table SZ300504.
+Creat table SZ300505.
+Creat table SZ300506.
+Creat table SZ300507.
+Creat table SZ300508.
+Creat table SZ300509.
+Creat table SZ300510.
+Creat table SZ300511.
+Creat table SZ300512.
+Creat table SZ300513.
+Creat table SZ300514.
+Creat table SZ300515.
+Creat table SZ300516.
+Creat table SZ300517.
+Creat table SZ300518.
+Creat table SZ300519.
+Creat table SZ300520.
+Creat table SZ300521.
+Creat table SZ300522.
+Creat table SZ300523.
+Creat table SZ300525.
+Creat table SZ300526.
+Creat table SZ300527.
+Creat table SZ300528.
+Creat table SZ300529.
+Creat table SZ300530.
+Creat table SZ300531.
+Creat table SZ300532.
+Creat table SZ300533.
+Creat table SZ300534.
+Creat table SZ300535.
+Creat table SZ300536.
+Creat table SZ300537.
+Creat table SZ300538.
+Creat table SZ300539.
+Creat table SZ300540.
+Creat table SZ300541.
+Creat table SZ300542.
+Creat table SZ300543.
+Creat table SZ300545.
+Creat table SZ300546.
+Creat table SZ300547.
+Creat table SZ300548.
+Creat table SZ300549.
+Creat table SZ300550.
+Creat table SZ300551.
+Creat table SZ300552.
+Creat table SZ300553.
+Creat table SZ300554.
+Creat table SZ300555.
+Creat table SZ300556.
+Creat table SZ300557.
+Creat table SZ300558.
+Creat table SZ300559.
+Creat table SZ300560.
+Creat table SZ300561.
+Creat table SZ300562.
+Creat table SZ300563.
+Creat table SZ300565.
+Creat table SZ300566.
+Creat table SZ300567.
+Creat table SZ300568.
+Creat table SZ300569.
+Creat table SZ300570.
+Creat table SZ300571.
+Creat table SZ300572.
+Creat table SZ300573.
+Creat table SZ300575.
+Creat table SZ300576.
+Creat table SZ300577.
+Creat table SZ300578.
+Creat table SZ300579.
+Creat table SZ300580.
+Creat table SZ300581.
+Creat table SZ300582.
+Creat table SZ300583.
+Creat table SZ300584.
+Creat table SZ300585.
+Creat table SZ300586.
+Creat table SZ300587.
+Creat table SZ300588.
+Creat table SZ300589.
+Creat table SZ300590.
+Creat table SZ300591.
+Creat table SZ300592.
+Creat table SZ300593.
+Creat table SZ300594.
+Creat table SZ300595.
+Creat table SZ300596.
+Creat table SZ300597.
+Creat table SZ300598.
+Creat table SZ300599.
+Creat table SZ300600.
+Creat table SZ300601.
+Creat table SZ300602.
+Creat table SZ300603.
+Creat table SZ300604.
+Creat table SZ300605.
+Creat table SZ300606.
+Creat table SZ300607.
+Creat table SZ300608.
+Creat table SZ300609.
+Creat table SZ300610.
+Creat table SZ300611.
+Creat table SZ300612.
+Creat table SZ300613.
+Creat table SZ300615.
+Creat table SZ300616.
+Creat table SZ300617.
+Creat table SZ300618.
+Creat table SZ300619.
+Creat table SZ300620.
+Creat table SZ300621.
+Creat table SZ300622.
+Creat table SZ300623.
+Creat table SZ300624.
+Creat table SZ300625.
+Creat table SZ300626.
+Creat table SZ300627.
+Creat table SZ300628.
+Creat table SZ300629.
+Creat table SZ300630.
+Creat table SZ300631.
+Creat table SZ300632.
+Creat table SZ300633.
+Creat table SZ300634.
+Creat table SZ300635.
+Creat table SZ300636.
+Creat table SZ300637.
+Creat table SZ300638.
+Creat table SZ300639.
+Creat table SZ300640.
+Creat table SZ300641.
+Creat table SZ300642.
+Creat table SZ300643.
+Creat table SZ300644.
+Creat table SZ300645.
+Creat table SZ300647.
+Creat table SZ300648.
+Creat table SZ300649.
+Creat table SZ300650.
+Creat table SZ300651.
+Creat table SZ300652.
+Creat table SZ300653.
+Creat table SZ300654.
+Creat table SZ300655.
+Creat table SZ300656.
+Creat table SZ300657.
+Creat table SZ300658.
+Creat table SZ300659.
+Creat table SZ300660.
+Creat table SZ300661.
+Creat table SZ300662.
+Creat table SZ300663.
+Creat table SZ300664.
+Creat table SZ300665.
+Creat table SZ300666.
+Creat table SZ300667.
+Creat table SZ300668.
+Creat table SZ300669.
+Creat table SZ300670.
+Creat table SZ300671.
+Creat table SZ300672.
+Creat table SZ300673.
+Creat table SZ300674.
+Creat table SZ300675.
+Creat table SZ300676.
+Creat table SZ300677.
+Creat table SZ300678.
+Creat table SZ300679.
+Creat table SZ300680.
+Creat table SZ300681.
+Creat table SZ300682.
+Creat table SZ300683.
+Creat table SZ300684.
+Creat table SZ300685.
+Creat table SZ300686.
+Creat table SZ300687.
+Creat table SZ300688.
+Creat table SZ300689.
+Creat table SZ300690.
+Creat table SZ300691.
+Creat table SZ300692.
+Creat table SZ300693.
+Creat table SZ300694.
+Creat table SZ300695.
+Creat table SZ300696.
+Creat table SZ300697.
+Creat table SZ300698.
+Creat table SZ300699.
+Creat table SZ300700.
+Creat table SZ300701.
+Creat table SZ300702.
+Creat table SZ300703.
+Creat table SZ300705.
+Creat table SZ300706.
+Creat table SZ300707.
+Creat table SZ300708.
+Creat table SZ300709.
+Creat table SZ300710.
+Creat table SZ300711.
+Creat table SZ300712.
+Creat table SZ300713.
+Creat table SZ300715.
+Creat table SZ300716.
+Creat table SZ300717.
+Creat table SZ300718.
+Creat table SZ300719.
+Creat table SZ300720.
+Creat table SZ300721.
+Creat table SZ300722.
+Creat table SZ300723.
+Creat table SZ300724.
+Creat table SZ300725.
+Creat table SZ300726.
+Creat table SZ300727.
+Creat table SZ300729.
+Creat table SZ300730.
+Creat table SZ300731.
+Creat table SZ300732.
+Creat table SZ300733.
+Creat table SZ300735.
+Creat table SZ300736.
+Creat table SZ300737.
+Creat table SZ300738.
+Creat table SZ300739.
+Creat table SZ300740.
+Creat table SZ300741.
+Creat table SZ300742.
+Creat table SZ300743.
+Creat table SZ300745.
+Creat table SZ300746.
+Creat table SZ300747.
+Creat table SZ300748.
+Creat table SZ300749.
+Creat table SZ300750.
+Creat table SZ300751.
+Creat table SZ300752.
+Creat table SZ300753.
+Creat table SZ300755.
+Creat table SZ300756.
+Creat table SZ300757.
+Creat table SZ300758.
+Creat table SZ300759.
+Creat table SZ300760.
+Creat table SZ300761.
+Creat table SZ300762.
+Creat table SZ300763.
+Creat table SZ300765.
+Creat table SZ300766.
+Creat table SZ300767.
+Creat table SZ300768.
+Creat table SZ300769.
+Creat table SZ300770.
+Creat table SZ300771.
+Creat table SZ300772.
+Creat table SZ300773.
+Creat table SZ300775.
+Creat table SZ300776.
+Creat table SZ300777.
+Creat table SZ300778.
+Creat table SZ300779.
+Creat table SZ300780.
+Creat table SZ300781.
+Creat table SZ300782.
+Creat table SZ300783.
+Creat table SZ300785.
+Creat table SZ300786.
+Creat table SZ300787.
+Creat table SZ300788.
+Creat table SZ300789.
+Sat Oct 26 20:00:26 2019: Neutrino is running.
+
+Sat Oct 26 20:00:26 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 20:30:26 2019: Neutrino is running.
+
+Sat Oct 26 20:30:26 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 21:00:27 2019: Neutrino is running.
+
+Sat Oct 26 21:00:27 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 21:30:27 2019: Neutrino is running.
+
+Sat Oct 26 21:30:27 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sat Oct 26 22:00:27 2019: Neutrino is running.
+
+Sat Oct 26 22:00:27 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-26 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Job "event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 47, in event_record_interest
+    event.record_interest()
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 287, in record_interest
+    # engine.session.add(stk)
+NameError: name 'time' is not defined
+Sat Oct 26 22:30:28 2019: Neutrino is running.
+
+Sat Oct 26 22:30:28 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-26 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600000
+Calculating adjust factor of SH600001
+Calculating adjust factor of SH600002
+Calculating adjust factor of SH600003
+Sat Oct 26 23:00:28 2019: Neutrino is running.
+
+Sat Oct 26 23:00:28 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-26 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600004
+Calculating adjust factor of SH600005
+Calculating adjust factor of SH600006
+Job "event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 33, in event_download_stock_data
+    event.sub_download_stock_data()
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 266, in download_stock_data
+    'open_price', 'prev_close_price',
+NameError: name 'time' is not defined
+Calculating adjust factor of SH600007
+Calculating adjust factor of SH600008
+Calculating adjust factor of SH600009
+Calculating adjust factor of SH600010
+Sat Oct 26 23:30:28 2019: Neutrino is running.
+
+Sat Oct 26 23:30:28 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600011
+Calculating adjust factor of SH600012
+Calculating adjust factor of SH600015
+/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py:174: RuntimeWarning: divide by zero encountered in double_scalars
+  factor = factor*self.df.ix[i-1, 'close']/self.df.ix[i, 'prev_close']
+/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py:179: RuntimeWarning: invalid value encountered in double_scalars
+  self.df.ix[i, 'reh'] = self.df.ix[i, 'close']*factor
+Job "event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1244, in _execute_context
+    cursor, statement, parameters, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/default.py", line 552, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 170, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 328, in _query
+    conn.query(q)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 732, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1054, "Unknown column 'inf' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 67, in event_rehabilitation
+    event.update_adjust_factor(stock)
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock_dev.py", line 227, in update_adjust_factor
+    self.mysql.engine.execute(sql)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 2166, in execute
+    return connection.execute(statement, *multiparams, **params)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 982, in execute
+    return self._execute_text(object_, multiparams, params)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1155, in _execute_text
+    parameters,
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    e, statement, parameters, cursor, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1466, in _handle_dbapi_exception
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/util/compat.py", line 383, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/util/compat.py", line 128, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/base.py", line 1244, in _execute_context
+    cursor, statement, parameters, context
+  File "/usr/local/lib/python3.6/dist-packages/sqlalchemy/engine/default.py", line 552, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 170, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py", line 328, in _query
+    conn.query(q)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 732, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/local/lib/python3.6/dist-packages/pymysql/err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.InternalError: (pymysql.err.InternalError) (1054, "Unknown column 'inf' in 'field list'")
+[SQL: update SH600015 set trade_date='2006-03-31 00:00:00',adjust_factor=inf where trade_date='2006-03-31 00:00:00']
+(Background on this error at: http://sqlalche.me/e/2j85)
+Sun Oct 27 00:00:29 2019: Neutrino is running.
+
+Sun Oct 27 00:00:29 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Run time of job "event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)" was missed by 7:32:49.696216
+Run time of job "event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-27 11:00:00 CST)" was missed by 7:32:50.257287
+Run time of job "event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-27 12:00:00 CST)" was missed by 6:32:50.514046
+Sun Oct 27 18:51:16 2019: Neutrino is running.
+
+Sun Oct 27 18:51:16 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-28 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sun Oct 27 19:21:18 2019: Neutrino is running.
+
+Sun Oct 27 19:21:18 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-28 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Sun Oct 27 19:51:18 2019: Neutrino is running.
+
+Sun Oct 27 19:51:18 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-28 12:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Run time of job "event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-27 20:00:00 CST)" was missed by 0:10:54.681463
+Run time of job "event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-27 22:20:00 CST)" was missed by 21:50:55.288761
+Run time of job "event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-27 22:50:00 CST)" was missed by 21:20:55.500576
+Run time of job "event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-27 23:10:00 CST)" was missed by 21:00:55.610882
+Run time of job "event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)" was missed by 9:10:55.734075
+Run time of job "event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-28 11:00:00 CST)" was missed by 9:10:55.833196
+Run time of job "event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-28 12:00:00 CST)" was missed by 8:10:55.922470
+Mon Oct 28 20:38:22 2019: Neutrino is running.
+
+Mon Oct 28 20:38:22 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-28 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-28 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-28 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-29 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-29 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Mon Oct 28 21:08:23 2019: Neutrino is running.
+
+Mon Oct 28 21:08:23 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-28 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-28 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-28 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-29 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-29 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Mon Oct 28 21:49:23 2019: Neutrino is running.
+
+Mon Oct 28 21:49:23 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-28 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-28 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-28 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-29 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-29 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Mon Oct 28 22:19:23 2019: Neutrino is running.
+
+Mon Oct 28 22:19:23 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-28 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-28 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-28 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-29 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-29 20:00:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Job "event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-29 22:20:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 47, in event_record_interest
+    event.record_interest()
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 287, in record_interest
+    # engine.session.add(stk)
+NameError: name 'time' is not defined
+Mon Oct 28 22:49:24 2019: Neutrino is running.
+
+Mon Oct 28 22:49:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-28 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-28 23:10:00 CST)
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-29 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-29 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-29 22:20:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Calculating adjust factor of SH600000
+Calculating adjust factor of SH600001
+Calculating adjust factor of SH600002
+Calculating adjust factor of SH600003
+Calculating adjust factor of SH600004
+Calculating adjust factor of SH600005
+Calculating adjust factor of SH600006
+Job "event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-29 23:10:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/home/friederich/Documents/dev/neutrino/applications/event.py", line 33, in event_download_stock_data
+    event.sub_download_stock_data()
+  File "/home/friederich/Documents/dev/neutrino/applications/libstock.py", line 266, in download_stock_data
+    'open_price', 'prev_close_price',
+NameError: name 'time' is not defined
+Calculating adjust factor of SH600007
+Mon Oct 28 23:19:24 2019: Neutrino is running.
+
+Mon Oct 28 23:19:24 2019: Checking task file.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_init_stock (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_create_interest_table (trigger: cron[hour='11'], next run at: 2019-10-29 11:00:00 CST)
+    event_flag_stock (trigger: cron[hour='12', minute='0'], next run at: 2019-10-29 12:00:00 CST)
+    event_record_stock (trigger: cron[hour='20'], next run at: 2019-10-29 20:00:00 CST)
+    event_record_interest (trigger: cron[hour='22', minute='20'], next run at: 2019-10-29 22:20:00 CST)
+    event_rehabilitation (trigger: cron[hour='22', minute='50'], next run at: 2019-10-29 22:50:00 CST)
+    event_download_stock_data (trigger: cron[hour='23', minute='10'], next run at: 2019-10-29 23:10:00 CST)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

@@ -30,7 +30,7 @@ def event_download_stock_data():
     header = mysqlHeader('root', '6414939', 'test')
     event = EventDownloadStockData()
     event._init_database(header)
-    event.download_stock_data()
+    event.sub_download_stock_data()
 
 
 def event_create_interest_table():
@@ -62,6 +62,7 @@ def event_rehabilitation():
     event._init_database(header)
     stock_list = event.fetch_all_stock_list()
     for stock in stock_list:
+        print(f"Calculating adjust factor of {stock}")
         event.rehabilitate(stock)
         event.update_adjust_factor(stock)
 
@@ -73,6 +74,7 @@ def event_download_finance_report():
     stock_list = event.fetch_all_stock_list()
     for stock in stock_list:
         # print(stock[2:])
+        print(f"Download finance report of {stock}.")
         event.update_summary(stock[2:])
 
 
@@ -81,4 +83,5 @@ if __name__ == "__main__":
     # event_download_stock_data()
     # event_create_interest_table()
     # event_flag_stock()
-    event_record_interest()
+    # event_record_interest()
+    event_rehabilitation()

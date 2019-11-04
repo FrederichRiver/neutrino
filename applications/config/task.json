@@ -1,19 +1,19 @@
 [
 	{
 		"task":"event_rehabilitation",
-		"time":"20:30"
+		"time":"22:50"
 	},
 	{
 		"task": "event_download_stock_data",
-		"time": "23:00"
+		"time": "23:10"
 	},
 	{
 		"task":"event_flag_stock",
-		"hour":"12:00"
+		"time":"12:00"
 	},
 	{
 		"task":"event_record_interest",
-		"hour":"20"
+		"time":"22:20"
 	}
 
 ]

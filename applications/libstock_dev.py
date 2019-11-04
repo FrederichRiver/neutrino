@@ -220,11 +220,14 @@ class EventRehabilitation(StockEventBase):
         # first judge whether adjust factor has been calculated.
         for index, row in self.df.iterrows():
             # print(type(index), row['factor'])
-            sql = (
-                f"update {stock_code} set trade_date='{index}',"
-                f"adjust_factor={row['factor']} "
-                f"where trade_date='{index}'")
-            self.mysql.engine.execute(sql)
+            try:
+                sql = (
+                    f"update {stock_code} set trade_date='{index}',"
+                    f"adjust_factor={row['factor']} "
+                    f"where trade_date='{index}'")
+                self.mysql.engine.execute(sql)
+            except Exception:
+                print(Exception)
 
 
 def set_date_as_index(df):
