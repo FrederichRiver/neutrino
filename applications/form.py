@@ -3,11 +3,39 @@ from sqlalchemy import Column, String, Integer, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.3'
+__version__ = '1.0.6'
 
 
 formTemplate = declarative_base()
 formFinanceTemplate = declarative_base()
+formInfomation = declarative_base()
+
+
+class cooperation_info(formInfomation):
+    __tablename__ = 'cooperation_info'
+    # index = Column(Integer, nullable=False, autoincrement=True)
+    name = Column(String(100))
+    english_name = Column(String(100))
+    stock_code = Column(String(10), primary_key=True)
+    # type: 1,state enterprise; 2,
+    type = Column(Integer)
+    legal_representative = Column(String(20))
+    address = Column(String(100))
+    chairman = Column(String(20))
+    secratery = Column(String(20))
+    main_business = Column(String(100))
+    business_scope = Column(String(1000))
+    introduction = Column(String(1000))
+
+
+class formFinanceInfo(formFinanceTemplate):
+    __tablename__ = 'finance_info'
+    stock_code = Column(String(10), primary_key=True)
+    report_date = Column(Date, primary_key=True)
+    roe = Column(Float)
+    eps = Column(Float)
+    pe = Column(Float)
+    ttm = Column(Float)
 
 
 class formInterest(formTemplate):
@@ -15,51 +43,39 @@ class formInterest(formTemplate):
     __tablename__ = 'template_stock_interest'
     report_date = Column(Date, primary_key=True)
     year = Column(Integer)
-    bonus = Column(Float(precision=8,
-                         decimal_return_scale=3))
-    increase = Column(Float(precision=8,
-                            decimal_return_scale=3))
-    dividend = Column(Float(precision=8,
-                            decimal_return_scale=3))
+    bonus = Column(Float)
+    increase = Column(Float)
+    dividend = Column(Float)
     record_date = Column(Date)
     xrdr_date = Column(Date)
     share_date = Column(Date)
 
 
 class formStockList(formTemplate):
-    __tablename__ = 'stock_list'
+    __tablename__ = 'stock_manager'
     stock_code = Column(String(10), primary_key=True)
     stock_name = Column(String(20))
     gmt_create = Column(Date)
     gmt_modified = Column(Date)
     gmt_xrdr = Column(Date)
+    gmt_balance = Column(Date)
     flag = Column(String(10))
 
     def __str__(self):
-        # Not tested.
-        return (f"Stock<{self.stock_code},{self.stock_name}>"
-                "is created at {gmt_create}"
-                "and modified at {gmt_modified}")
+        return None
 
 
 class formStock(formTemplate):
     __tablename__ = 'template_stock'
     trade_date = Column(Date, primary_key=True)
     stock_name = Column(String(20))
-    close_price = Column(Float(precision=10,
-                               decimal_return_scale=3))
-    highest_price = Column(Float(precision=10,
-                                 decimal_return_scale=3))
-    lowest_price = Column(Float(precision=10,
-                                decimal_return_scale=3))
-    open_price = Column(Float(precision=10,
-                              decimal_return_scale=3))
-    prev_close_price = Column(Float(precision=10,
-                                    decimal_return_scale=3))
-    change_rate = Column(Float(precision=5,
-                               decimal_return_scale=3))
-    amplitude = Column(Float(precision=5,
-                             decimal_return_scale=3))
+    close_price = Column(Float)
+    highest_price = Column(Float)
+    lowest_price = Column(Float)
+    open_price = Column(Float)
+    prev_close_price = Column(Float)
+    change_rate = Column(Float)
+    amplitude = Column(Float)
     volume = Column(Integer)
     turnover = Column(Float)
     adjust_factor = Column(Float)
@@ -68,9 +84,10 @@ class formStock(formTemplate):
         return "Form Stock List is a template."
 
 
-class formCurrencyFlow(formFinanceTemplate):
-    __tablename__ = 'currency_flow_report'
-    report_date = Column(Date, primary_key=True)
+class formCashFlow(formFinanceTemplate):
+    __tablename__ = 'cash_flow_sheet'
+    report_period = Column(Date, primary_key=True)
+    stock_code = Column(String(10), primary_key=True)
     r2_cash_received_from_sales_of_goods_or_rendering_services = Column(Float)
     r3_net_increase_in_customer_deposits_and_interbank_deposits = Column(Float)
     r13_refunds_of_taxes = Column(Float)
@@ -82,39 +99,60 @@ class formCurrencyFlow(formFinanceTemplate):
     r27_cash_received_from_disposal_of_investments = Column(Float)
 
 
-class formFinanceReport(formFinanceTemplate):
-    __tablename__ = 'income_statement2'
+class formBalanceSheet(formFinanceTemplate):
+    __tablename__ = 'balance_sheet_template'
     report_period = Column(Date, primary_key=True)
-    r1_revenue = Column(Float, comment='revenue')
-    r2_total_operating_cost = Column(Float)
-    r3_operating_profit = Column(Float)
-    r4_net_profit = Column(Float)
-    r5_current_asset = Column(Float)
-    r6_long_term_asset = Column(Float)
-    r7_current_liability = Column(Float)
-    r8_long_term_liability = Column(Float)
+    stock_code = Column(String(10), primary_key=True)
+    r1_assets = Column(Float)
+    r2_current_assets = Column(Float)
+    r3_non_current_assets = Column(Float)
+    r4_liability = Column(Float)
+    r5_current_liability = Column(Float)
+    r6_long_term_liability = Column(Float)
+    r7_total_equity = Column(Float)
+    r1_1_bank_and_cash = Column(Float)
+    r1_2_current_investment = Column(Float)
+    r1_3_inventory = Column(Float)
+    r1_3_less_provision_for_inventory = Column(Float)
+    r3_1_fixed_assets = Column(Float)
+    r3_2_goodwill = Column(Float)
 
-
-class formFinanceSummary(formFinanceTemplate):
-    __tablename__ = 'summary'
+"""
+class formBalanceSheet(formFinanceTemplate):
+    __tablename__ = 'balance_sheet_template'
     report_period = Column(Date, primary_key=True)
-    r1_revenue = Column(Float)
-    r2_gross_profit = Column(Float)
-    r3_profit_from_operating = Column(Float)
-    r4_net_profit = Column(Float)
-    r5_total_asset = Column(Float)
-    r6_total_liability = Column(Float)
-    r7_roe = Column(Float)
-
-
-class formCashFlow(formFinanceTemplate):
-    __tablename__ = 'cash_flow'
-    report_period = Column(Date, primary_key=True)
-
-
-class formAssetLiability(formFinanceTemplate):
-    __tablename__ = 'asset'
-    report_period = Column(Date, primary_key=True)
+    r1_assets = Column(Float)
+    r2_current_assets = Column(Float)
+    r3_bank_and_cash = Column(Float)
+    r4_current_investment = Column(Float)
+    r5_entrusted_loan_receivable_due_within_one_year = Column(Float)
+    r6_less_impairment_entrusted_loan_receivable_due_within_one_year = Column(Float)
+    r7_net_bal_of_current_investment = Column(Float)
+    r8_notes_receivable = Column(Float)
+    r9_dividend_receivable = Column(Float)
+    r10_interest_receivable = Column(Float)
+    r11_account_receivable = Column(Float)
+    r12_less_bad_debt_provision_for_account_receivable = Column(Float)
+    r13_net_bal_of_current_receivable = Column(Float)
+    r14_other_receivable = Column(Float)
+    r15_less_bad_debt_provision_for_other_receivable = Column(Float)
+    r16_net_bal_of_other_receivable = Column(Float)
+    r17_prepayment = Column(Float)
+    r18_subsidy_receivable = Column(Float)
+    r19_inventory = Column(Float)
+    r20_less_provision_for_inventory = Column(Float)
+    r21_net_bal_of_inventory = Column(Float)
+    r22_amount_due_from_customer_for_contract_work = Column(Float)
+    r23_deferred_expense = Column(Float)
+    r24_long_term_debt_investment_due_within_one_year = Column(Float)
+    r25_finance_lease_receivables_due_within_one_year = Column(Float)
+    r26_other_current_assets = Column(Float)
+    r27_total_current_assets = Column(Float)
+    r28_long_term_investment = Column(Float)
+    r29_long_term_equity_investment = Column(Float)
+    r30_entrusted_loan_receivable = Column(Float)
+    r31_long_term_debt_investment = Column(Float)
+    r32_total_for_long_term_investment = Column(Float)
 
 
 class formIncomeStatement(formFinanceTemplate):
@@ -155,7 +193,7 @@ class formIncomeStatement(formFinanceTemplate):
     r33_transfer_from_ordinary_share_dividend_to_paid_in_capital = Column(Float)
     r34_retained_profit_after_appropriation = Column(Float)
     r35_supplementary_infomation = Column(Float)
-
+"""
 
 if __name__ == '__main__':
     stocklist = formStockList()

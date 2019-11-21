@@ -10,6 +10,7 @@ DM_STOP = "{0}: Neutrino is stopped.\n"
 DM_NOT_RUN = "Neutrino is not running.\n"
 DM_CHECK_TASK = "{}: Checking task file.\n"
 DM_MISS_TASK = "{}: Task plan file is not found.\n"
+ADJUST_FACTOR_ERROR = "Adjust factor error: {code}, {trade_date}, {factor}\n"
 
 
 class NoFileException(BaseException):

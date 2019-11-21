@@ -22,7 +22,7 @@ class StratagyBase(StockEventBase):
             highest_price, lowest_price,\
             prev_close_price from {stock_code}"
         df = self.mysql.engine.execute(sql).fetchall()
-        df = pd.DataFrame.from_dict(res)
+        df = pd.DataFrame.from_dict(df)
         df = self._config(df)
         return df
 
@@ -47,7 +47,7 @@ class StratagyBase(StockEventBase):
 
     def _config(self, df):
         df.columns = ['trade_date', 'open', 'close', 'high', 'low', 'prev_close']
-        df['trade_date'] = pd.to_datetime(res['trade_date'])
+        df['trade_date'] = pd.to_datetime(df['trade_date'])
         df.set_index('trade_date', inplace=True)
         return df
 
@@ -80,6 +80,11 @@ class StratagyBase(StockEventBase):
         print('alpha:', alpha)
         print('sharp ratio:', sharp_ratio)
         return stock_code, total_ret.values[0], annual_ret.values[0], beta, alpha, sharp_ratio
+
+
+class strategy_dev(StratagyBase):
+    def run(self):
+        df = self.fetch_data('SH601818') 
 
 
 def test(stock_code):

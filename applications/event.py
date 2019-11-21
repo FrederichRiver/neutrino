@@ -2,35 +2,51 @@
 # event_stock
 
 from libmysql8 import mysqlHeader
-from libstock import (EventCreateStockTable,
-                      EventDownloadStockData,
-                      EventCreateInterestTable,
-                      EventRecordInterest,
-                      EventFlag)
-from libstock_dev import EventRehabilitation
+from libstock import (
+    EventTradeDataManager,
+    EventCreateInterestTable,
+    EventRecordInterest,
+    EventFlag,
+    EventTradeDetail)
+from libstock import EventRehabilitation
 from libfinance import EventFinanceReport
-__version__ = '1.0.6'
+from dev import fetch_finance_info, fetch_cooperation_info
+import time
+
+__version__ = '1.0.9'
 
 
 def event_init_stock():
     header = mysqlHeader('root', '6414939', 'test')
-    event = EventCreateStockTable()
+    event = EventTradeDataManager()
     event._init_database(header)
-    event.sub_init_stock_table()
+    stock_list = create_stock_list()
+    for stock in stock_list:
+        print(f"{time.ctime()}: Create table {stock}.")
+        self.record_stock(stock)
 
 
 def event_record_stock():
     header = mysqlHeader('root', '6414939', 'test')
-    event = EventCreateStockTable()
+    event = EventTradeDataManager()
     event._init_database(header)
-    event.sub_create_stock_table()
+    self.fetch_all_security_list()
+    for stock in self.security_list:
+        print(f"{time.ctime()}: Create table {stock}.")
+        self.record_stock(stock)
 
 
 def event_download_stock_data():
     header = mysqlHeader('root', '6414939', 'test')
-    event = EventDownloadStockData()
+    event = EventTradeDataManager()
     event._init_database(header)
-    event.sub_download_stock_data()
+    result = self.mysql.session.query(
+            formStockList.stock_code).all()
+    # result format:
+    # (stock_code,)
+    for stock in result:
+        print(f"{time.ctime()}: Download {stock[0]} stock data.")
+        self.download_stock_data(stock[0])
 
 
 def event_create_interest_table():
@@ -75,7 +91,22 @@ def event_download_finance_report():
     for stock in stock_list:
         # print(stock[2:])
         print(f"Download finance report of {stock}.")
-        event.update_summary(stock[2:])
+        event.update_balance_sheet_asset(stock)
+
+
+def event_download_trade_detail_data():
+    header = mysqlHeader('root', '6414939', 'test')
+    trade_date_list = ["20191120"]
+    event = EventTradeDetail()
+    event._init_database(header)
+    stock_list = event.fetch_all_stock_list()
+    for trade_date in trade_date_list:
+        for stock in stock_list:
+            print(f"Download detail trade data {stock}: {trade_date}")
+            try:
+                event.fetch_trade_detail_data(stock, trade_date)
+            except Exception:
+                pass
 
 
 if __name__ == "__main__":
@@ -84,4 +115,4 @@ if __name__ == "__main__":
     # event_create_interest_table()
     # event_flag_stock()
     # event_record_interest()
-    event_rehabilitation()
+    event_download_trade_detail_data()

@@ -10,7 +10,8 @@ from datetime import datetime
 from form import formStockList
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from libstock import StockEventBase
-__version__ = '1.3.11-dev'
+from message import ADJUST_FACTOR_ERROR
+__version__ = '1.3.12-dev'
 
 
 class StratagyBase(StockEventBase):
@@ -132,110 +133,6 @@ def beta(df, df2):
     import numpy as np
     beta = np.cov(df, df2) / np.var(df2)
     return beta
-
-
-class EventRehabilitation(StockEventBase):
-    def rehabilitate(self, stock_code):
-        """
-        Main function, rehabilitation process.
-        """
-        try:
-            # fetching data from mysql.
-            sql = (
-                "select trade_date,open_price,close_price,"
-                "highest_price, lowest_price, prev_close_price,"
-                f"amplitude from {stock_code}")
-            result = self.mysql.session.execute(sql).fetchall()
-            self.df = pd.DataFrame.from_dict(result)
-            # data configging
-            self._config_df()
-            share = self._fetch_share(stock_code)
-            self.df = pd.concat([self.df, share], axis=1, join='outer')
-            # print(self.df.head(5))
-            self.df.sort_index()
-            self.df['reh'] = self.df['close']
-            self.df.fillna(0, inplace=True)
-            self.adjust_factor()
-        except Exception:
-            print(Exception)
-
-    def adjust_factor(self):
-        """
-        Calculating adjust factor.
-        Beta version.
-        """
-        self.df['factor'] = self.df['close']
-        xr_flag = 0
-        factor = 1.0
-        for i in range(self.df.shape[0]):
-            if i:
-                if self.df.ix[i, 'dividend']+self.df.ix[i, 'bonus']+self.df.ix[i, 'increase']:
-                    xr_flag = 2
-                    factor = factor*self.df.ix[i-1, 'close']/self.df.ix[i, 'prev_close']
-                else:
-                    if xr_flag:
-                        xr_flag -= 1
-            self.df.ix[i, 'factor'] = factor
-            self.df.ix[i, 'reh'] = self.df.ix[i, 'close']*factor
-            if xr_flag:
-                pass
-                # print(
-                #    self.df.index.T[i], self.df.ix[i, 'close'], self.df.ix[i, 'reh'], self.df.ix[i, 'factor'],
-                #    self.df.ix[i, 'dividend'], self.df.ix[i, 'bonus'], self.df.ix[i, 'increase'])
-
-    def _config_df(self):
-        """
-        Config dataframe, set data type, column index, etc.
-        """
-        # setting column index.
-        self.df.columns = ['date', 'open', 'close', 'high', 'low', 'prev_close', 'amplitude']
-        # setting data type.
-        self.df['open'] = self.df['open'].astype(float)
-        self.df['close'] = self.df['close'].astype(float)
-        self.df['high'] = self.df['high'].astype(float)
-        self.df['low'] = self.df['low'].astype(float)
-        self.df['prev_close'] = self.df['prev_close'].astype(float)
-        self.df['amplitude'] = self.df['amplitude'].astype(float)
-        # convert date format from string to date.
-        self.df = set_date_as_index(self.df)
-
-    def _fetch_share(self, stock_code):
-        """
-        Getting interest data
-        """
-        # Querying data from mysql
-        sql = (
-            "SELECT xrdr_date, bonus, increase, dividend "
-            f"FROM {stock_code}_interest")
-        share = self.mysql.session.execute(sql).fetchall()
-        # converting dict data to dataframe format
-        share = pd.DataFrame.from_dict(share)
-        # setting column index
-        share.columns = ['date', 'bonus', 'increase', 'dividend']
-        # converting data format and setting index
-        share = set_date_as_index(share)
-        return share
-
-    def update_adjust_factor(self, stock_code):
-        # first judge whether adjust factor has been calculated.
-        for index, row in self.df.iterrows():
-            # print(type(index), row['factor'])
-            try:
-                sql = (
-                    f"update {stock_code} set trade_date='{index}',"
-                    f"adjust_factor={row['factor']} "
-                    f"where trade_date='{index}'")
-                self.mysql.engine.execute(sql)
-            except Exception:
-                print(Exception)
-
-
-def set_date_as_index(df):
-    df['date'] = pd.to_datetime(df['date'], format=TIME_FMT)
-    df.set_index('date', inplace=True)
-    # exception 1, date index not exists.
-    # exception 2, date data is not the date format.
-    return df
 
 
 if __name__ == '__main__':

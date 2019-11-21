@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 import sys
 from libmysql8 import mysqlHeader, mysqlBase, create_table
-from form import formTemplate,  formStockList, formFinanceTemplate
+from form import (
+    formTemplate,  formStockList,
+    formFinanceTemplate, formInfomation)
 from libstock import StockEventBase
 
-__version__ = '1.3'
+__version__ = '1.4'
 
 
 def event_initial_database():
@@ -13,6 +15,7 @@ def event_initial_database():
     mysql = mysqlBase(header)
     create_table(formTemplate, mysql.engine)
     create_table(formFinanceTemplate, mysql.engine)
+    create_table(formInfomation, mysql.engine)
 
 
 def event_drop_tables():

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
 This is a library dealing with mysql which is based on sqlalchemy.
+Library support MYSQL version 8.
 Auther: Friederich River
 """
 from sqlalchemy import create_engine
@@ -8,7 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
 from libexception import AccountException
-__version__ = '3.1.12'
+__version__ = '3.1.16'
 
 
 class mysqlBase(object):
@@ -41,6 +42,11 @@ class mysqlBase(object):
         # self.engine.commit()
         return 1
 
+    def select_values(self, table, field):
+        sql = f"SELECT {field} from {table}"
+        result = self.engine.execute(sql)
+        return result
+
     def query(self, sql):
         result = self.engine.execute(sql).fetchone()
         return result
@@ -52,6 +58,26 @@ class mysqlBase(object):
     def truncate_table(self, table_name):
         sql = f"TRUNCATE TABLE {table_name}"
         self.engine.execute(sql)
+
+    def create_table(self, table):
+        """
+        : param table: It is form template defined in form module.
+        : param engine: It is a sqlalchemy mysql engine.
+        """
+        table.metadata.create_all(self.mysql.engine)
+
+    def create_table_from_table(name, table_template, engine):
+        # Base on a table, create another form which
+        # is similar with the original table.
+        # Only name was changed.
+        # name : which is the target table name.
+        # tableName : which is the original table name.
+        # engine : a database engine base on MySQLBase.
+        sql = f"CREATE table {name} like {table_template}"
+        try:
+            mysql.engine.execute(sql)
+        except Exception as e:
+            print(e)
 
 
 def _drop_all(base, engine):
@@ -97,12 +123,15 @@ def create_table_from_table(name, table_template, engine):
     # name : which is the target table name.
     # tableName : which is the original table name.
     # engine : a database engine base on MySQLBase.
-    sql = "CREATE table {name} like {table_template}"
-    engine.connect().execute(sql)
-    engine.connect().close()
+    sql = f"CREATE table {name} like {table_template}"
+    try:
+        engine.connect().execute(sql)
+        engine.connect().close()
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
-    h = mysqlHeader('root', '6414939', 'test')
-    engine = mysqlBase(h)
+    header = mysqlHeader('root', '6414939', 'test')
+    engine = mysqlBase(header)
     print(engine)

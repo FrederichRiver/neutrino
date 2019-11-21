@@ -9,22 +9,40 @@ v1.2.5, Feb 17, 2019, build class stockeventbase, not perfect.
 """
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import pywt
 import random
 import re
-import pandas as pd
+import requests
 import talib as ta
 import time
-import requests
+from datetime import datetime
+from enum import Enum
 from env import TIME_FMT, CONF_FILE
-from utils import read_json, neteaseindex, today, info, error
+from form import formStockList
 from lxml import etree
 from libmysql8 import (mysqlBase, mysqlHeader,
                        create_table_from_table)
-from datetime import datetime
-from form import formStockList
+from message import ADJUST_FACTOR_ERROR
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
-from enum import Enum
-__version__ = '1.2.15'
+from utils import read_json, neteaseindex, today, info, error
+
+__version__ = '1.7.33'
+
+
+def wavelet_nr(df):
+    """TODO: Docstring for wavelet_nr.
+
+    :df: TODO
+    :returns: TODO
+
+    """
+    db4 = pywt.Wavelet('db4')
+    coeffs = pywt.wavedec(df, db4)
+    coeffs[-1] *= 0
+    coeffs[-2] *= 0
+    meta = pywt.waverec(coeffs, db4)
+    return meta
 
 
 class SecurityFlag(Enum):
@@ -42,18 +60,23 @@ class StockEventBase(object):
         self.mysql = None
         self.stock_list = []
         self.security_list = []
+        self.coder = codeFormat()
 
-    def __repr__(self):
-        return self.mysql.id_string
+    def __str__(self):
+        return "class <Stock Event Base>"
 
     def _init_database(self, header):
         self.mysql = mysqlBase(header)
+
+    def update_date_time(self):
+        self.Today = datetime.now().strftime(TIME_FMT)
 
     def fetch_all_stock_list(self):
         self.stock_list = []
         result = self.mysql.session.query(
             formStockList.stock_code, formStockList.flag).all()
         for dataline in result:
+            # flag = 1 means stock
             if dataline[1] == '1':
                 self.stock_list.append(dataline[0])
         return self.stock_list
@@ -76,6 +99,16 @@ class StockEventBase(object):
             if stock[0]:
                 stock_list.append(stock[0])
         return stock_list
+
+    def close(self):
+        self.mysql.engine.close()
+
+
+class EventStockPrice(StockEventBase):
+    def run(self, code, field):
+        prices = self.mysql.select_values(code, field)
+        df = pd.DataFrame(list(prices), columns=field.split(','))
+        return df
 
 
 class EventFlag(StockEventBase):
@@ -127,6 +160,7 @@ class EventFlag(StockEventBase):
 
     def _flag_future(self, stock_code):
         pass
+
     def _flag_gold(self, stock_code):
         pass
 
@@ -138,53 +172,49 @@ def fetch_name(s):
     pass
 
 
-class EventCreateStockTable(StockEventBase):
+class EventTradeDataManager(StockEventBase):
     def __init__(self):
         super(StockEventBase, self).__init__()
         self.coder = codeFormat()
 
-    def _get_file_from_net_ease(
-            self, code,
-            start_date='19901219',
-            end_date=today()):
+    def fetch_trade_data_from_netease(
+            self, code, start_date='19901219', end_date=today()):
         """
         read csv data and return a dataframe object.
         """
-        _, url_ne_index = read_json('URL_163_MONEY', CONF_FILE)
+        # config file is a url file.
+        _, url = read_json('URL_163_MONEY', CONF_FILE)
         query_code = self.coder.net_ease_code(code)
-        netease_stock_index_url = url_ne_index.format(
-            query_code, start_date, end_date)
-        return pd.read_csv(netease_stock_index_url,
-                           encoding='gb18030')
+        netease_url = url.format(query_code, start_date, end_date)
+        return pd.read_csv(netease_url, encoding='gb18030')
 
-    def _get_stock_name(self, code):
+    def fetch_stock_name(self, code):
         try:
-            result = self._get_file_from_net_ease(code)
+            result = self.fetch_data_from_netease(code)
             if len(result) > 0:
                 stock_name = result.iloc[1, 2].replace(' ', '')
             else:
                 stock_name = None
         except Exception as e:
-            error(f"_get_stock_name: {e}")
+            print(f"{time.ctime()}: Error when fetching stock name. {e}")
             stock_name = None
         return code, stock_name
 
-    def _record_stock(self, stock_code):
-        result = self._confirm_stock(stock_code)
+    def record_stock(self, stock_code):
+        result = self.check_stock(stock_code)
         if result is None:
-            self._create_table(stock_code)
+            self.create_stock_table(stock_code)
 
-    def _confirm_stock(self, stock_code):
+    def check_stock(self, stock_code):
         # It is a sub function of _record_stock
         result = self.mysql.session.query(
             formStockList.stock_code
         ).filter_by(stock_code=stock_code).first()
         return result
 
-    def _create_table(self, code):
-        stock_code, stock_name = self._get_stock_name(code)
+    def create_stock_table(self, code):
+        stock_code, stock_name = self.fetch_stock_name(code)
         if stock_name:
-            print(f"{stock_code}: {stock_name}")
             stock_orm = formStockList(stock_code=stock_code,
                                       stock_name=stock_name,
                                       gmt_create=datetime.today())
@@ -194,35 +224,23 @@ class EventCreateStockTable(StockEventBase):
                                     'template_stock',
                                     self.mysql.engine)
 
-    def sub_init_stock_table(self):
-        stock_list = create_stock_list()
-        for stock in stock_list:
-            self._record_stock(stock)
+    def _data_cleaning(self, df):
+        df.drop(['stock_code'], axis=1, inplace=True)
+        df.replace('None', np.nan, inplace=True)
+        df = df.dropna(axis=0, how='any')
 
-    def sub_create_stock_table(self):
-        self.fetch_all_security_list()
-        for stock in self.security_list:
-            print(f"Creat table {stock}.")
-            self._record_stock(stock)
-
-
-class EventDownloadStockData(EventCreateStockTable):
-    """
-    This method download daily stock trading data.
-    """
-
-    def first_time_download_stock_data(self, stock_code):
-        # print(stock_code)
-        result = self._get_file_from_net_ease(stock_code)
+    def init_stock_data(self, stock_code):
+        """
+        used when first time download stock data.
+        """
+        result = self.fetch_trade_data_from_netease(stock_code)
         result.columns = ['trade_date', 'stock_code',
                           'stock_name', 'close_price',
                           'highest_price', 'lowest_price',
                           'open_price', 'prev_close_price',
                           'change_rate', 'amplitude',
                           'volume', 'turnover']
-        result.drop(['stock_code'], axis=1, inplace=True)
-        result.replace('None', np.nan, inplace=True)
-        result = result.dropna(axis=0, how='any')
+        result = self._data_cleaning(result)
         columetype = {
             'trade_date': Date,
             'stock_name': NVARCHAR(length=10),
@@ -257,7 +275,7 @@ class EventDownloadStockData(EventCreateStockTable):
         except Exception as e:
             print(f'{time.ctime()}: Error 3 - {e}')
 
-    def _download_stock_data(self, stock_code):
+    def download_stock_data(self, stock_code):
         # print(stock_code)
         result = self._get_file_from_net_ease(stock_code)
         result.columns = ['trade_date', 'stock_code',
@@ -266,9 +284,7 @@ class EventDownloadStockData(EventCreateStockTable):
                           'open_price', 'prev_close_price',
                           'change_rate', 'amplitude',
                           'volume', 'turnover']
-        result.drop(['stock_code'], axis=1, inplace=True)
-        result.replace('None', np.nan, inplace=True)
-        result = result.dropna(axis=0, how='any')
+        result = self._data_cleaning(result)
         columetype = {
             'trade_date': Date,
             'stock_name': NVARCHAR(length=10),
@@ -307,7 +323,7 @@ class EventDownloadStockData(EventCreateStockTable):
                         f"{row['close_price']},{row['highest_price']},"
                         f"{row['lowest_price']},{row['open_price']},"
                         f"{row['prev_close_price']},{row['change_rate']},"
-                        f"{row['amplitude']},{row['volume']},{row['turnover']})")        
+                        f"{row['amplitude']},{row['volume']},{row['turnover']})")    
                     self.mysql.engine.execute(sql2)
                     update_date = t1
             query = self.mysql.session.query(
@@ -320,15 +336,6 @@ class EventDownloadStockData(EventCreateStockTable):
             self.mysql.session.commit()
         except Exception as e:
             print(f'{time.ctime()}: Error 3 - {e}')
-
-    def sub_download_stock_data(self):
-        result = self.mysql.session.query(
-            formStockList.stock_code).all()
-        # result format:
-        # (stock_code,)
-        for x in result:
-            print(f"{time.ctime()}: Download {x[0]} stock data.")
-            self._download_stock_data(x[0])
 
 
 class EventCreateInterestTable(StockEventBase):
@@ -486,9 +493,9 @@ def str2zero(input_str, return_type='i'):
         return input_str
     else:
         if return_type == 'i':
-            return 0
+            return 'NULL'
         else:
-            return None
+            return 'NULL'
 
 
 class DataLine(object):
@@ -581,6 +588,197 @@ def event_stock_flag():
                     '{df.loc[i,'stock_code']}'"
             mysql.session.execute(sql)
             mysql.session.commit()
+
+
+class EventRehabilitation(StockEventBase):
+    def rehabilitate(self, stock_code):
+        """
+        Main function, rehabilitation process.
+        """
+        try:
+            # fetching data from mysql.
+            sql = (
+                "select trade_date,open_price,close_price,"
+                "highest_price, lowest_price, prev_close_price,"
+                f"amplitude from {stock_code}")
+            result = self.mysql.session.execute(sql).fetchall()
+            self.df = pd.DataFrame.from_dict(result)
+            # data configging
+            self._config_df()
+            share = self._fetch_share(stock_code)
+            self.df = pd.concat([self.df, share], axis=1, join='outer')
+            # print(self.df.head(5))
+            self.df.sort_index()
+            self.df['reh'] = self.df['close']
+            self.df.fillna(0, inplace=True)
+            self.adjust_factor()
+        except Exception:
+            print(Exception)
+
+    def adjust_factor(self):
+        """
+        Calculating adjust factor.
+        Beta version.
+        """
+        self.df['factor'] = self.df['close']
+        xr_flag = 0
+        factor = 1.0
+        for i in range(self.df.shape[0]):
+            if i:
+                if self.df.ix[i, 'dividend']+self.df.ix[i, 'bonus']+self.df.ix[i, 'increase']:
+                    xr_flag = 2
+                    factor = factor*self.df.ix[i-1, 'close']/self.df.ix[i, 'prev_close']
+                else:
+                    if xr_flag:
+                        xr_flag -= 1
+            self.df.ix[i, 'factor'] = factor
+            self.df.ix[i, 'reh'] = self.df.ix[i, 'close']*factor
+            if xr_flag:
+                pass
+                # print(
+                #    self.df.index.T[i], self.df.ix[i, 'close'], self.df.ix[i, 'reh'], self.df.ix[i, 'factor'],
+                #    self.df.ix[i, 'dividend'], self.df.ix[i, 'bonus'], self.df.ix[i, 'increase'])
+
+    def _config_df(self):
+        """
+        Config dataframe, set data type, column index, etc.
+        """
+        # setting column index.
+        self.df.columns = ['date', 'open', 'close', 'high', 'low', 'prev_close', 'amplitude']
+        # setting data type.
+        self.df['open'] = self.df['open'].astype(float)
+        self.df['close'] = self.df['close'].astype(float)
+        self.df['high'] = self.df['high'].astype(float)
+        self.df['low'] = self.df['low'].astype(float)
+        self.df['prev_close'] = self.df['prev_close'].astype(float)
+        self.df['amplitude'] = self.df['amplitude'].astype(float)
+        # convert date format from string to date.
+        self.df = set_date_as_index(self.df)
+
+    def _fetch_share(self, stock_code):
+        """
+        Getting interest data
+        """
+        # Querying data from mysql
+        sql = (
+            "SELECT xrdr_date, bonus, increase, dividend "
+            f"FROM {stock_code}_interest")
+        share = self.mysql.session.execute(sql).fetchall()
+        # converting dict data to dataframe format
+        share = pd.DataFrame.from_dict(share)
+        # setting column index
+        share.columns = ['date', 'bonus', 'increase', 'dividend']
+        # converting data format and setting index
+        share = set_date_as_index(share)
+        return share
+
+    def update_adjust_factor(self, stock_code):
+        # first judge whether adjust factor has been calculated.
+        for index, row in self.df.iterrows():
+            # print(type(index), row['factor'])
+            try:
+                sql = (
+                    f"update {stock_code} set trade_date='{index}',"
+                    f"adjust_factor={row['factor']} "
+                    f"where trade_date='{index}'")
+                self.mysql.engine.execute(sql)
+            except Exception as e:
+                print(
+                    ADJUST_FACTOR_ERROR.format(
+                        code=stock_code,
+                        trade_date=index,
+                        factor=row['factor']))
+
+
+class EventTradeDetail(StockEventBase):
+    def fetch_trade_detail_data(self, stock_code, trade_date):
+        year = '2019'
+        # trade_date format: '20191118'
+        code = self.coder.net_ease_code(stock_code)
+        url = f"http://quotes.money.163.com/cjmx/{year}/{trade_date}/{code}.xls"
+        df = pd.read_excel(url)
+        filename = f"csv/{stock_code}_{trade_date}.csv"
+        df.to_csv(filename, encoding='gb18030')
+
+
+class EventFinanceReport(StockEventBase):
+    def update_balance_sheet(self, stock_code):
+        url = f"http://quotes.money.163.com/service/zcfzb_{stock_code[2:]}.html"
+        df = self.fetch_balance_sheet(stock_code)
+        update_period = '0'
+        if df.empty is False:
+            for index, row in df.iterrows():
+                query_sql = (
+                    f"SELECT * from balance_sheet_template where ("
+                    f"report_period='{index}' and stock_code='{stock_code}')")
+                # print(query_sql)
+                result = self.mysql.engine.execute(query_sql).fetchall()
+                # print(result)
+                insert_sql = (
+                    f"INSERT into balance_sheet_template (report_period, stock_code,"
+                    "r1_assets,r2_current_assets,r3_fixed_assets,r4_current_liability,"
+                    "r5_long_term_liability,r6_total_equity) "
+                    f"VALUES ('{index}', '{stock_code}',{str2zero(row[51])},"
+                    f"{str2zero(row[24])},{str2zero(row[50])},{str2zero(row[83])},"
+                    f"{str2zero(row[92])},{str2zero(row[106])})")
+                update_sql = (
+                    f"UPDATE balance_sheet_template set "
+                    f"r1_assets={str2zero(row[51])},r2_current_assets={str2zero(row[24])},"
+                    f"r3_fixed_assets={str2zero(row[50])},r5_current_liability={str2zero(row[83])},"
+                    f"r6_long_term_liability={str2zero(row[92])},r7_total_equity={str2zero(row[106])} "
+                    f"WHERE (report_period='{index}' and stock_code='{stock_code}')"
+                )
+                if index > update_period:
+                    update_period = index
+                    # print(update_period)
+                if result:
+                    self.mysql.engine.execute(update_sql)
+                else:
+                    self.mysql.engine.execute(insert_sql)
+            update_date_sql = (
+                f"UPDATE stock_manager set gmt_balance='{update_period}' "
+                f"WHERE stock_code='{stock_code}'")
+            self.mysql.engine.execute(update_date_sql)
+
+    def update_balance_sheet_asset(self, stock_code):
+        url = f"http://quotes.money.163.com/service/zcfzb_{stock_code[2:]}.html"
+        df = self.fetch_balance_sheet(stock_code)
+        update_period = '0'
+        if df.empty is False:
+            for index, row in df.iterrows():
+                update_sql = (
+                    f"UPDATE balance_sheet_template set "
+                    f"r1_1_bank_and_cash={str2zero(row[0])},r1_3_inventory={str2zero(row[19])},"
+                    f"r3_1_fixed_assets={str2zero(row[36])},r3_2_goodwill={str2zero(row[45])} "
+                    f"WHERE (report_period='{index}' and stock_code='{stock_code}')"
+                )
+                if index > update_period:
+                    update_period = index
+                    # print(update_period)
+                self.mysql.engine.execute(update_sql)
+
+    def fetch_balance_sheet(self, stock_code):
+        """
+        read csv data and return a dataframe object.
+        """
+        # config file is a url file.
+        # _, url = read_json('URL_163_MONEY', CONF_FILE)
+        url = f"http://quotes.money.163.com/service/zcfzb_{stock_code[2:]}.html"
+        df = pd.read_csv(url, encoding='gb18030')
+        if df.empty is False:
+            df = df.T
+            result = df.ix[1:-1, :]
+        else:
+            result = df
+        return result
+
+
+def set_date_as_index(df):
+    df['date'] = pd.to_datetime(df['date'], format=TIME_FMT)
+    df.set_index('date', inplace=True)
+    # exception 1, date index not exists.
+    # exception 2, date data is not the date format.
+    return df
 
 
 def sub_7_days_benefit_distribution():
@@ -730,79 +928,6 @@ def test(stock_code):
         beta, alpha, sharp_ratio)
 
 
-def rehabilitation():
-    """Calculate the rehabilitation of stock
-
-    :df: TODO
-    :returns: TODO
-
-    """
-    stock_code = 'SH600001'
-    header = mysqlHeader('root', '6414939', 'test')
-    stock = mysqlBase(header)
-    sql = f"select trade_date,open_price,close_price,\
-            highest_price, lowest_price,\
-            prev_close_price, amplitude from {stock_code}"
-    res = stock.session.execute(sql).fetchall()
-    res = pd.DataFrame.from_dict(res)
-    res.columns = ['date', 'open', 'close', 'high',
-                   'low', 'prev_close', 'amplitude']
-    res['open'] = res['open'].astype(float)
-    res['close'] = res['close'].astype(float)
-    res['high'] = res['high'].astype(float)
-    res['low'] = res['low'].astype(float)
-    res['prev_close'] = res['prev_close'].astype(float)
-    res['amplitude'] = res['amplitude'].astype(float)
-    print(res.dtypes)
-    res['date'] = pd.to_datetime(res['date'])
-    res.set_index('date', inplace=True)
-    # res = res.sort_index()
-    sql2 = f"SELECT xrdr_date, bonus, increase,\
-            dividend from {stock_code}_interest"
-    share = stock.session.execute(sql2).fetchall()
-    share = pd.DataFrame.from_dict(share)
-    share.columns = ['date', 'bonus', 'increase', 'dividend']
-    share['date'] = pd.to_datetime(share['date'])
-    share.set_index('date', inplace=True)
-    # share.sort_index()
-    res = pd.concat([res, share], axis=1, join='outer')
-    res.sort_index()
-    res['reh'] = res['close']
-    res.fillna(0, inplace=True)
-    b = i = d = 0
-    res['closeshift'] = res['close'].shift(1)
-    print(res[370:410])
-    res = res[370:410]
-    base = res.iat[0, 2]
-    ref = base
-    for index, row in res.iterrows():
-        if row['bonus'] + row['increase'] + row['dividend'] != 0:
-            b = row['bonus']
-            i = row['increase']
-            d = row['dividend']
-            base = (row['closeshift']-b/10)*(1-i/10-d/10)
-            ref = row['closeshift']
-            print('REH', 'last close:', row['closeshift'], 'reh close:', base)
-        row['reh'] = ref * row['close']/base
-        # print(row['close'],row['reh'],b,i,d)
-
-
-"""
-stock_list = fetch_all_stock_list()
-for stock in stock_list:
-    with open('data.log', 'a') as f:
-        try:
-            stock_code, total_ret, anu_ret, beta, alpha, sharp = test(stock)
-            content = f'Code: {stock_code},'
-            content = content + f'Benefit: {total_ret},'
-            content = content + f'Beta: {beta},'
-            content = content + f'Alpha: {alpha},'
-            content = content + f'Sharp: {sharp}\n'
-            f.write(content)
-        except Exception as e:
-            f.write(f'{stock}:{e}')
-        f.close()
-"""
 if __name__ == '__main__':
     header = mysqlHeader('root', '6414939', 'stock')
     stock = EventCreateStockTable()

@@ -15,6 +15,7 @@ from event import (event_record_stock, event_init_stock,
                    event_record_interest,
                    event_flag_stock,
                    event_rehabilitation)
+from dev import event_cooperation_info, event_finance_info
 
 __version__ = '1.0.3'
 
@@ -34,7 +35,9 @@ class taskManager(BackgroundScheduler):
                 'event_create_interest_table': event_create_interest_table,
                 'event_record_interest': event_record_interest,
                 'event_flag_stock': event_flag_stock,
-                'event_rehabilitation': event_rehabilitation
+                'event_rehabilitation': event_rehabilitation,
+                'event_cooperation_info': event_cooperation_info,
+                'event_finance_info': event_finance_info
             }
             self.taskfile = taskfile
 
