@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.6'
+__version__ = '1.0.8'
 
 
 formTemplate = declarative_base()
@@ -51,7 +51,7 @@ class formInterest(formTemplate):
     share_date = Column(Date)
 
 
-class formStockList(formTemplate):
+class formStockManager(formTemplate):
     __tablename__ = 'stock_manager'
     stock_code = Column(String(10), primary_key=True)
     stock_name = Column(String(20))
@@ -59,6 +59,8 @@ class formStockList(formTemplate):
     gmt_modified = Column(Date)
     gmt_xrdr = Column(Date)
     gmt_balance = Column(Date)
+    gmt_income = Column(Date)
+    gmt_cashflow = Column(Date)
     flag = Column(String(10))
 
     def __str__(self):
@@ -84,6 +86,21 @@ class formStock(formTemplate):
         return "Form Stock List is a template."
 
 
+class formFinance(formFinanceTemplate):
+    __tablename__ = 'finance_factor'
+    report_period = Column(Date, primary_key=True)
+    stock_code = Column(String(10), primary_key=True)
+    roe = Column(Float)
+    pe = Column(Float)
+    ttm = Column(Float)
+    roic = Column(Float)
+    croic = Column(Float)
+    ebit = Column(Float)
+    ebitda = Column(Float)
+    noplat = Column(Float)
+    # r5_quantity = Column(Float)
+
+
 class formCashFlow(formFinanceTemplate):
     __tablename__ = 'cash_flow_sheet'
     report_period = Column(Date, primary_key=True)
@@ -106,16 +123,45 @@ class formBalanceSheet(formFinanceTemplate):
     r1_assets = Column(Float)
     r2_current_assets = Column(Float)
     r3_non_current_assets = Column(Float)
-    r4_liability = Column(Float)
-    r5_current_liability = Column(Float)
-    r6_long_term_liability = Column(Float)
-    r7_total_equity = Column(Float)
+    # r4_liability = Column(Float)
+    r4_current_liability = Column(Float)
+    r5_long_term_liability = Column(Float)
+    r6_total_equity = Column(Float)
     r1_1_bank_and_cash = Column(Float)
     r1_2_current_investment = Column(Float)
     r1_3_inventory = Column(Float)
     r1_3_less_provision_for_inventory = Column(Float)
     r3_1_fixed_assets = Column(Float)
     r3_2_goodwill = Column(Float)
+    r5_1_short_term_loans = Column(Float)
+    r5_2_notes_payable = Column(Float)
+    r5_3_accounts_payable = Column(Float)
+    r6_1_long_term_loans = Column(Float)
+
+
+class formIncomeStatement(formFinanceTemplate):
+    __tablename__ = 'income_statement_template'
+    report_period = Column(Date, primary_key=True)
+    stock_code = Column(String(10), primary_key=True)
+    r1_total_revenue = Column(Float)
+    r2_total_cost = Column(Float)
+    r3_profit_from_operation = Column(Float)
+    r4_net_profit = Column(Float)
+    r1_1_revenue = Column(Float)
+    r1_2_interest_income = Column(Float)
+    r1_3_other_operating_income = Column(Float)
+    r2_1_operating_cost = Column(Float)
+    r2_2_rd_expense = Column(Float)
+    r2_3_ga_expense = Column(Float)
+    r2_4_selling_expense = Column(Float)
+    r2_5_finance_expense = Column(Float)
+    r3_1_non_operating_income = Column(Float)
+    r3_2_non_operating_expense = Column(Float)
+    r3_3_disposal_loss_on_non_current_asset = Column(Float)
+    r3_4_profit_before_tax = Column(Float)
+    r3_5_income_tax = Column(Float)
+    r3_6_unrealized_investment_loss = Column(Float)
+
 
 """
 class formBalanceSheet(formFinanceTemplate):

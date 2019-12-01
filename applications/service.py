@@ -124,6 +124,7 @@ class tableLine(tableBase):
 
 # relationship between companies.
 
+
 if __name__ == "__main__":
     head = tableHead(5)
     head.set_head(['month', 'benefit', 'date'])

@@ -7,13 +7,13 @@ from lxml import etree
 from libmysql8 import (mysqlBase, mysqlHeader,
                        create_table_from_table)
 from datetime import datetime
-from form import formStockList
+from form import formStockManager, formIncomeStatement, formBalanceSheet
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from libstock import StockEventBase
 __version__ = '1.0.1-dev'
 
 
-class StratagyBase(StockEventBase):
+class StratagyBase2(StockEventBase):
     def __init__(self):
         super(StockEventBase, self).__init__()
 
@@ -80,11 +80,6 @@ class StratagyBase(StockEventBase):
         print('alpha:', alpha)
         print('sharp ratio:', sharp_ratio)
         return stock_code, total_ret.values[0], annual_ret.values[0], beta, alpha, sharp_ratio
-
-
-class strategy_dev(StratagyBase):
-    def run(self):
-        df = self.fetch_data('SH601818') 
 
 
 def test(stock_code):
@@ -189,5 +184,39 @@ def beta(df, df2):
     return beta
 
 
+class StratagyBase(StockEventBase):
+    def __init__(self, start_date, end_date, period):
+        super(StockEventBase, self).__init__()
+
+    def select_stock(self):
+        result = self.mysql.session.query(
+            income_statement.stock_code,
+            income_statement.r4_net_profit
+        ).filter_by(report_period='2019-09-30')
+        df = pd.DataFrame.from_dict(result)
+        df.set_index('stock_code', inplace=True)
+        result2 = self.mysql.session.query(
+            formBalanceSheet.stock_code,
+            formBalanceSheet.r6_total_equity
+        ).filter_by(report_period='2019-09-30')
+        df2 = pd.DataFrame.from_dict(result2)
+        df2.set_index('stock_code', inplace=True)
+        df = pd.concat([df, df2], axis=1, join='outer')
+        df['roe'] = df['r4_net_profit']/df['r6_total_equity']
+        for index, row in df.iterrows():
+            if row['roe'] > 0:
+                df.drop(index, inplace=True)
+        print(df.head(5))
+
+    def choose_stock(self, upper_limit):
+        import random
+        stock_list = self.fetch_all_stock_list()
+        n = random.randint(0, upper_limit)
+        return stock_list[n]
+
+
 if __name__ == '__main__':
     header = mysqlHeader('root', '6414939', 'test')
+    event = StratagyBase('1990-12-19', '2019-11-22', 300)
+    event._init_database(header)
+    event.select_stock()

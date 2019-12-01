@@ -9,7 +9,7 @@ from lxml import etree
 from data_feature import ma
 from form import formFinanceTemplate, formBalanceSheet
 
-__version__ = '1.5.6-beta'
+__version__ = '1.6.7-beta'
 
 
 # ARIMA
@@ -139,58 +139,87 @@ def fetch_cooperation_info(stock_code):
         mysql.engine.execute(update_sql)
 
 
-def event_stratagy():
-    # segment()
-    header = mysqlHeader('root', '6414939', 'test')
-    s = stratagy_new()
-    s._init_database(header)
-    s.run()
-
-
-def event_cooperation_info():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StockEventBase()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    # stock_list = ['SH601818']
-    for stock in stock_list:
-        print("fetch cooperation: ", stock)
-        try:
-            fetch_cooperation_info(stock)
-        except Exception as e:
-            print(e)
-
-
-def event_finance_info():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StockEventBase()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    # stock_list = ['SH601818']
-    for stock in stock_list:
-        print("fetch finance: ", stock)
-        try:
-            fetch_finance_info(stock)
-        except Exception as e:
-            print(e)
-
-
 class EventRelationship(StockEventBase):
+    """
+    Test.
+    """
     def fetch_relation_sheet(self, stock_code):
         url = f"http://quotes.money.163.com/f10/jjcg_{stock_code}.html#01d03"
+
+
+class Stratagy1(StockEventBase):
+    def fetch_data(self):
+        year = range(1990, 2019)
+        q1 = [f"{y}-03-31" for y in year]
+        q2 = [f"{y}-06-30" for y in year]
+        q3 = [f"{y}-09-30" for y in year]
+        q4 = [f"{y}-12-31" for y in year]
+        period = q1 + q2 + q3 + q4
+        import numpy as np
+        for p in period:
+            print(p)
+            try:
+                sql = (
+                    "SELECT stock_code,r4_net_profit,r3_5_income_tax,r2_5_finance_expense,r1_1_revenue "
+                    f"from income_statement_template where report_period='{p}'"
+                )
+                income_statement = self.mysql.engine.execute(sql).fetchall()
+                income_statement = pd.DataFrame.from_dict(income_statement)
+                if not income_statement.empty:
+                    income_statement.set_index(0, inplace=True)
+                    income_statement.columns = ['net_profit', 'income_tax', 'finance_expense', 'revenue']
+                sql2 = (
+                    "SELECT stock_code,r1_assets,r1_1_bank_and_cash,r5_3_accounts_payable "
+                    f"from balance_sheet_template where report_period='{p}'"
+                )
+                balance_sheet = self.mysql.engine.execute(sql2).fetchall()
+                balance_sheet = pd.DataFrame.from_dict(balance_sheet)
+                if not balance_sheet.empty:
+                    balance_sheet.set_index(0, inplace=True)
+                    balance_sheet.columns = ['asset', 'bank_cash', 'accout_payable']
+                result = pd.concat([income_statement, balance_sheet], axis=1, join='outer', sort= False)
+                if not result.empty:
+                    result['EBIT'] = (result['net_profit'] + result['income_tax'] + result['finance_expense'])/result['revenue']
+                    result['NOPLAT'] = result['EBIT']*(1-0.3)
+                    result['ROIC'] = result['NOPLAT']
+                    result[np.isinf(result)] = np.nan
+                    result.dropna(inplace=True)
+                    print(result.head(5))
+                    for index, row in result.iterrows():
+                        insert_sql = (
+                            "INSERT INTO finance_factor ("
+                            "stock_code, report_period, ebit, roic)"
+                            "VALUES ( "
+                            f"'{index}','{p}',{row['EBIT']},{row['ROIC']})"
+                            )
+                        update_sql = (
+                            f"UPDATE finance_factor set stock_code='{index}',"
+                            f"report_period='{p}', ebit={row['EBIT']},"
+                            f"roic={row['ROIC']} "
+                            f"WHERE stock_code='{index}' and report_period='{p}'"
+                            )
+                        try:
+                            # print('Insert:', index)
+                            self.mysql.engine.execute(insert_sql)
+                        except Exception:
+                            # print('Update', index)
+                            self.mysql.engine.execute(update_sql)
+            except Exception as e:
+                print('Error:', e)
 
 
 if __name__ == "__main__":
     # segment()
     header = mysqlHeader('root', '6414939', 'test')
-    trade_date_list = ["20191113","20191114","20191115","20191118","20191119"]
-    event = EventTradeDetail()
+    event = Stratagy1()
     event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    for trade_date in trade_date_list:
-        for stock in stock_list:
-            print(stock, ":", trade_date)
-            try:
-                event.fetch_(stock, trade_date)
-            except Exception:
-                pass
+    event.fetch_data()
+    """
+    year = range(1990, 2019)
+    q1 = [f"{y}-03-31" for y in year]
+    q2 = [f"{y}-06-30" for y in year]
+    q3 = [f"{y}-09-30" for y in year]
+    q4 = [f"{y}-12-31" for y in year]
+    period = q1 + q2 + q3 + q4
+    print(period)
+    """

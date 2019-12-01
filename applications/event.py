@@ -7,13 +7,13 @@ from libstock import (
     EventCreateInterestTable,
     EventRecordInterest,
     EventFlag,
-    EventTradeDetail)
+    EventTradeDetail,
+    EventFinanceReport)
 from libstock import EventRehabilitation
-from libfinance import EventFinanceReport
 from dev import fetch_finance_info, fetch_cooperation_info
 import time
 
-__version__ = '1.0.9'
+__version__ = '1.0.10'
 
 
 def event_init_stock():
@@ -22,7 +22,6 @@ def event_init_stock():
     event._init_database(header)
     stock_list = create_stock_list()
     for stock in stock_list:
-        print(f"{time.ctime()}: Create table {stock}.")
         self.record_stock(stock)
 
 
@@ -30,10 +29,9 @@ def event_record_stock():
     header = mysqlHeader('root', '6414939', 'test')
     event = EventTradeDataManager()
     event._init_database(header)
-    self.fetch_all_security_list()
-    for stock in self.security_list:
-        print(f"{time.ctime()}: Create table {stock}.")
-        self.record_stock(stock)
+    event.fetch_all_security_list()
+    for stock in event.security_list:
+        event.record_stock(stock)
 
 
 def event_download_stock_data():
@@ -91,12 +89,13 @@ def event_download_finance_report():
     for stock in stock_list:
         # print(stock[2:])
         print(f"Download finance report of {stock}.")
-        event.update_balance_sheet_asset(stock)
+        # event.update_balance_sheet(stock)
+        event.update_income_statement(stock)
 
 
 def event_download_trade_detail_data():
     header = mysqlHeader('root', '6414939', 'test')
-    trade_date_list = ["20191120"]
+    trade_date_list = ["20191129"]
     event = EventTradeDetail()
     event._init_database(header)
     stock_list = event.fetch_all_stock_list()
@@ -109,10 +108,40 @@ def event_download_trade_detail_data():
                 pass
 
 
+def event_cooperation_info():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = StockEventBase()
+    event._init_database(header)
+    stock_list = event.fetch_all_stock_list()
+    # stock_list = ['SH601818']
+    for stock in stock_list:
+        print("fetch cooperation: ", stock)
+        try:
+            fetch_cooperation_info(stock)
+        except Exception as e:
+            print(e)
+
+
+def event_finance_info():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = StockEventBase()
+    event._init_database(header)
+    stock_list = event.fetch_all_stock_list()
+    # stock_list = ['SH601818']
+    for stock in stock_list:
+        print("fetch finance: ", stock)
+        try:
+            fetch_finance_info(stock)
+        except Exception as e:
+            print(e)
+
+
 if __name__ == "__main__":
     # event_init_stock()
     # event_download_stock_data()
     # event_create_interest_table()
     # event_flag_stock()
     # event_record_interest()
-    event_download_trade_detail_data()
+    # event_download_trade_detail_data()
+    event_download_finance_report()
+    # event_record_stock()
