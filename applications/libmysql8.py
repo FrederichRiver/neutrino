@@ -66,7 +66,7 @@ class mysqlBase(object):
         """
         table.metadata.create_all(self.mysql.engine)
 
-    def create_table_from_table(name, table_template, engine):
+    def create_table_from_table(self, name, table_template):
         # Base on a table, create another form which
         # is similar with the original table.
         # Only name was changed.
@@ -75,7 +75,7 @@ class mysqlBase(object):
         # engine : a database engine base on MySQLBase.
         sql = f"CREATE table {name} like {table_template}"
         try:
-            mysql.engine.execute(sql)
+            self.engine.execute(sql)
         except Exception as e:
             print(e)
 

@@ -3,23 +3,21 @@
 import sys
 from libmysql8 import mysqlHeader, mysqlBase, create_table
 from form import (
-    formTemplate,  formStockList,
+    formTemplate,  formStockManager,
     formFinanceTemplate, formInfomation)
 from libstock import StockEventBase
 
 __version__ = '1.4'
 
 
-def event_initial_database():
-    header = mysqlHeader('root', '6414939', 'test')
+def event_initial_database(header):
     mysql = mysqlBase(header)
     create_table(formTemplate, mysql.engine)
     create_table(formFinanceTemplate, mysql.engine)
     create_table(formInfomation, mysql.engine)
 
 
-def event_drop_tables():
-    header = mysqlHeader('root', '6414939', 'test')
+def event_drop_tables(header):
     mysql = mysqlBase(header)
     # self definition
     table_list = mysql.session.query(
@@ -60,7 +58,8 @@ if __name__ == "__main__":
         raise SystemExit(1)
     if sys.argv[1] == "init":
         try:
-            event_initial_database()
+            header = mysqlHeader('stock', 'stock2020', 'stock')
+            event_initial_database(header)
         except Exception as e:
             print(e)
     elif sys.argv[1] == "backup":

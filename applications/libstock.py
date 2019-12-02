@@ -16,6 +16,7 @@ import re
 import requests
 import talib as ta
 import time
+from datetime import date
 from datetime import datetime
 from enum import Enum
 from env import TIME_FMT, CONF_FILE
@@ -86,9 +87,8 @@ class StockEventBase(object):
         self.security_list = []
         result = self.mysql.session.query(
             formStockManager.stock_code).all()
-        for dataline in result:
-            if dataline[0]:
-                self.security_list.append(dataline[0])
+        result = pd.DataFrame.from_dict(result)
+        self.security_list = result['stock_code'].tolist()
         return self.security_list
 
     def fetch_no_flag_stock(self):
@@ -173,6 +173,9 @@ def fetch_name(s):
 
 
 class EventTradeDataManager(StockEventBase):
+    """
+    It is a basic event, which fetch trade data and manage it.
+    """
     def __init__(self):
         super(StockEventBase, self).__init__()
         self.coder = codeFormat()
@@ -189,8 +192,11 @@ class EventTradeDataManager(StockEventBase):
         return pd.read_csv(netease_url, encoding='gb18030')
 
     def fetch_stock_name(self, code):
+        """
+        Searching stock name from net ease.
+        """
         try:
-            result = self.fetch_data_from_netease(code)
+            result = self.fetch_trade_data_from_netease(code)
             if len(result) > 0:
                 stock_name = result.iloc[1, 2].replace(' ', '')
             else:
@@ -203,7 +209,6 @@ class EventTradeDataManager(StockEventBase):
     def record_stock(self, stock_code):
         result = self.check_stock(stock_code)
         if result is None:
-            print(f"{time.ctime()}: Create table {stock}.")
             self.create_stock_table(stock_code)
 
     def check_stock(self, stock_code):
@@ -218,12 +223,12 @@ class EventTradeDataManager(StockEventBase):
         if stock_name:
             stock_orm = formStockManager(stock_code=stock_code,
                                       stock_name=stock_name,
-                                      gmt_create=datetime.today())
+                                      gmt_create=date.today())
             self.mysql.session.add(stock_orm)
             self.mysql.session.commit()
-            create_table_from_table(stock_code,
-                                    'template_stock',
-                                    self.mysql.engine)
+            self.mysql.create_table_from_table(stock_code,
+                'template_stock')
+            print(f"{time.ctime()}: Create table {stock_code}.")
 
     def _data_cleaning(self, df):
         df.drop(['stock_code'], axis=1, inplace=True)

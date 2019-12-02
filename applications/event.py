@@ -3,6 +3,7 @@
 
 from libmysql8 import mysqlHeader
 from libstock import (
+    create_stock_list,
     EventTradeDataManager,
     EventCreateInterestTable,
     EventRecordInterest,
@@ -13,29 +14,32 @@ from libstock import EventRehabilitation
 from dev import fetch_finance_info, fetch_cooperation_info
 import time
 
-__version__ = '1.0.10'
+__version__ = '1.0.12'
 
 
 def event_init_stock():
-    header = mysqlHeader('root', '6414939', 'test')
+    """
+    Init database from a blank stock list.
+    """
+    header = mysqlHeader('stock', 'stock2020', 'stock')
     event = EventTradeDataManager()
     event._init_database(header)
     stock_list = create_stock_list()
     for stock in stock_list:
-        self.record_stock(stock)
+        event.record_stock(stock)
 
 
 def event_record_stock():
-    header = mysqlHeader('root', '6414939', 'test')
+    header = mysqlHeader('stock', 'stock2020', 'stock')
     event = EventTradeDataManager()
     event._init_database(header)
-    event.fetch_all_security_list()
+    event.security_list = event.fetch_all_security_list()
     for stock in event.security_list:
         event.record_stock(stock)
 
 
 def event_download_stock_data():
-    header = mysqlHeader('root', '6414939', 'test')
+    header = mysqlHeader('stock', 'stock2020', 'stock')
     event = EventTradeDataManager()
     event._init_database(header)
     result = self.mysql.session.query(
@@ -44,7 +48,7 @@ def event_download_stock_data():
     # (stock_code,)
     for stock in result:
         print(f"{time.ctime()}: Download {stock[0]} stock data.")
-        self.download_stock_data(stock[0])
+        event.download_stock_data(stock[0])
 
 
 def event_create_interest_table():
@@ -137,11 +141,12 @@ def event_finance_info():
 
 
 if __name__ == "__main__":
-    # event_init_stock()
+    header = mysqlHeader('stock', 'stock2020', 'stock')
+    event_init_stock()
     # event_download_stock_data()
     # event_create_interest_table()
     # event_flag_stock()
     # event_record_interest()
     # event_download_trade_detail_data()
-    event_download_finance_report()
-    # event_record_stock()
+    # event_download_finance_report()
+    # event_record_stock(header)
