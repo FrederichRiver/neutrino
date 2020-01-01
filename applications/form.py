@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.8'
+__version__ = '1.0.10'
 
 
 formTemplate = declarative_base()
@@ -28,20 +28,11 @@ class cooperation_info(formInfomation):
     introduction = Column(String(1000))
 
 
-class formFinanceInfo(formFinanceTemplate):
-    __tablename__ = 'finance_info'
-    stock_code = Column(String(10), primary_key=True)
-    report_date = Column(Date, primary_key=True)
-    roe = Column(Float)
-    eps = Column(Float)
-    pe = Column(Float)
-    ttm = Column(Float)
-
-
 class formInterest(formTemplate):
     # This is the template of stock interest.
     __tablename__ = 'template_stock_interest'
     report_date = Column(Date, primary_key=True)
+    stock_code = Column(String(10), primary_key=True)
     year = Column(Integer)
     bonus = Column(Float)
     increase = Column(Float)
@@ -64,7 +55,7 @@ class formStockManager(formTemplate):
     flag = Column(String(10))
 
     def __str__(self):
-        return None
+        return "<Stock Manager>"
 
 
 class formStock(formTemplate):
@@ -83,7 +74,7 @@ class formStock(formTemplate):
     adjust_factor = Column(Float)
 
     def __str__(self):
-        return "Form Stock List is a template."
+        return "<Stock template>"
 
 
 class formFinance(formFinanceTemplate):
@@ -98,32 +89,36 @@ class formFinance(formFinanceTemplate):
     ebit = Column(Float)
     ebitda = Column(Float)
     noplat = Column(Float)
-    # r5_quantity = Column(Float)
 
 
 class formCashFlow(formFinanceTemplate):
     __tablename__ = 'cash_flow_sheet'
     report_period = Column(Date, primary_key=True)
     stock_code = Column(String(10), primary_key=True)
-    r2_cash_received_from_sales_of_goods_or_rendering_services = Column(Float)
-    r3_net_increase_in_customer_deposits_and_interbank_deposits = Column(Float)
-    r13_refunds_of_taxes = Column(Float)
-    r14_cash_received_relating_to_other_operating_activities = Column(Float)
-    r15_subtotal_of_cash_inflows_in_operating_activities = Column(Float)
-    r22_cash_paid_to_and_one_behalf_of_employees = Column(Float)
-    r23_tax_payments = Column(Float)
-    r24_cash_paid_relating_to_other_operating_activities = Column(Float)
-    r27_cash_received_from_disposal_of_investments = Column(Float)
+    r1_cash_flow_from_operating_activities = Column(Float)
+    r2_cash_flow_from_investment = Column(Float)
+    r3_cash_flow_from_finance_activities = Column(Float)
+    r4_effect_of_foriegn_exchange_rate_changes_on_cash_effect = Column(Float)
+    r5_net_increase_in_cash_and_cash_equivalent = Column(Float)
+    r1_1_cash_received_from_sales_of_goods_or_rendering_services = Column(Float)
+    r1_2_subtotal_of_cash_inflow_from_operating = Column(Float)
+    r1_3_subtotal_of_cash_outflow_from_operating = Column(Float)
+    r1_4_captial_expenditure = Column(Float)
+    r2_1_subtotal_of_cash_inflow_from_investment = Column(Float)
+    r2_2_subtotal_of_cash_outflow_from_investment = Column(Float)
+    r3_1_subtotal_of_cash_inflow_from_finance = Column(Float)
+    r3_2_subtotal_of_cash_outflow_from_finance = Column(Float)
+    r5_1_cash_and_cash_equivalent_at_the_beginning_of_period = Column(Float)
+    r5_2_cash_and_cash_equivalent_at_the_end_of_period = Column(Float)
 
 
-class formBalanceSheet(formFinanceTemplate):
-    __tablename__ = 'balance_sheet_template'
+class formBalance(formFinanceTemplate):
+    __tablename__ = 'balance_sheet'
     report_period = Column(Date, primary_key=True)
     stock_code = Column(String(10), primary_key=True)
     r1_assets = Column(Float)
     r2_current_assets = Column(Float)
     r3_non_current_assets = Column(Float)
-    # r4_liability = Column(Float)
     r4_current_liability = Column(Float)
     r5_long_term_liability = Column(Float)
     r6_total_equity = Column(Float)
@@ -140,7 +135,7 @@ class formBalanceSheet(formFinanceTemplate):
 
 
 class formIncomeStatement(formFinanceTemplate):
-    __tablename__ = 'income_statement_template'
+    __tablename__ = 'income_statement_sheet'
     report_period = Column(Date, primary_key=True)
     stock_code = Column(String(10), primary_key=True)
     r1_total_revenue = Column(Float)
@@ -161,6 +156,45 @@ class formIncomeStatement(formFinanceTemplate):
     r3_4_profit_before_tax = Column(Float)
     r3_5_income_tax = Column(Float)
     r3_6_unrealized_investment_loss = Column(Float)
+
+
+class formCashFlowSupplymentary(formFinanceTemplate):
+    __tablename__ = 'cashflow_supplymentary'
+    report_period = Column(Date, primary_key=True)
+    stock_code = Column(String(10), primary_key=True)
+    r1_net_profit = Column(Float)
+    r2_minority_interest = Column(Float)
+    r3_unaffirmed_investment_loss = Column(Float)
+    r4_impairment_of_fixed_asset = Column(Float)
+    r5_depreciation_of_fixed_asset = Column(Float)
+    r6_amortization_of_intangible_asset = Column(Float)
+    r7_deferred_asset = Column(Float)
+    r8_ = Column(Float)
+    r9_ = Column(Float)
+    r10_loss_on_disposal_asset = Column(Float)
+    r11_loss_on_scrapping_of_fixed_asset = Column(Float)
+    r12_ = Column(Float)
+    r13_ = Column(Float)
+    r14_accrued_liabilities = Column(Float)
+    r15_finance_expense = Column(Float)
+    r16_invesetment_loss = Column(Float)
+    r17_ = Column(Float)
+    r18_ = Column(Float)
+    r19_decrease_in_inventory = Column(Float)
+    r20_decrease_in_operating_receivables = Column(Float)
+    r21_increase_in_operating_payables = Column(Float)
+    r22_ = Column(Float)
+    r23_ = Column(Float)
+    r24_other = Column(Float)
+    r25_net_cashflow_from_operating_activities = Column(Float)
+    r26_ = Column(Float)
+    r27_ = Column(Float)
+    r28_ = Column(Float)
+    r29_cash_at_the_end_of_period = Column(Float)
+    r30_cash_at_the_beginning_of_period = Column(Float)
+    r31_cash_equivalent_at_the_end_of_period = Column(Float)
+    r32_cash_equivalent_at_the_beginning_of_period = Column(Float)
+    r33_net_increase_in_cash_and_cash_equivalent = Column(Float)
 
 
 """
@@ -242,5 +276,5 @@ class formIncomeStatement(formFinanceTemplate):
 """
 
 if __name__ == '__main__':
-    stocklist = formStockList()
+    stocklist = formStockManager()
     print(stocklist)

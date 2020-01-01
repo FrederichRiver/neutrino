@@ -96,9 +96,10 @@ def main_function(taskfile=None):
     Base = declarative_base()
     header = mysqlHeader('root', '6414939', 'test')
     mysql = mysqlBase(header)
-    jobstores = {'default': SQLAlchemyJobStore(
-        engine=mysql.engine,
-        metadata=Base.metadata)}
+    jobstores = {
+        'default': SQLAlchemyJobStore(
+            engine=mysql.engine, metadata=Base.metadata)
+            }
     executor = {'default': ThreadPoolExecutor(20)}
     Neptune = taskManager(taskfile=taskfile,
                           jobstores=jobstores,

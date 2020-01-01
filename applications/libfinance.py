@@ -107,11 +107,62 @@ def event():
         event.mysql.engine.execute(sql)
 
 
+class FinanceAnalysisBase(StockEventBase):
+    def enterprise_value(self, stock_code, period):
+        return ev
+
+    def liability(self, stock_code, period):
+        sql = (
+            "SELECT r4_liability from balance_sheet "
+            f"WHERE stock_code='{stock_code}' and report_period='{period}'"
+        )
+        result = self.mysql.engine.execute(sql).fetchone()
+        return result[0]
+
+    def goodwill(self, stock_code, period):
+        sql = (
+            "SELECT r3_2_goodwill from balance_sheet "
+            f"WHERE stock_code='{stock_code}' and report_period='{period}'"
+        )
+        result = self.mysql.engine.execute(sql).fetchone()
+        return result[0]
+
+    def inventory(self, stock_code, period):
+        sql = (
+            "SELECT r1_3_inventory from balance_sheet "
+            f"WHERE stock_code='{stock_code}' and report_period='{period}'"
+        )
+        result = self.mysql.engine.execute(sql).fetchone()
+        return result[0]
+
+
+class FinanceAnalysis(FinanceAnalysisBase):
+    def inventory_ratio(self, stock_code, period):
+        inventory = self.inventory(stock_code, period)
+        ev = self.enterprise_value(stock_code, period)
+        inventory_ratio = inventory / ev
+        return inventory_ratio
+
+    def goodwill_ratio(self, stock_code, period):
+        goodwill = self.goodwill(stock_code, period)
+        ev = self.enterprise_value(stock_code, period)
+        goodwill_ratio = goodwill / ev
+        return goodwill_ratio
+
+    def liability_ratio(self, stock_code, period):
+        liability = self.liability(stock_code, period)
+        ev = self.enterprise_value(stock_code, period)
+        liability_ratio = liability / ev
+        return liability_ratio
+
+
+class AdvancedFinanceAnalysis(FinanceAnalysis):
+    pass
+
+
 if __name__ == "__main__":
     header = mysqlHeader('root', '6414939', 'test')
-    event = EventFinanceReport()
+    event = FinanceAnalysis()
     event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    for stock in stock_list:
-        print(stock[2:])
-    event.update_summary('601818')
+    goodwill = event.goodwill('SZ002230', '2019-09-30')
+    print(goodwill)

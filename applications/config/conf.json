@@ -3,5 +3,6 @@
 	"Sina":"https://sina.com.cn",
     "URL_163_MONEY":"http://quotes.money.163.com/service/chddata.html?code={0}&start={1}&end={2}&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER",
 	"URL_fh_163":"http://quotes.money.163.com/f10/fhpg_{}.html#01d05",
-	"URL_FINANCE_SUMMARY":"http://quotes.money.163.com/service/zycwzb_{0}.html?type=report"
+	"URL_FINANCE_SUMMARY":"http://quotes.money.163.com/service/zycwzb_{0}.html?type=report",
+	"URL_HEXUN_001":""
 }

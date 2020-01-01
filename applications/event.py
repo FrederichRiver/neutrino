@@ -2,6 +2,7 @@
 # event_stock
 
 from libmysql8 import mysqlHeader
+from form import formStockManager
 from libstock import (
     create_stock_list,
     EventTradeDataManager,
@@ -39,16 +40,30 @@ def event_record_stock():
 
 
 def event_download_stock_data():
-    header = mysqlHeader('stock', 'stock2020', 'stock')
+    header = mysqlHeader('root', '6414939', 'test')
     event = EventTradeDataManager()
     event._init_database(header)
-    result = self.mysql.session.query(
-            formStockList.stock_code).all()
+    from form import formStockManager
+    result = event.mysql.session.query(
+            formStockManager.stock_code).all()
     # result format:
     # (stock_code,)
     for stock in result:
         print(f"{time.ctime()}: Download {stock[0]} stock data.")
         event.download_stock_data(stock[0])
+
+
+def event_init_stock_data():
+    header = mysqlHeader('stock', 'stock2020', 'stock')
+    event = EventTradeDataManager()
+    event._init_database(header)
+    result = event.mysql.session.query(
+            formStockManager.stock_code).all()
+    # result format:
+    # (stock_code,)
+    for stock in result:
+        print(f"{time.ctime()}: Download {stock[0]} stock data.")
+        event.init_stock_data(stock[0])
 
 
 def event_create_interest_table():
@@ -95,11 +110,13 @@ def event_download_finance_report():
         print(f"Download finance report of {stock}.")
         # event.update_balance_sheet(stock)
         event.update_income_statement(stock)
+        event.update_balance_sheet(stock)
+        event.update_cashflow_sheet(stock)
 
 
 def event_download_trade_detail_data():
     header = mysqlHeader('root', '6414939', 'test')
-    trade_date_list = ["20191129"]
+    trade_date_list = ["20191225", "20191226", "20191227"]
     event = EventTradeDetail()
     event._init_database(header)
     stock_list = event.fetch_all_stock_list()
@@ -141,12 +158,14 @@ def event_finance_info():
 
 
 if __name__ == "__main__":
-    header = mysqlHeader('stock', 'stock2020', 'stock')
-    event_init_stock()
+    header = mysqlHeader('root', '6414939', 'test')
+    # header = mysqlHeader('stock', 'stock2020', 'stock')
+    # event_init_stock()
     # event_download_stock_data()
+    # event_init_stock_data()
     # event_create_interest_table()
     # event_flag_stock()
     # event_record_interest()
-    # event_download_trade_detail_data()
+    event_download_trade_detail_data()
     # event_download_finance_report()
     # event_record_stock(header)

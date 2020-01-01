@@ -1,2 +1,12 @@
-flake8
 apscheduler
+sqlalchemy
+pandas
+numpy
+matplotlib
+pywt
+*Ta-Lib, install c lang ta-lib first , then use pip insall
+lxml
+psutil
+pytorch
+pymysql
+set mysql character-set

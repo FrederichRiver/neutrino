@@ -31,8 +31,7 @@ class mysqlBase(object):
         db_session = sessionmaker(bind=self.engine)
         self.session = db_session()
         self.id_string = (
-            f"mysql engine <{header.account}"
-            f"@{header.host}>")
+            f"mysql engine <{header.account}@{header.host}>")
 
     def __str__(self):
         return self.id_string
@@ -114,21 +113,6 @@ def create_table(table, engine):
     : param engine: It is a sqlalchemy mysql engine.
     """
     table.metadata.create_all(engine)
-
-
-def create_table_from_table(name, table_template, engine):
-    # Base on a table, create another form which
-    # is similar with the original table.
-    # Only name was changed.
-    # name : which is the target table name.
-    # tableName : which is the original table name.
-    # engine : a database engine base on MySQLBase.
-    sql = f"CREATE table {name} like {table_template}"
-    try:
-        engine.connect().execute(sql)
-        engine.connect().close()
-    except Exception as e:
-        print(e)
 
 
 if __name__ == '__main__':

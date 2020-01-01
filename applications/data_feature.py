@@ -33,6 +33,9 @@ def ma(x, n):
 ma7 = functools.partial(ma, n=7)
 ma12 = functools.partial(ma, n=12)
 ma26 = functools.partial(ma, n=26)
+ma5 = functools.partial(ma, n=5)
+ma10 = functools.partial(ma, n=10)
+ma20 = functools.partial(ma, n=20)
 
 
 def ema(df, n):

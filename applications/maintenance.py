@@ -46,7 +46,7 @@ def table_batch_modify():
     for stock in stock_list:
         print(stock)
         try:
-            sql = f"alter table {stock} add column adjust_factor float"
+            sql = f"alter table {stock} add column stock_quantity int"
             event.mysql.engine.execute(sql)
         except Exception:
             pass
@@ -58,7 +58,8 @@ if __name__ == "__main__":
         raise SystemExit(1)
     if sys.argv[1] == "init":
         try:
-            header = mysqlHeader('stock', 'stock2020', 'stock')
+            # header = mysqlHeader('stock', 'stock2020', 'stock')
+            header = mysqlHeader('root', '6414939', 'test')
             event_initial_database(header)
         except Exception as e:
             print(e)

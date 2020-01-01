@@ -22,13 +22,12 @@ from enum import Enum
 from env import TIME_FMT, CONF_FILE
 from form import formStockManager
 from lxml import etree
-from libmysql8 import (mysqlBase, mysqlHeader,
-                       create_table_from_table)
+from libmysql8 import (mysqlBase, mysqlHeader)
 from message import ADJUST_FACTOR_ERROR
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from utils import read_json, neteaseindex, today, info, error
 
-__version__ = '1.7.34'
+__version__ = '1.7.38'
 
 
 def wavelet_nr(df):
@@ -64,31 +63,34 @@ class StockEventBase(object):
         self.coder = codeFormat()
 
     def __str__(self):
-        return "class <Stock Event Base>"
+        return "<Stock Event Base>"
 
     def _init_database(self, header):
         self.mysql = mysqlBase(header)
 
     def update_date_time(self):
+        """
+        Get date of today.
+        """
         self.Today = datetime.now().strftime(TIME_FMT)
 
     def fetch_all_stock_list(self):
-        self.stock_list = []
+        """
+        fetch stocks flaged by 1 from database.
+        """
         result = self.mysql.session.query(
             formStockManager.stock_code, formStockManager.flag).all()
-        for dataline in result:
-            # flag = 1 means stock
-            if dataline[1] == '1':
-                self.stock_list.append(dataline[0])
+        df = pd.DataFrame.from_dict(result)
+        df = df[df['flag'] == '1']
+        self.stock_list = df['stock_code'].tolist()
         return self.stock_list
 
     def fetch_all_security_list(self):
         # Return all kinds of securities in form stock list.
-        self.security_list = []
         result = self.mysql.session.query(
             formStockManager.stock_code).all()
-        result = pd.DataFrame.from_dict(result)
-        self.security_list = result['stock_code'].tolist()
+        df = pd.DataFrame.from_dict(result)
+        self.security_list = df['stock_code'].tolist()
         return self.security_list
 
     def fetch_no_flag_stock(self):
@@ -105,6 +107,10 @@ class StockEventBase(object):
 
 
 class EventStockPrice(StockEventBase):
+    """
+    Param : field : open_price, close_price, high_price, low_price\n
+    Return: dataframe type price data.
+    """
     def run(self, code, field):
         prices = self.mysql.select_values(code, field)
         df = pd.DataFrame(list(prices), columns=field.split(','))
@@ -168,10 +174,6 @@ class EventFlag(StockEventBase):
         pass
 
 
-def fetch_name(s):
-    pass
-
-
 class EventTradeDataManager(StockEventBase):
     """
     It is a basic event, which fetch trade data and manage it.
@@ -183,7 +185,7 @@ class EventTradeDataManager(StockEventBase):
     def fetch_trade_data_from_netease(
             self, code, start_date='19901219', end_date=today()):
         """
-        read csv data and return a dataframe object.
+        read csv data and return dataframe type data.
         """
         # config file is a url file.
         _, url = read_json('URL_163_MONEY', CONF_FILE)
@@ -221,19 +223,22 @@ class EventTradeDataManager(StockEventBase):
     def create_stock_table(self, code):
         stock_code, stock_name = self.fetch_stock_name(code)
         if stock_name:
-            stock_orm = formStockManager(stock_code=stock_code,
-                                      stock_name=stock_name,
-                                      gmt_create=date.today())
+            stock_orm = formStockManager(
+                stock_code=stock_code,
+                stock_name=stock_name,
+                gmt_create=date.today()
+                )
             self.mysql.session.add(stock_orm)
             self.mysql.session.commit()
-            self.mysql.create_table_from_table(stock_code,
-                'template_stock')
+            self.mysql.create_table_from_table(
+                stock_code, 'template_stock')
             print(f"{time.ctime()}: Create table {stock_code}.")
 
     def _data_cleaning(self, df):
         df.drop(['stock_code'], axis=1, inplace=True)
         df.replace('None', np.nan, inplace=True)
         df = df.dropna(axis=0, how='any')
+        return df
 
     def init_stock_data(self, stock_code):
         """
@@ -279,11 +284,11 @@ class EventTradeDataManager(StockEventBase):
                     {"gmt_modified": today()})
             self.mysql.session.commit()
         except Exception as e:
-            print(f'{time.ctime()}: Error 3 - {e}')
+            print(f'{time.ctime()}: (Error 101) Initially download stock data problem.')
 
     def download_stock_data(self, stock_code):
         # print(stock_code)
-        result = self._get_file_from_net_ease(stock_code)
+        result = self.fetch_trade_data_from_netease(stock_code)
         result.columns = ['trade_date', 'stock_code',
                           'stock_name', 'close_price',
                           'highest_price', 'lowest_price',
@@ -312,6 +317,7 @@ class EventTradeDataManager(StockEventBase):
         try:
             sql = f"SELECT trade_date from {stock_code}"
             query = self.mysql.engine.execute(sql).fetchall()
+            # t2 = result[-1][0]
             result['trade_date'] = pd.to_datetime(result['trade_date'], format=TIME_FMT)
             result = result.sort_values('trade_date')
             # print(result.head(5))
@@ -329,7 +335,8 @@ class EventTradeDataManager(StockEventBase):
                         f"{row['close_price']},{row['highest_price']},"
                         f"{row['lowest_price']},{row['open_price']},"
                         f"{row['prev_close_price']},{row['change_rate']},"
-                        f"{row['amplitude']},{row['volume']},{row['turnover']})")    
+                        f"{row['amplitude']},{row['volume']},{row['turnover']})"
+                        )
                     self.mysql.engine.execute(sql2)
                     update_date = t1
             query = self.mysql.session.query(
@@ -341,7 +348,7 @@ class EventTradeDataManager(StockEventBase):
                     {"gmt_modified": update_date})
             self.mysql.session.commit()
         except Exception as e:
-            print(f'{time.ctime()}: Error 3 - {e}')
+            print(f'{time.ctime()}: (Error 102) {e}')
 
 
 class EventCreateInterestTable(StockEventBase):
@@ -797,21 +804,6 @@ class EventFinanceReport(StockEventBase):
             result = df
         return result
 
-    def fetch_income_statement(self, stock_code):
-        """
-        read csv data and return a dataframe object.
-        """
-        # config file is a url file.
-        # _, url = read_json('URL_163_MONEY', CONF_FILE)
-        url = f"http://quotes.money.163.com/service/lrb_{stock_code[2:]}.html"
-        df = pd.read_csv(url, encoding='gb18030')
-        if df.empty is False:
-            df = df.T
-            result = df.ix[1:-1, :]
-        else:
-            result = df
-        return result
-
     def update_income_statement(self, stock_code):
         df = self.fetch_income_statement(stock_code)
         update_period = '0'
@@ -832,7 +824,7 @@ class EventFinanceReport(StockEventBase):
                     "r2_5_finance_expense),r3_1_non_operating_income,"
                     "r3_2_non_operating_expense,r3_2_disposal_loss_on_non_current_asset,"
                     "r3_4_profit_before_tax,r3_5_income_tax,"
-                    "r3_6_unrealized_investment_loss "
+                    "r3_6_unrealized_investment_loss) "
                     f"VALUES ('{index}', '{stock_code}',{str2zero(row[0])},"
                     f"{str2zero(row[7])},{str2zero(row[32])},{str2zero(row[39])},"
                     f"{str2zero(row[1])},{str2zero(row[2])},{str2zero(row[6])},"
@@ -874,43 +866,68 @@ class EventFinanceReport(StockEventBase):
                 f"WHERE stock_code='{stock_code}'")
             self.mysql.engine.execute(update_date_sql)
 
+    def fetch_income_statement(self, stock_code):
+        """
+        read csv data and return a dataframe object.
+        """
+        # config file is a url file.
+        # _, url = read_json('URL_163_MONEY', CONF_FILE)
+        url = f"http://quotes.money.163.com/service/lrb_{stock_code[2:]}.html"
+        df = pd.read_csv(url, encoding='gb18030')
+        if df.empty is False:
+            df = df.T
+            result = df.ix[1:-1, :]
+        else:
+            result = df
+        return result
+
     def update_cashflow_sheet(self, stock_code):
-        url = f"http://quotes.money.163.com/service/zcfzb_{stock_code[2:]}.html"
-        df = self.fetch_balance_sheet(stock_code)
+        url = f"http://quotes.money.163.com/service/xjllb_{stock_code[2:]}.html"
+        df = self.fetch_cashflow_sheet(stock_code)
         update_period = '0'
         if df.empty is False:
             for index, row in df.iterrows():
                 query_sql = (
-                    f"SELECT * from balance_sheet_template where ("
+                    f"SELECT * from cash_flow_sheet where ("
                     f"report_period='{index}' and stock_code='{stock_code}')")
                 # print(query_sql)
                 result = self.mysql.engine.execute(query_sql).fetchall()
                 # print(result)
                 insert_sql = (
-                    f"INSERT into balance_sheet_template (report_period, stock_code,"
-                    "r1_assets,r2_current_assets,r3_non_current_assets,"
-                    "r4_liability,"
-                    "r4_current_liability,r5_long_term_liability,r6_total_equity,"
-                    "r1_1_bank_and_cash, r1_3_inventory,"
-                    "r3_1_fixed_assets,r3_2_goodwill,"
-                    "r5_1_short_term_loans,r5_2_notes_payable,"
-                    "r5_3_accounts_payable,r6_1_long_term_loans,r6_2_bonds_payable) "
-                    f"VALUES ('{index}', '{stock_code}',{str2zero(row[51])},"
-                    f"{str2zero(row[24])},{str2zero(row[50])},{str2zero(row[93])},"
-                    f"{str2zero(row[83])},{str2zero(row[92])},{str2zero(row[106])},"
-                    f"{str2zero(row[0])},{str2zero(row[19])},{str2zero(row[36])},"
-                    f"{str2zero(row[45])},{str2zero(row[52])},{str2zero(row[58])},"
-                    f"{str2zero(row[59])},{str2zero(row[84])},{str2zero(row[85])})")
+                    "INSERT into cash_flow_sheet (report_period, stock_code, "
+                    "r1_cash_flow_from_operating_activities, "
+                    "r2_cash_flow_from_investment, "
+                    "r3_cash_flow_from_finance_activities, "
+                    "r4_effect_of_foriegn_exchange_rate_changes_on_cash_effect, "
+                    "r5_net_increase_in_cash_and_cash_equivalent, "
+                    "r1_2_subtotal_of_cash_inflow_from_operating, "
+                    "r1_3_subtotal_of_cash_outflow_from_operating, "
+                    "r2_1_subtotal_of_cash_inflow_from_investment, "
+                    "r2_2_subtotal_of_cash_outflow_from_investment, "
+                    "r3_1_subtotal_of_cash_inflow_from_finance, "
+                    "r3_2_subtotal_of_cash_outflow_from_finance, "
+                    "r5_1_cash_and_cash_equivalent_at_the_beginning_of_period, "
+                    "r5_2_cash_and_cash_equivalent_at_the_end_of_period) "
+                    f"VALUES ('{index}', '{stock_code}',{str2zero(row[24])},"
+                    f"{str2zero(row[39])},{str2zero(row[51])},{str2zero(row[52])},"
+                    f"{str2zero(row[53])},{str2zero(row[13])},{str2zero(row[23])},"
+                    f"{str2zero(row[31])},{str2zero(row[38])},{str2zero(row[45])},"
+                    f"{str2zero(row[50])},{str2zero(row[54])},{str2zero(row[55])})")
                 update_sql = (
-                    f"UPDATE balance_sheet_template set "
-                    f"r1_assets={str2zero(row[51])},r2_current_assets={str2zero(row[24])},"
-                    f"r3_non_current_assets={str2zero(row[50])},r4_current_liability={str2zero(row[83])},"
-                    f"r5_long_term_liability={str2zero(row[92])},r6_total_equity={str2zero(row[106])},"
-                    f"r1_1_bank_and_cash={str2zero(row[0])}, r1_3_inventory={str2zero(row[19])},"
-                    f"r3_1_fixed_assets={str2zero(row[36])},r3_2_goodwill={str2zero(row[45])},"
-                    f"r5_1_short_term_loans={str2zero(row[52])},r5_2_notes_payable={str2zero(row[58])},"
-                    f"r5_3_accounts_payable={str2zero(row[59])},r6_1_long_term_loans={str2zero(row[84])},"
-                    f"r6_2_bonds_payable={str2zero(row[85])} "
+                    f"UPDATE cash_flow_sheet set "
+                    f"r1_cash_flow_from_operating_activities={str2zero(row[24])},"
+                    f"r2_cash_flow_from_investment={str2zero(row[39])},"
+                    f"r3_cash_flow_from_finance_activities={str2zero(row[51])},"
+                    f"r4_effect_of_foriegn_exchange_rate_changes_on_cash_effect={str2zero(row[52])},"
+                    f"r5_net_increase_in_cash_and_cash_equivalent={str2zero(row[53])},"
+                    f"r1_2_subtotal_of_cash_inflow_from_operating={str2zero(row[13])},"
+                    f"r1_3_subtotal_of_cash_outflow_from_operating={str2zero(row[23])},"
+                    f"r2_1_subtotal_of_cash_inflow_from_investment={str2zero(row[31])},"
+                    f"r2_2_subtotal_of_cash_outflow_from_investment={str2zero(row[38])},"
+                    f"r3_1_subtotal_of_cash_inflow_from_finance={str2zero(row[45])},"
+                    f"r3_2_subtotal_of_cash_outflow_from_finance={str2zero(row[50])},"
+                    f"r5_1_cash_and_cash_equivalent_at_the_beginning_of_period={str2zero(row[54])},"
+                    f"r5_2_cash_and_cash_equivalent_at_the_end_of_period={str2zero(row[55])} "
                     f"WHERE (report_period='{index}' and stock_code='{stock_code}')"
                 )
                 if index > update_period:
@@ -921,7 +938,112 @@ class EventFinanceReport(StockEventBase):
                 else:
                     self.mysql.engine.execute(insert_sql)
             update_date_sql = (
-                f"UPDATE stock_manager set gmt_balance='{update_period}' "
+                f"UPDATE stock_manager set gmt_cashflow='{update_period}' "
+                f"WHERE stock_code='{stock_code}'")
+            self.mysql.engine.execute(update_date_sql)
+
+    def fetch_cashflow_sheet(self, stock_code):
+        """
+        read csv data and return a dataframe object.
+        """
+        # config file is a url file.
+        # _, url = read_json('URL_163_MONEY', CONF_FILE)
+        url = f"http://quotes.money.163.com/service/xjllb_{stock_code[2:]}.html"
+        df = pd.read_csv(url, encoding='gb18030')
+        if df.empty is False:
+            df = df.T
+            result = df.ix[1:-1, :]
+        else:
+            result = df
+        return result
+
+    def update_cashflow_supplymentary(self, stock_code):
+        df = self.fetch_cashflow_sheet(stock_code)
+        update_period = '0'
+        if df.empty is False:
+            for index, row in df.iterrows():
+                query_sql = (
+                    f"SELECT * from cash_flow_supplymentary where ("
+                    f"report_period='{index}' and stock_code='{stock_code}')")
+                # print(query_sql)
+                result = self.mysql.engine.execute(query_sql).fetchall()
+                # print(result)
+                insert_sql = (
+                    "INSERT into cash_flow_supplymentary (report_period, stock_code, "
+                    "r1_net_profit,r2_minority_interest,r3_unaffirmed_investment_loss,"
+                    "r4_impairment_of_fixed_asset,r5_depreciation_of_fixed_asset,"
+                    "r6_amortization_of_intangible_asset,r7_deferred_asset,"
+                    "r8_,r9_,r10_loss_on_disposal_asset,"
+                    "r11_loss_on_scrapping_of_fixed_asset,r12_,r13_,"
+                    "r14_accrued_liabilities,r15_finance_expense,"
+                    "r16_invesetment_loss,r17_,r18_,"
+                    "r19_decrease_in_inventory,r20_decrease_in_operating_receivables,"
+                    "r21_increase_in_operating_payables,r22_,r23_,r24_other,"
+                    "r25_net_cashflow_from_operating_activities,"
+                    "r26_,r27_,r28_,r29_cash_at_the_end_of_period,"
+                    "r30_cash_at_the_beginning_of_period,"
+                    "r31_cash_equivalent_at_the_end_of_period,"
+                    "r32_cash_equivalent_at_the_beginning_of_period,"
+                    "r33_net_increase_in_cash_and_cash_equivalent) "
+                    f"VALUES ('{index}', '{stock_code}',{str2zero(row[56])},"
+                    f"{str2zero(row[57])},{str2zero(row[58])},{str2zero(row[59])},"
+                    f"{str2zero(row[60])},{str2zero(row[61])},{str2zero(row[62])},"
+                    f"{str2zero(row[63])},{str2zero(row[64])},{str2zero(row[65])},"
+                    f"{str2zero(row[66])},{str2zero(row[67])},{str2zero(row[68])},"
+                    f"{str2zero(row[69])},{str2zero(row[70])},{str2zero(row[71])},"
+                    f"{str2zero(row[72])},{str2zero(row[73])},{str2zero(row[74])},"
+                    f"{str2zero(row[75])},{str2zero(row[76])},{str2zero(row[77])},"
+                    f"{str2zero(row[78])},{str2zero(row[79])},{str2zero(row[80])},"
+                    f"{str2zero(row[81])},{str2zero(row[82])},{str2zero(row[83])},"
+                    f"{str2zero(row[84])},{str2zero(row[85])},{str2zero(row[86])},"
+                    f"{str2zero(row[87])},{str2zero(row[88])})"
+                    )
+                update_sql = (
+                    f"UPDATE cash_flow_sheet set "
+                    f"r1_net_profit = {str2zero(row[56])},"
+                    f"r2_minority_interest = {str2zero(row[57])},"
+                    f"r3_unaffirmed_investment_loss = {str2zero(row[58])},"
+                    f"r4_impairment_of_fixed_asset = {str2zero(row[59])},"
+                    f"r5_depreciation_of_fixed_asset = {str2zero(row[60])},"
+                    f"r6_amortization_of_intangible_asset = {str2zero(row[61])},"
+                    f"r7_deferred_asset = {str2zero(row[62])},"
+                    f"r8_ = {str2zero(row[63])},"
+                    f"r9_ = {str2zero(row[64])},"
+                    f"r10_loss_on_disposal_asset = {str2zero(row[65])},"
+                    f"r11_loss_on_scrapping_of_fixed_asset = {str2zero(row[66])},"
+                    f"r12_ = {str2zero(row[67])},"
+                    f"r13_ = {str2zero(row[68])},"
+                    f"r14_accrued_liabilities = {str2zero(row[69])},"
+                    f"r15_finance_expense = {str2zero(row[70])},"
+                    f"r16_invesetment_loss = {str2zero(row[71])},"
+                    f"r17_ = {str2zero(row[72])},"
+                    f"r18_ = {str2zero(row[73])},"
+                    f"r19_decrease_in_inventory = {str2zero(row[74])},"
+                    f"r20_decrease_in_operating_receivables = {str2zero(row[75])},"
+                    f"r21_increase_in_operating_payables = {str2zero(row[76])},"
+                    f"r22_ = {str2zero(row[77])},"
+                    f"r23_ = {str2zero(row[78])},"
+                    f"r24_other = {str2zero(row[79])},"
+                    f"r25_net_cashflow_from_operating_activities = {str2zero(row[80])},"
+                    f"r26_ = {str2zero(row[81])},"
+                    f"r27_ = {str2zero(row[82])},"
+                    f"r28_ = {str2zero(row[83])},"
+                    f"r29_cash_at_the_end_of_period = {str2zero(row[84])},"
+                    f"r30_cash_at_the_beginning_of_period = {str2zero(row[85])},"
+                    f"r31_cash_equivalent_at_the_end_of_period = {str2zero(row[86])},"
+                    f"r32_cash_equivalent_at_the_beginning_of_period = {str2zero(row[87])},"
+                    f"r33_net_increase_in_cash_and_cash_equivalent = {str2zero(row[88])} "
+                    f"WHERE (report_period='{index}' and stock_code='{stock_code}')"
+                )
+                if index > update_period:
+                    update_period = index
+                    # print(update_period)
+                if result:
+                    self.mysql.engine.execute(update_sql)
+                else:
+                    self.mysql.engine.execute(insert_sql)
+            update_date_sql = (
+                f"UPDATE stock_manager set gmt_cashflow='{update_period}' "
                 f"WHERE stock_code='{stock_code}'")
             self.mysql.engine.execute(update_date_sql)
 
@@ -1082,4 +1204,8 @@ def test(stock_code):
 
 
 if __name__ == '__main__':
-    sub_7_days_benefit_distribution()
+    # sub_7_days_benefit_distribution()
+    header = mysqlHeader('root', '6414939', 'test')
+    event = StockEventBase()
+    event._init_database(header)
+    event.fetch_all_stock_list()

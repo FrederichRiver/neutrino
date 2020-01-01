@@ -85,5 +85,46 @@ class Resource(object):
         return sys_info
 
 
+def str2number(in_str):
+    import re
+    if isinstance(in_str, str):
+        in_str = in_str.replace(',', '')
+        f = re.search(r'(\-|\+)?\d+(\.[0-9]+)?', in_str)
+        d = re.match(r'\d{4}\-\d{2}\-\d{2}', in_str)
+        if d:    
+            result = in_str
+        elif f:
+            # print(in_str) 
+            try:
+                result = float(f[0])
+            except Exception:
+                result = 'NULL'
+        else:
+            result = None
+    elif isinstance(in_str, int):
+        result = in_str
+    elif isinstance(in_str, float):
+        result = in_str
+    else:
+        result = None
+    return result
+
+
+class RandomHeader(object):
+    def __init__(self):
+        self.js = None
+        with open('config/header.json', 'r') as f:
+            result = f.read()
+            self.js = json.loads(result)
+
+    def __call__(self):
+        from random import randint
+        index = randint(0, len(self.js)-1)
+        header = {"User-Agent": self.js[str(index)]}
+        return header
+
+
 if __name__ == '__main__':
-    pass
+    from random import randint
+    rh = RandomHeader()
+    print(rh())

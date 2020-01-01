@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 
+import re
 import pandas as pd
 import talib as ta
 from env import TIME_FMT
 from lxml import etree
-from libmysql8 import (mysqlBase, mysqlHeader,
-                       create_table_from_table)
+from libmysql8 import (mysqlBase, mysqlHeader)
 from datetime import datetime
-from form import formStockManager, formIncomeStatement, formBalanceSheet
+from form import formStockManager, formIncomeStatement, formBalance
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from libstock import StockEventBase
-__version__ = '1.0.1-dev'
+__version__ = '1.0.2-dev'
 
 
 class StratagyBase2(StockEventBase):
@@ -188,25 +188,91 @@ class StratagyBase(StockEventBase):
     def __init__(self, start_date, end_date, period):
         super(StockEventBase, self).__init__()
 
-    def select_stock(self):
-        result = self.mysql.session.query(
-            income_statement.stock_code,
-            income_statement.r4_net_profit
-        ).filter_by(report_period='2019-09-30')
+    def fetch_adjust_price(self, stock_code):
+        """
+        From local database, fetch adjust price.
+        data format: DataFrame in pandas.
+        data order like： close price, open price, low price, high price.
+        """
+        sql = f"SELECT stock_name,trade_date,close_price,adjust_factor from {stock_code}"
+        result = self.mysql.engine.execute(sql)
         df = pd.DataFrame.from_dict(result)
+        df.columns = ['stock_name', 'trade_date', 'close_price', 'adjust_factor']
+        df.set_index('trade_date', inplace=True)
+        df.fillna(0, inplace=True)
+        for i in range(len(df)):
+            if not df['adjust_factor'][i]:
+                df['adjust_factor'][i] = df['adjust_factor'][i-1]
+        df['close_price'] = df['close_price'] * df['adjust_factor']
+        print(df)
+        return df
+
+    def plot(self, data):
+        pass
+
+    def select_stock(self):
+        # last period profit
+        last_period_profit = self.mysql.session.query(
+            formIncomeStatement.stock_code,
+            formIncomeStatement.r4_net_profit
+        ).filter_by(report_period='2018-12-31')
+        df4 = pd.DataFrame.from_dict(last_period_profit)
+        df4.set_index('stock_code', inplace=True)
+        df4.columns = ['last_year_profit']
+        # profit
+        net_profit = self.mysql.session.query(
+            formIncomeStatement.stock_code,
+            formIncomeStatement.r4_net_profit
+        ).filter_by(report_period='2019-09-30')
+        df = pd.DataFrame.from_dict(net_profit)
         df.set_index('stock_code', inplace=True)
+        # roe
         result2 = self.mysql.session.query(
-            formBalanceSheet.stock_code,
-            formBalanceSheet.r6_total_equity
+            formBalance.stock_code,
+            formBalance.r6_total_equity
         ).filter_by(report_period='2019-09-30')
         df2 = pd.DataFrame.from_dict(result2)
         df2.set_index('stock_code', inplace=True)
+        # stock name
+        result3 = self.mysql.session.query(
+            formStockManager.stock_code,
+            formStockManager.stock_name
+        )
+        df3 = pd.DataFrame.from_dict(result3)
+        df3.set_index('stock_code', inplace=True)
+        # data processing
         df = pd.concat([df, df2], axis=1, join='outer')
+        df = pd.concat([df, df4], axis=1, join='outer')
+        df = pd.concat([df, df3], axis=1, join='inner')
         df['roe'] = df['r4_net_profit']/df['r6_total_equity']
+        df = df[df['roe'] > 0.1]
+        df = df[df['last_year_profit'] > 0]
+        df = df[df['r4_net_profit'] > 0]
         for index, row in df.iterrows():
-            if row['roe'] > 0:
+            if re.search(r'ST', row['stock_name']):
                 df.drop(index, inplace=True)
-        print(df.head(5))
+        df.sort_values(by='roe', inplace=True, ascending=False)
+        # print(df.head(5))
+        stock_list = df.index.tolist()
+        # print(stock_list)
+        return stock_list
+
+    def run(self, stock_code):
+        from data_feature import ma5, ma10, ma20
+        sql = f"SELECT stock_name,trade_date,close_price from {stock_code}"
+        result = self.mysql.engine.execute(sql)
+        df = pd.DataFrame.from_dict(result)
+        df.columns = ['stock_name', 'trade_date', 'close_price']
+        df.set_index('trade_date', inplace=True)
+        ma5(df)
+        ma10(df)
+        ma20(df)
+        df = df[-1:]
+        # print(df)
+        with open('stock_list', 'a') as f:
+            if df['ma5'][-1] > df['ma10'][-1] > df['ma20'][-1]:
+                line = stock_code + df['stock_name'][-1] + '\n'
+                f.write(line)
 
     def choose_stock(self, upper_limit):
         import random
@@ -215,8 +281,45 @@ class StratagyBase(StockEventBase):
         return stock_list[n]
 
 
+class FastTrade(StockEventBase):
+    def run(self, stock_code):
+        from data_feature import ma5, ma10, ma20
+        sql = f"SELECT stock_name,trade_date,close_price from {stock_code}"
+        result = self.mysql.engine.execute(sql)
+        df = pd.DataFrame.from_dict(result)
+        df.columns = ['stock_name', 'trade_date', 'close_price']
+        df.set_index('trade_date', inplace=True)
+        ma5(df)
+        ma10(df)
+        ma20(df)
+        # print(df)
+        profit = 1
+        i = 0
+        try:
+            while i < len(df)-5:
+                if df['ma10'][i] > df['ma20'][i]:
+                    if df['ma5'][i] > 0.9*df['ma10'][i]:
+                        buy = df['close_price'][i]
+                        sell = df['close_price'][i+5]
+                        profit = profit * sell / buy
+                        while df['ma5'][i] > df['ma10'][i]:
+                            i += 1
+                    else:
+                        i += 1
+                else:
+                    i += 1
+        except Exception as e:
+            print(e)
+        print(stock_code, ':', profit)
+
+
 if __name__ == '__main__':
     header = mysqlHeader('root', '6414939', 'test')
     event = StratagyBase('1990-12-19', '2019-11-22', 300)
     event._init_database(header)
-    event.select_stock()
+    stock_list = event.select_stock()
+    #event2 = FastTrade()
+    #event2._init_database(header)
+    #for stock in stock_list:
+    #    event2.run(stock)
+    event.fetch_adjust_price("SH600000")
