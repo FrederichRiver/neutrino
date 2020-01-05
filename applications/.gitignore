@@ -1,4 +1,3 @@
-csv/*
 applications/csv/*
 applications/old_code/*
 applications/__pycache__/*

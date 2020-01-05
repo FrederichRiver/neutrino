@@ -48,9 +48,10 @@ def event_download_stock_data():
             formStockManager.stock_code).all()
     # result format:
     # (stock_code,)
+    result = event.fetch_all_stock_list()
     for stock in result:
-        print(f"{time.ctime()}: Download {stock[0]} stock data.")
-        event.download_stock_data(stock[0])
+        print(f"{time.ctime()}: Download {stock} stock data.")
+        event.download_stock_data(stock)
 
 
 def event_init_stock_data():
@@ -116,7 +117,7 @@ def event_download_finance_report():
 
 def event_download_trade_detail_data():
     header = mysqlHeader('root', '6414939', 'test')
-    trade_date_list = ["20191225", "20191226", "20191227"]
+    trade_date_list = ["20191230","20191231","20191227", "20191226", "20191225"]
     event = EventTradeDetail()
     event._init_database(header)
     stock_list = event.fetch_all_stock_list()
@@ -161,11 +162,11 @@ if __name__ == "__main__":
     header = mysqlHeader('root', '6414939', 'test')
     # header = mysqlHeader('stock', 'stock2020', 'stock')
     # event_init_stock()
-    # event_download_stock_data()
+    event_download_stock_data()
     # event_init_stock_data()
     # event_create_interest_table()
     # event_flag_stock()
     # event_record_interest()
-    event_download_trade_detail_data()
+    # event_download_trade_detail_data()
     # event_download_finance_report()
     # event_record_stock(header)

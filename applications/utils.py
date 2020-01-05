@@ -21,6 +21,15 @@ def read_json(key, jfile):
     return key, item
 
 
+def read_url(key):
+    """
+    It is a method base on read_json, returns a url.
+    """
+    url_json = 'config/conf.json'
+    _, url = read_json(key, url_json)
+    return url
+
+
 def neteaseindex(code):
     if code[:2] == 'SH':
         code = '0'+code[2:]

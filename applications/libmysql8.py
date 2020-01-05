@@ -9,6 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
 from libexception import AccountException
+import pandas as pd
 __version__ = '3.1.16'
 
 
@@ -44,6 +45,12 @@ class mysqlBase(object):
     def select_values(self, table, field):
         sql = f"SELECT {field} from {table}"
         result = self.engine.execute(sql)
+        return result
+
+    def select_values2(self, table, field):
+        sql = f"SELECT {field} from {table}"
+        select_value = self.engine.execute(sql)
+        result = pd.DataFrame(select_value)
         return result
 
     def query(self, sql):

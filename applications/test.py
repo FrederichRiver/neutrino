@@ -16,5 +16,21 @@ def unit_test_random_header():
         print(rh())
 
 
+def test():
+    from env import global_header
+    from utils import RandomHeader
+    from dev import TotalStock
+    import pandas as pd
+    import numpy as np
+    event = TotalStock()
+    event._init_database(global_header)
+    result = event.mysql.select_values2('SH600001', 'trade_date,stock_quantity')
+    result.columns = ['trade_date', 'quantity']
+    result.astype({'quantity': np.float64}).dtypes
+    print(result.head(5))
+    print(result.dtypes)
+
+
 if __name__ == "__main__":
-    unit_test_random_header()
+    # unit_test_random_header()
+    test()

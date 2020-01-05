@@ -318,8 +318,8 @@ if __name__ == '__main__':
     event = StratagyBase('1990-12-19', '2019-11-22', 300)
     event._init_database(header)
     stock_list = event.select_stock()
-    #event2 = FastTrade()
-    #event2._init_database(header)
-    #for stock in stock_list:
+    # event2 = FastTrade()
+    # event2._init_database(header)
+    # for stock in stock_list:
     #    event2.run(stock)
     event.fetch_adjust_price("SH600000")

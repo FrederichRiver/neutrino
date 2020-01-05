@@ -464,9 +464,6 @@ def create_stock_list(flag='all'):
     kcb = ['SH688001']*1000
     for i in range(len(kcb)):
         kcb[i] = 'SH' + '688' + str(i).zfill(3)
-    hk = ['HK00001']*10000
-    for i in range(len(hk)):
-        hk[i] = 'HK'+str(i+1).zfill(5)
 
     if flag == 'all':
         indices.extend(sha)
@@ -490,8 +487,6 @@ def create_stock_list(flag='all'):
         indices.extend(zxb)
     elif flag == 'cyb':
         indices.extend(cyb)
-    elif flag == 'hk':
-        indices.extend(hk)
     else:
         pass
     return indices
@@ -1056,32 +1051,6 @@ def set_date_as_index(df):
     return df
 
 
-def sub_7_days_benefit_distribution():
-    header = mysqlHeader('root', '6414939', 'test')
-    stock = mysqlBase(header)
-    stock_list = stock.session.query(
-        formStockManager.stock_code).all()
-    for s in stock_list:
-        try:
-            stock_code = s[0]
-            sql = f"select trade_date,close_price from {stock_code}"
-            result = stock.session.execute(sql).fetchall()
-            x = pd.DataFrame.from_dict(result)
-            x.columns = ['trade_date', 'close_price']
-            li = []
-            k = 0
-            while k < 300:
-                i = random.randint(0, x.shape[0]-10)
-                benefit = (x.iloc[i+7, 1]-x.iloc[i, 1])/x.iloc[i, 1]
-                li.append(benefit)
-                k = k+1
-
-            y = pd.DataFrame.from_dict(li)
-            print(f"{stock_code}: {y.mean()}, {y.std()}")
-        except Exception as e:
-            print(e)
-
-
 def fetch_atr(stock_code):
     stock_conn = mysqlBase('root', '6414939', 'stock')
     sql = (
@@ -1103,6 +1072,69 @@ def fetch_atr(stock_code):
     atr.plot()
     plt.show()
     return result
+
+
+
+
+class TotalStock(StockEventBase):
+    def fetch_html_object(self, url, header):
+        """
+        result is a etree.HTML object
+        """
+        content = requests.get(url, headers=header, timeout=3)
+        content.encoding = content.apparent_encoding
+        result = etree.HTML(content.text)
+        return result
+
+    def hexun_stock_structure(self, stock_code, header):
+        url = read_url('URL_hexun_stockstructure').format(stock_code[2:])
+        try:
+            html = self.fetch_html_object(url, header)
+            table_list = html.xpath("//table[@class='web2']")
+            # print(type(table_list[1]))
+            if table_list:
+                table = etree.tostring(table_list[1]).decode()
+                result = pd.read_html(table)[0]
+                result = result.loc[3:, [0, 1]]
+                result = result.dropna()
+                result.columns = ['date', 'quantity']
+                for _, row in result.iterrows():
+                    # print(row['date'], row['quantity'])
+                    sql = (
+                        f"Update {stock_code} set stock_quantity={row['quantity']} "
+                        f"Where trade_date='{row['date']}'"
+                    )
+                    self.mysql.engine.execute(sql)
+            delay(5)
+        except Exception as e:
+            print(e)
+            self.stock_list.append(stock_code)
+
+    def calculate_stock_structure(self, stock_code):
+        import numpy as np
+        from numpy import NaN
+        try:
+            value = self.mysql.select_values2(stock_code, 'trade_date, stock_quantity')
+            # value.astype({1: 'float64'})
+            # print(value.dtypes)
+            if value.iloc[0, 1] is None:
+                value.iloc[0, 1] = 0
+            for i in range(value.shape[0]):
+                # print(value.iloc[i, 1])
+                if value.iloc[i, 1] is None:
+                    value.iloc[i, 1] = value.iloc[i-1, 1]
+                elif np.isnan(value.iloc[i, 1]):
+                    value.iloc[i, 1] = value.iloc[i-1, 1]
+                # value.columns = ['trade_date', 'stock_quantity']
+                # value.set_index('trade_date')
+            for index, row in value.iterrows():
+                sql = (
+                    f"Update {stock_code} set stock_quantity={row[1]} "
+                    f"Where trade_date='{row[0]}'"
+                )
+                self.mysql.engine.execute(sql)
+        except Exception as e:
+            print(e)
 
 
 def test(stock_code):
@@ -1204,7 +1236,6 @@ def test(stock_code):
 
 
 if __name__ == '__main__':
-    # sub_7_days_benefit_distribution()
     header = mysqlHeader('root', '6414939', 'test')
     event = StockEventBase()
     event._init_database(header)

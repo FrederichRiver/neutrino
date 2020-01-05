@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import requests
 import time
+import random
 from env import global_header
 from libmysql8 import mysqlHeader, mysqlBase
 from libstock import wavelet_nr, StockEventBase, str2zero
@@ -13,7 +14,7 @@ from lxml import etree
 from data_feature import ma
 from form import formFinanceTemplate, formBalance
 from utils import str2number
-from utils import RandomHeader
+from utils import RandomHeader, read_url
 
 __version__ = '1.6.8-beta'
 
@@ -145,14 +146,6 @@ def fetch_cooperation_info(stock_code):
         mysql.engine.execute(update_sql)
 
 
-class EventRelationship(StockEventBase):
-    """
-    Test.
-    """
-    def fetch_relation_sheet(self, stock_code):
-        url = f"http://quotes.money.163.com/f10/jjcg_{stock_code}.html#01d03"
-
-
 class Stratagy1(StockEventBase):
     def fetch_report_period(self):
         """
@@ -233,125 +226,6 @@ class TradeDate(object):
         return holiday
 
 
-class TotalStock(StockEventBase):
-    def run(self, stock_code):
-        header = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36"}
-        url = f"http://f10.eastmoney.com/CapitalStockStructure/CapitalStockStructureAjax?code={stock_code}"
-        json_content = requests.get(url, headers=header, timeout=3)
-        import json
-        s = json.loads(json_content.text)
-        result = pd.DataFrame(columns=[0, 1], dtype='str')
-        if s['ShareChangeList']:
-            for i in range(2):
-                df = pd.DataFrame(s['ShareChangeList'][i]['changeList'])
-                result[i] = df[0]
-            result.columns = ['report_date', 'total_capital']
-            result.set_index('report_date', inplace=True)
-            for name, row in result.iteritems():
-                result[name] = result[name].map(str2number)
-        print(result)
-        """
-        result = pd.DataFrame(columns=[0, 1, 2, 3, 4, 5, 6, 7], dtype='str')
-        if s['ShareChangeList']:
-            for i in range(8):
-                df = pd.DataFrame(s['ShareChangeList'][i]['changeList'])
-                result[i] = df[0]
-            result.columns = [
-                'report_date', 'total_capital', 'limited_in_circulation',
-                'state_owned_limited', 'other_domestic_limited', 'natrual_person_limited',
-                'outstanding_share', 'listed_share'
-            ]
-            result.set_index('report_date', inplace=True)
-            for name, row in result.iteritems():
-                result[name] = result[name].map(str2number)
-        """
-        return result
-
-    def update_stock_structure(self, stock_code):
-        df = self.run(stock_code)
-        if not df.empty:
-            for index, row in df.iterrows():
-                try:
-                    sql = (
-                        f"INSERT into stock_structure ("
-                        "stock_code, report_date, total_capital) "
-                        "VALUES ("
-                        f"'{stock_code}', '{index}', {row['total_capital']})"
-                    )
-                    self.mysql.engine.execute(sql)
-                except Exception as e:
-                    print(e)
-
-    def sina(self, stock_code):
-        url = f"http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructure/stockid/{stock_code[2:]}.phtml"
-        content = requests.get(url, timeout=3)
-        content.encoding = content.apparent_encoding
-        html = etree.HTML(content.text)
-        table_ids = html.xpath("//table[contains(@id, 'StockStructureNewTable')]/@id")
-        tables = []
-        for ids in table_ids:
-            table_list = html.xpath(f"//table[@id='{ids}']")
-            tables.append(table_list[0])
-        result = pd.DataFrame(columns=['Null'])
-        for t in tables:
-            df = pd.DataFrame.from_dict(t)
-            print(df)
-        for ids in table_ids:
-            table_list = pd.read_html(url, attrs={"id": ids})
-            df = table_list[0]
-            df.columns = [i for i in range(df.shape[1])]
-            df.drop(0, axis=1, inplace=True)
-            df.columns = map(lambda i: df.iloc[1, i], range(df.shape[1]))
-            if result.empty:
-                result = df
-            else:
-                result = pd.concat([result, df], axis=1)
-            # print(df.head(2))
-        print(result.columns)
-        for name, row in result.iteritems():
-            if result[name].empty:
-                result.drop(name, axis=1, inplace=True)
-            else:
-                result[name] = result[name].apply(str2number)
-        print(result)
-        # print(df.head(2), ids)
-        # for index, row in df.iterrows():
-        # print(df.iloc[1,1].xpath('//text()'))
-
-    def fetch_html_object(url, header):
-        """
-        result is a etree.HTML object
-        """
-        content = requests.get(url, headers=header, timeout=3)
-        content.encoding = content.apparent_encoding
-        result = etree.HTML(content.text)
-        return result
-
-    def hexun(self, stock_code, header):
-        url = f"http://stockdata.stock.hexun.com/2009_gbjg_{stock_code[2:]}.shtml"
-        try:
-            html = self.fetch_html_object(url, header)
-            table_list = html.xpath("//table[@class='web2']")
-            # print(type(table_list[1]))
-            if table_list:
-                table = etree.tostring(table_list[1]).decode()
-                result = pd.read_html(table)[0]
-                result = result.loc[3:, [0, 1]]
-                result = result.dropna()
-                result.columns = ['date', 'quantity']
-                for _, row in result.iterrows():
-                    # print(row['date'], row['quantity'])
-                    sql = (
-                        f"Update {stock_code} set trade_date='{row['date']}',"
-                        f"stock_quantity={row['quantity']} "
-                        f"Where trade_date='{row['date']}'"
-                    )
-                    self.mysql.engine.execute(sql)
-            delay(5)
-        except Exception as e:
-            print(e)
-
-
 def delay(delta):
     time.sleep(random.randint(0, delta))
 
@@ -380,8 +254,10 @@ if __name__ == "__main__":
     rh = RandomHeader()
     event._init_database(global_header)
     # event.update_stock_structure('SZ002230')
-    stock_list = event.fetch_all_stock_list()
+    event.stock_list = event.fetch_all_stock_list()
     # event.update_stock_structure('SH600000')
-    for stock in stock_list:
+    # event.calculate_stock_structure('SH600001')
+    for stock in event.stock_list:
         print(stock)
-        event.hexun(stock, rh())
+        event.hexun_stock_structure(stock, rh())
+        event.calculate_stock_structure(stock)
