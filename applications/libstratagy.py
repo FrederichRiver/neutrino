@@ -3,6 +3,7 @@
 import re
 import pandas as pd
 import talib as ta
+import numpy as np
 from env import TIME_FMT
 from lxml import etree
 from libmysql8 import (mysqlBase, mysqlHeader)
@@ -185,8 +186,8 @@ def beta(df, df2):
 
 
 class StratagyBase(StockEventBase):
-    def __init__(self, start_date, end_date, period):
-        super(StockEventBase, self).__init__()
+    # def __init__(self, start_date, end_date, period):
+    #    super(StockEventBase, self).__init__()
 
     def fetch_adjust_price(self, stock_code):
         """
@@ -280,46 +281,85 @@ class StratagyBase(StockEventBase):
         n = random.randint(0, upper_limit)
         return stock_list[n]
 
+    def fetch_stock_name(self, stock_code):
+        sql = f"Select stock_name from stock_manager Where stock_code = '{stock_code}'"
+        result = self.mysql.engine.execute(sql).fetchone()
+        return result[0]
 
-class FastTrade(StockEventBase):
-    def run(self, stock_code):
-        from data_feature import ma5, ma10, ma20
-        sql = f"SELECT stock_name,trade_date,close_price from {stock_code}"
+    def amp_3_day(self, stock_code):
+        import datetime
+        day = datetime.datetime.now() - datetime.timedelta(days = 10)
+        # print(day.strftime(TIME_FMT))
+        day_string = day.strftime(TIME_FMT)
+        sql = f"Select amplitude, close_price from {stock_code} Where trade_date > '{day_string}'"
         result = self.mysql.engine.execute(sql)
-        df = pd.DataFrame.from_dict(result)
-        df.columns = ['stock_name', 'trade_date', 'close_price']
-        df.set_index('trade_date', inplace=True)
-        ma5(df)
-        ma10(df)
-        ma20(df)
-        # print(df)
-        profit = 1
-        i = 0
         try:
-            while i < len(df)-5:
-                if df['ma10'][i] > df['ma20'][i]:
-                    if df['ma5'][i] > 0.9*df['ma10'][i]:
-                        buy = df['close_price'][i]
-                        sell = df['close_price'][i+5]
-                        profit = profit * sell / buy
-                        while df['ma5'][i] > df['ma10'][i]:
-                            i += 1
-                    else:
-                        i += 1
-                else:
-                    i += 1
+            data = pd.DataFrame.from_dict(result)
+            data = data.tail(3)
+            amp2 = data.loc[3, 0]
+            price = sum(data[1])/3
+            amp = sum(data[0])
         except Exception as e:
-            print(e)
-        print(stock_code, ':', profit)
+            # print(e)
+            amp = 0
+            amp2 = 0
+            price = 0
+        return amp, amp2, price
+
+
+class target(object):
+    def __init__(self):
+        self.sigma = 0
+        self.profit = 0
+
+
+class targetGroup(object):
+    def __init__(self, r, sigma):
+        if len(r) != len(sigma):
+            print("Dimensions not equal.\n")
+        else:
+            self.r = np.array(r)
+            self.sigma = np.array(sigma)
+
+    def run(self, x):
+        result = [[0 for i in range(x.shape[0])] for i in range(5)]
+        
+        print(result)
+
+
+def test():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = StratagyBase()
+    event._init_database(header)
+    stock_list = event.select_stock()
+    with open('data0108.log', 'w') as f:
+        for stock in stock_list:
+            name = event.fetch_stock_name(stock)
+            amp, amp2, price = event.amp_3_day(stock)
+            # print(stock, amp, amp2)
+            if amp > 8 and amp2 > 0 and price < 50:
+                line = stock + ': ' + name + ': ' + str(amp) + '\n'
+                f.write(line)
+
+
+def test2():
+    header = mysqlHeader('root', '6414939', 'test')
+    event = StratagyBase()
+    event._init_database(header)
+    stock_data = pd.DataFrame()
+    stock_list = ['SH601818', 'SZ002230', 'SZ002460', 'SZ300146']
+    for stock in stock_list:
+        sql = f"SELECT trade_date, amplitude from {stock} WHERE (trade_date>'2019-12-01' AND trade_date<'2020-01-07')"
+        result = event.mysql.engine.execute(sql).fetchall()
+        df = pd.DataFrame.from_dict(result)
+        df.columns = ['trade_date', stock]
+        df.set_index('trade_date', inplace=True)
+        stock_data = pd.concat([stock_data, df], axis=1, join='outer', sort=False)
+    # Cov calculation
+    print(stock_data.cov())
+
+
 
 
 if __name__ == '__main__':
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StratagyBase('1990-12-19', '2019-11-22', 300)
-    event._init_database(header)
-    stock_list = event.select_stock()
-    # event2 = FastTrade()
-    # event2._init_database(header)
-    # for stock in stock_list:
-    #    event2.run(stock)
-    event.fetch_adjust_price("SH600000")
+    test()
