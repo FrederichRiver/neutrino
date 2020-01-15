@@ -117,7 +117,7 @@ def event_download_finance_report():
 
 def event_download_trade_detail_data():
     header = mysqlHeader('root', '6414939', 'test')
-    trade_date_list = ["20191230","20191231","20191227", "20191226", "20191225"]
+    trade_date_list = ["20200106","20200107","20200108","20200109","20200110"]
     event = EventTradeDetail()
     event._init_database(header)
     stock_list = event.fetch_all_stock_list()

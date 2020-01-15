@@ -22,10 +22,11 @@ from enum import Enum
 from env import TIME_FMT, CONF_FILE
 from form import formStockManager
 from lxml import etree
-from libmysql8 import (mysqlBase, mysqlHeader)
+# from libmysql8 import (mysqlBase, mysqlHeader)
+from polaris.mysql8 import (mysqlBase, mysqlHeader)
 from message import ADJUST_FACTOR_ERROR
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
-from utils import read_json, neteaseindex, today, info, error
+from util import read_json, neteaseindex, today, info, error
 
 __version__ = '1.7.38'
 
@@ -101,6 +102,15 @@ class StockEventBase(object):
             if stock[0]:
                 stock_list.append(stock[0])
         return stock_list
+
+    def fetch_html_object(self, url, header):
+        """
+        result is a etree.HTML object
+        """
+        content = requests.get(url, headers=header, timeout=3)
+        content.encoding = content.apparent_encoding
+        result = etree.HTML(content.text)
+        return result
 
     def close(self):
         self.mysql.engine.close()
@@ -490,10 +500,6 @@ def create_stock_list(flag='all'):
     else:
         pass
     return indices
-
-
-def random_header():
-    return 1
 
 
 def str2zero(input_str, return_type='i'):
@@ -1074,8 +1080,6 @@ def fetch_atr(stock_code):
     return result
 
 
-
-
 class TotalStock(StockEventBase):
     def fetch_html_object(self, url, header):
         """
@@ -1240,3 +1244,4 @@ if __name__ == '__main__':
     event = StockEventBase()
     event._init_database(header)
     event.fetch_all_stock_list()
+    print(event.stock_list)

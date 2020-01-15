@@ -68852,3 +68852,6 @@ Run time of job "event_finance_info (trigger: cron[hour='3', minute='40'], next 
 /usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1300, "Invalid utf8mb4 character string: '800495'")
   result = self._query(query)
 Calculating adjust factor of SH600012
+2020-01-15 21:27:06 [INFO]: test
+2020-01-15 21:27:06 [ERROR]: test
+2020-01-15 21:27:06 [WARNING]: test

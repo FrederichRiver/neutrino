@@ -8,7 +8,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
-from libexception import AccountException
 import pandas as pd
 __version__ = '3.1.16'
 
@@ -42,12 +41,26 @@ class mysqlBase(object):
         # self.engine.commit()
         return 1
 
+    def select_one(self, table, field, condition):
+        """
+        Result is a tuple like structure data.
+        """
+        sql = f"SELECT {field} FROM {table} WHERE {condition}"
+        result = self.engine.execute(sql).fetchone()
+        return result
+
     def select_values(self, table, field):
+        """
+        Return a tuple like result
+        """
         sql = f"SELECT {field} from {table}"
         result = self.engine.execute(sql)
         return result
 
     def select_values2(self, table, field):
+        """
+        Return a DataFrame type result.
+        """
         sql = f"SELECT {field} from {table}"
         select_value = self.engine.execute(sql)
         result = pd.DataFrame(select_value)

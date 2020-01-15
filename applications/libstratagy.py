@@ -11,6 +11,10 @@ from datetime import datetime
 from form import formStockManager, formIncomeStatement, formBalance
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from libstock import StockEventBase
+from env import global_header
+from util import RandomHeader
+
+
 __version__ = '1.0.2-dev'
 
 
@@ -296,11 +300,12 @@ class StratagyBase(StockEventBase):
         try:
             data = pd.DataFrame.from_dict(result)
             data = data.tail(3)
-            amp2 = data.loc[3, 0]
+            amp2 = 0
+            # print(amp2)
             price = sum(data[1])/3
             amp = sum(data[0])
         except Exception as e:
-            # print(e)
+            # print(Exception, e)
             amp = 0
             amp2 = 0
             price = 0
@@ -322,9 +327,7 @@ class targetGroup(object):
             self.sigma = np.array(sigma)
 
     def run(self, x):
-        result = [[0 for i in range(x.shape[0])] for i in range(5)]
-        
-        print(result)
+        pass
 
 
 def test():
@@ -332,17 +335,18 @@ def test():
     event = StratagyBase()
     event._init_database(header)
     stock_list = event.select_stock()
-    with open('data0108.log', 'w') as f:
+    with open('data0116.log', 'w') as f:
         for stock in stock_list:
             name = event.fetch_stock_name(stock)
             amp, amp2, price = event.amp_3_day(stock)
-            # print(stock, amp, amp2)
-            if amp > 8 and amp2 > 0 and price < 50:
+            # print(stock, name, amp, amp2)
+            if amp > 8:
                 line = stock + ': ' + name + ': ' + str(amp) + '\n'
                 f.write(line)
 
 
 def test2():
+    # calculate cov of assets.
     header = mysqlHeader('root', '6414939', 'test')
     event = StratagyBase()
     event._init_database(header)
@@ -359,7 +363,78 @@ def test2():
     print(stock_data.cov())
 
 
+def test3():
+    # numpy test.
+    import numpy.matlib
+    a = np.array([[1, 2], [3, 4]])
+    print(a)
+    b = np.linalg.inv(a)
+    print(b)
+    c = a * b
+    c = np.dot(a, b)
+    print(c)
+
+
+def solve(r, Cov):
+    E = np.linalg.inv(Cov)
+    L = numpy.matlib.ones((1, 5))
+    # a = r.T * int(Cov) * r
+    # b = r.T * int(Cov) * 1
+    # c = 1.T * int(Cov) * 1
+    a, b, c
+    miu = b/c
+    lamda1 = 1
+    lamda2 = 2
+    w = lamda1 * E * r + lamda2*E*L
+    return miu, sigma, w
+
+
+class MPTBase(StockEventBase):
+    def __init__(self):
+        super(MPTBase, self).__init__()
+        # asset data group
+        self.data = None
+        # cov matrix
+        self.cov = None
+        self.beta = 0.0
+        self.sharpe_m = 0.0
+        self.none_risk_profit = 0.0
+        self.asset_group = {}
+
+    def solve_frontier(self):
+        pass
+
+    def fetch_data(self):
+        pass
+
+    def sh50_solver(self, header):
+        import requests
+        url = f"http://www.sse.com.cn/market/sseindex/indexlist/constlist/index.shtml?COMPANY_CODE=000016&cfg=yes&INDEX_Code=000016"
+        html = self.fetch_html_object(url, header)
+        table = html.xpath("//table[@class='table search_cfList searchCC']")
+        table = etree.tostring(table[0]).decode()
+        result = pd.read_html(table)
+        print(result)
+
+
+def test_event():
+    rh = RandomHeader()
+    event = MPTBase()
+    event._init_database(global_header)
+    event.sh50_solver(rh())
 
 
 if __name__ == '__main__':
     test()
+    """
+    test_event()
+    event = StockEventBase()
+    event._init_database(global_header)
+    stock_list = event.fetch_all_stock_list()
+    for stock in stock_list:
+        sql = (
+            f"insert into stock_index "
+            f"(stock_code) values ('{stock}')"
+            )
+        event.mysql.engine.execute(sql)
+    """
