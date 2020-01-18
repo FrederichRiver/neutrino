@@ -5,5 +5,5 @@
 	"URL_fh_163":"http://quotes.money.163.com/f10/fhpg_{}.html#01d05",
 	"URL_FINANCE_SUMMARY":"http://quotes.money.163.com/service/zycwzb_{0}.html?type=report",
 	"URL_hexun_stockstructure": "http://stockdata.stock.hexun.com/2009_gbjg_{}.shtml",
-	"test": "f'{x}'"
+	"URL_tick_data": "http://quotes.money.163.com/cjmx/{0}/{1}/{2}.xls"
 }

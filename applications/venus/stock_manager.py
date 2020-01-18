@@ -1,5 +1,6 @@
 from stock_base import StockEventBase
 from jupiter.utils import read_url, ERROR, drop_space, INFO
+from dev_global.env import CONF_FILE
 
 
 class EventTradeDataManager(StockEventBase):
@@ -190,4 +191,18 @@ class EventTradeDataManager(StockEventBase):
             self.mysql.session.commit()
         except Exception as e:
             ERROR(f"Failed when donwload {stock_code} data.")
+            ERROR(e)
+
+    def get_trade_detail_data(self, stock_code, trade_date):
+        # trade_date format: '20191118'
+        code = self.coder.net_ease_code(stock_code)
+        url = read_url("URL_tick_data", CONF_FILE).format(
+            trade_date[:4], trade_date, code)
+        try:
+            df = pd.read_excel(url)
+            csv_path = "/home/friederich/Documents/dev/neutrino/csv/"
+            filename = csv_path + f"{stock_code}_{trade_date}.csv"
+            df.to_csv(filename, encoding='gb18030')
+        except Exception as e:
+            ERROR(f"Failed when download {stock_code} tick data.")
             ERROR(e)
