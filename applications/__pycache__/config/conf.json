@@ -1,6 +1,0 @@
-{
-	"URL":"https://163.com",
-	"Sina":"https://sina.com.cn",
-    "URL_163_MONEY":"http://quotes.money.163.com/service/chddata.html?code={0}&start={1}&end={2}&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER"
-
-}
