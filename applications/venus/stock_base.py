@@ -2,8 +2,11 @@
 import re
 from datetime import date
 from dev_global.env import TIME_FMT
-from msg import NoneHeaderError
+from venus.msg import NoneHeaderError
 from polaris.mysql8 import (mysqlBase, mysqlHeader)
+
+
+__version__ = '1.0.10'
 
 
 class StockEventBase(object):
