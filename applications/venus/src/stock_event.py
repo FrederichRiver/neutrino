@@ -2,6 +2,7 @@
 # event_stock
 
 from polaris.mysql8 import mysqlHeader
+from dev_global.env import GLOBAL_HEADER
 # from form import formStockManager
 # from dev import fetch_finance_info, fetch_cooperation_info
 import time
@@ -10,10 +11,6 @@ __version__ = '1.0.12'
 
 
 def event_record_stock():
-    pass
-
-
-def event_init_stock():
     pass
 
 
@@ -44,20 +41,19 @@ def event_cooperation_info():
 def event_finance_info():
     pass
 
-'''
 
 def event_init_stock():
     """
     Init database from a blank stock list.
     """
-    header = mysqlHeader('stock', 'stock2020', 'stock')
     event = EventTradeDataManager()
-    event._init_database(header)
+    event._init_database(GLOBAL_HEADER)
     stock_list = create_stock_list()
     for stock in stock_list:
         event.record_stock(stock)
 
 
+'''
 def event_record_stock():
     header = mysqlHeader('stock', 'stock2020', 'stock')
     event = EventTradeDataManager()
