@@ -1,26 +1,6 @@
 [
 	{
-		"task":"event_rehabilitation",
-		"time":"22:50"
-	},
-	{
-		"task": "event_download_stock_data",
-		"time": "23:10"
-	},
-	{
-		"task":"event_flag_stock",
-		"time":"12:00"
-	},
-	{
-		"task":"event_record_interest",
-		"time":"22:20"
-	},
-	{
-		"task":"event_finance_info",
-		"time":"3:40"
-	},
-	{
-		"task":"event_cooperation_info",
+		"task":"event_init_stock",
 		"time":"22:50"
 	}
 

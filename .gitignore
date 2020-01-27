@@ -1,5 +1,6 @@
+*.csv
 csv/*
-applications/csv/*
+applications/csv/*.csv
 applications/old_code/*
 applications/*/__pycache__/*
 applications/__pycache__/*.pyc

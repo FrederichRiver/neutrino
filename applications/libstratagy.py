@@ -12,7 +12,7 @@ from form import formStockManager, formIncomeStatement, formBalance
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
 from libstock import StockEventBase
 from env import global_header
-from util import RandomHeader
+from utils import RandomHeader
 
 
 __version__ = '1.0.2-dev'

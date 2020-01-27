@@ -26,7 +26,7 @@ from lxml import etree
 from polaris.mysql8 import (mysqlBase, mysqlHeader)
 from message import ADJUST_FACTOR_ERROR
 from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
-from util import read_json, neteaseindex, today, info, error
+from utils import read_json, neteaseindex, today, info, error
 
 __version__ = '1.7.38'
 

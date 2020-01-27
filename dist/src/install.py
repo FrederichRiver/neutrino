@@ -12,16 +12,11 @@ def solve_dir(dir):
     :direc: First iter directory
     :returns: None
     """
-    # files = os.listdir(dir)
-    files = [
-        'neutrino.py', 'message.py',
-        'config/conf.json', 'config/task.json',
-        'config/Neutrino']
+    files = os.listdir(dir)
     for fi in files:
         obj_fi = dir + fi
         dest_fi = DEST + fi
         if os.path.isfile(obj_fi):
-            print(obj_fi)
             cmd = "cp -u -v %s %s" % (obj_fi, dest_fi)
             os.system(cmd)
         elif os.path.isdir(fi):
