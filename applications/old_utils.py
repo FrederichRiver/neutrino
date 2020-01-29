@@ -100,7 +100,7 @@ def str2number(in_str):
         in_str = in_str.replace(',', '')
         f = re.search(r'(\-|\+)?\d+(\.[0-9]+)?', in_str)
         d = re.match(r'\d{4}\-\d{2}\-\d{2}', in_str)
-        if d:    
+        if d:
             result = in_str
         elif f:
             # print(in_str) 

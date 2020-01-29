@@ -1,9 +1,12 @@
 #!/usr/bin/python3
+import datetime
+import numpy as np
+import pandas as pd
 import re
-from datetime import date
 from dev_global.env import TIME_FMT
 from venus.msg import NoneHeaderError
 from polaris.mysql8 import (mysqlBase, mysqlHeader)
+from jupiter.utils import trans
 
 
 __version__ = '1.0.10'
@@ -11,8 +14,8 @@ __version__ = '1.0.10'
 
 class StockEventBase(object):
     def __init__(self, header):
-        self.Today = date.today().strftime(TIME_FMT)
-        self.today = date.today().strftime('%Y%m%d')
+        self.Today = datetime.date.today().strftime(TIME_FMT)
+        self.today = datetime.date.today().strftime('%Y%m%d')
         if not header:
             raise Exception
         self.mysql = mysqlBase(header)
@@ -26,7 +29,39 @@ class StockEventBase(object):
         """
         Get date of today.
         """
-        self.Today = date.today().strftime(TIME_FMT)
+        self.Today = datetime.date.today().strftime(TIME_FMT)
+
+    def get_all_stock_list(self):
+        """
+        Return stock code --> list.
+        """
+        query = self.mysql.condition_select(
+            "stock_manager", "stock_code", "flag='1'"
+        )
+        df = pd.DataFrame.from_dict(query)
+        self.stock_list = df[0].tolist()
+        return self.stock_list
+
+    def get_all_security_list(self):
+        """
+        Return stock code --> list
+        """
+        # Return all kinds of securities in form stock list.
+        # Result : List type data.
+        result = self.mysql.session.query(
+            formStockManager.stock_code).all()
+        df = pd.DataFrame.from_dict(result)
+        result = df['stock_code'].tolist()
+        return result
+
+    def get_html_object(self, url, header):
+        """
+        result is a etree.HTML object
+        """
+        content = requests.get(url, headers=header, timeout=3)
+        content.encoding = content.apparent_encoding
+        result = etree.HTML(content.text)
+        return result
 
     def close(self):
         self.mysql.engine.close()
@@ -109,3 +144,30 @@ class StockList(object):
         stock_list += self.get_cyb_stock()
         stock_list += self.get_zxb_stock()
         return stock_list
+
+
+class dataLine(object):
+    def __init__(self, table_name):
+        # self.data = df
+        self.table_name = table_name
+
+    def insert_sql(self, df):
+        """
+        Result: Return a list of sql.
+        """
+        sql = f"INSERT into {self.table_name} ("
+        sql += ','.join(df.columns)
+        sql += ") VALUES ({})"
+        value = []
+        result = []
+        for index, row in df.iterrows():
+            value = []
+            for col in df.columns:
+                value.append(trans(row[col]))
+            result_sql = sql.format(','.join(value))
+            result.append(result_sql)
+        return result
+
+
+if __name__ == "__main__":
+    pass

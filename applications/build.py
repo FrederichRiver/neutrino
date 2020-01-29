@@ -11,3 +11,5 @@ for lib in lib_list:
     os.system(rm_dir_cmd)
     cp_cmd = f"cp -r dist/ {root_path}/"
     os.system(cp_cmd)
+    rm_dist_cmd = f"rm -r dist/"
+    os.system(rm_dist_cmd)

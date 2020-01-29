@@ -9,7 +9,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
-__version__ = '3.1.16'
+
+
+__version__ = '3.1.17'
 
 
 class mysqlBase(object):
@@ -49,7 +51,7 @@ class mysqlBase(object):
         result = self.engine.execute(sql).fetchone()
         return result
 
-    def select_values(self, table, field):
+    def simple_select(self, table, field):
         """
         Return a tuple like result
         """
@@ -57,11 +59,20 @@ class mysqlBase(object):
         result = self.engine.execute(sql)
         return result
 
-    def select_values2(self, table, field):
+    def select_values(self, table, field):
         """
         Return a DataFrame type result.
         """
         sql = f"SELECT {field} from {table}"
+        select_value = self.engine.execute(sql)
+        result = pd.DataFrame(select_value)
+        return result
+
+    def condition_select(self, table, field, condition):
+        """
+        Return a DataFrame type result.
+        """
+        sql = f"SELECT {field} from {table} WHERE {condition}"
         select_value = self.engine.execute(sql)
         result = pd.DataFrame(select_value)
         return result

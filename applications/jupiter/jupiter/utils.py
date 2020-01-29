@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 import json
 import logging
-from datetime import datetime
+import pandas as pd
+import datetime
+import re
 from pandas import read_csv
 import functools
 import psutil
@@ -82,6 +84,29 @@ class Resource(object):
             f"<Total Memory>: {round(mem.total/MB, 2)}MB\n"
             f"<Total Disk>: {round(disk.total/GB, 2)}GB")
         return sys_info
+
+
+def trans(x):
+    """
+    Used for sql generating.
+    float or int : value -> str / nan -> 0
+    datetime     : value -> '2020-01-22' / nan -> NULL
+    str          : value -> 'value'
+    """
+    if isinstance(x, int) or isinstance(x, float):
+        if pd.isnull(x):
+            return '0'
+        else:
+            return str(x)
+    elif isinstance(x, datetime.datetime):
+        if re.match(r"\d{4}\-\d{2}\-\d{2}", str(x)):
+            return f"'{str(x)}'"
+        else:
+            return "NULL"
+    elif isinstance(x, str):
+        return f"'{str(x)}'"
+    else:
+        return f"'{str(x)}'"
 
 
 def str2number(in_str):

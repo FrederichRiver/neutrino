@@ -79,6 +79,7 @@ class StockEventBase(object):
         """
         fetch stocks flaged by 1 from database.
         """
+        # -----#
         result = self.mysql.session.query(
             formStockManager.stock_code, formStockManager.flag).all()
         df = pd.DataFrame.from_dict(result)
@@ -87,6 +88,7 @@ class StockEventBase(object):
         return self.stock_list
 
     def fetch_all_security_list(self):
+        # --------- #
         # Return all kinds of securities in form stock list.
         result = self.mysql.session.query(
             formStockManager.stock_code).all()
