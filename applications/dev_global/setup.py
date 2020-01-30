@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from setuptools import setup, find_packages
-from src import __version__ as v
+from dev_global import __version__ as v
 setup(
         name='dev_global',
         version=v,

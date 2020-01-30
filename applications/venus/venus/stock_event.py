@@ -18,12 +18,45 @@ def event_download_stock_data():
     pass
 
 
+# delete, not use.
 def event_create_interest_table():
     pass
 
 
+# event record interest
+def event_init_interest():
+    from venus.stock_interest import EventInterest
+    event = EventInterest(GLOBAL_HEADER)
+    event.fetch_all_stock_list()
+    for stock_code in event.stock_list:
+        # stock code format: SH600000
+        try:
+            taskline = Thread(
+                target=event.insert_interest_table_into_sql,
+                args=(stock_code,),
+                name=stock_code,
+                daemon=True)
+            taskline.start()
+            # event.insert_interest_table_into_sql(stock_code)
+            time.sleep(1)
+        except Exception:
+            ERROR(f"Error while recording interest of {stock_code}")
+
+
 def event_record_interest():
-    pass
+    """
+    Insert interest line by line.
+    """
+    import numpy as np
+    import re
+    event = EventInterest(GLOBAL_HEADER)
+    event.fetch_all_stock_list()
+    for stock_code in event.stock_list:
+        tab = event.resolve_interst_table(stock_code)
+        if not tab.empty:
+            tab.replace(['--'], np.nan, inplace=True)
+            tab = event.data_clean(tab)
+            event.insert_interest_to_sql(tab)
 
 
 def event_flag_stock():

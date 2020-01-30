@@ -32,11 +32,11 @@ class formInterest(formTemplate):
     # This is the template of stock interest.
     __tablename__ = 'template_stock_interest'
     report_date = Column(Date, primary_key=True)
-    stock_code = Column(String(10), primary_key=True)
-    year = Column(Integer)
-    bonus = Column(Float)
-    increase = Column(Float)
-    dividend = Column(Float)
+    char_stock_code = Column(String(10), primary_key=True)
+    int_year = Column(Integer)
+    float_bonus = Column(Float)
+    float_increase = Column(Float)
+    float_dividend = Column(Float)
     record_date = Column(Date)
     xrdr_date = Column(Date)
     share_date = Column(Date)
