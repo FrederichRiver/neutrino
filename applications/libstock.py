@@ -439,71 +439,6 @@ class codeFormat(object):
         return stock_code
 
 
-def create_stock_list(flag='all'):
-    # Shanghai A : sha
-    # Shenzhen A : sza
-    # Chuangyeban : cyb
-    # Zhongxiaoban : zxb
-    # Shanghai index : shi
-    # Shenzhen index : szi
-    # Hongkong stock : hk
-    indices = []
-    sha = ['SH600000']*4000
-    for i in range(len(sha)):
-        sha[i] = 'SH' + '60' + str(i).zfill(4)
-    sza = ['SZ000001']*1000
-    for i in range(len(sza)):
-        sza[i] = 'SZ' + str(i).zfill(6)
-    cyb = ['SZ300001']*1000
-    for i in range(len(cyb)):
-        cyb[i] = 'SZ' + '300' + str(i).zfill(3)
-    zxb = ['SZ002000']*1000
-    for i in range(len(zxb)):
-        zxb[i] = 'SZ' + '002' + str(i).zfill(3)
-    shb = ['SH900000']*4000
-    for i in range(len(shb)):
-        shb[i] = 'SH' + '900' + str(i).zfill(3)
-    szb = ['SZ200001']*1000
-    for i in range(len(szb)):
-        szb[i] = 'SZ' + '200' + str(i).zfill(3)
-    shi = ['SH000000']*2000
-    for i in range(999):
-        shi[i] = 'SH' + str(i).zfill(6)
-        shi[i + 1000] = 'SH' + '950' + str(i).zfill(3)
-    szi = ['SZ399000']*1000
-    for i in range(len(szi)):
-        szi[i] = 'SZ' + '399' + str(i).zfill(3)
-    kcb = ['SH688001']*1000
-    for i in range(len(kcb)):
-        kcb[i] = 'SH' + '688' + str(i).zfill(3)
-
-    if flag == 'all':
-        indices.extend(sha)
-        indices.extend(sza)
-        indices.extend(cyb)
-        indices.extend(zxb)
-        indices.extend(szb)
-        indices.extend(shi)
-        indices.extend(szi)
-        indices.extend(kcb)
-    elif flag == 'stocks':
-        indices.extend(sha)
-        indices.extend(sza)
-    elif flag == 'a':
-        indices.extend(sha)
-        indices.extend(sza)
-    elif flag == 'b':
-        indices.extend(shb)
-        indices.extend(szb)
-    elif flag == 'zxb':
-        indices.extend(zxb)
-    elif flag == 'cyb':
-        indices.extend(cyb)
-    else:
-        pass
-    return indices
-
-
 def str2zero(input_str, return_type='i'):
     if input_str != '--':
         return input_str
@@ -512,59 +447,6 @@ def str2zero(input_str, return_type='i'):
             return 'NULL'
         else:
             return 'NULL'
-
-
-class DataLine(object):
-
-    # Resolve the dataline
-    # and convert it into sql.
-
-    def __init__(self):
-        self.report_date = datetime.now()
-        self.record_date = datetime.now()
-        self.xrdr_date = datetime.now()
-        self.share_date = None
-        self.year = datetime.now().timetuple()[0]
-        self.bonus = 0.0
-        self.increase = 0.0
-        self.dividend = 0.0
-        self.time = datetime.now().timetuple()
-
-    def resolve(self, data_line, table_name):
-        self.report_date = datetime.strptime(
-            data_line[0], TIME_FMT)
-        self.year = int(data_line[1])
-        self.bonus = float(str2zero(data_line[4]))
-        self.increase = float(str2zero(data_line[3]))
-        self.dividend = float(str2zero(data_line[2]))
-        self.record_date = datetime.strptime(
-            data_line[5], TIME_FMT)
-        self.xrdr_date = datetime.strptime(
-            data_line[6], TIME_FMT)
-        self.share_date = datetime.strptime(
-            data_line[7],
-            TIME_FMT) if data_line[7] != '--' else None
-        if self.share_date:
-            sql = (f"INSERT INTO {table_name}"
-                   "(report_date, year, bonus, increase,"
-                   "dividend, record_date, xrdr_date,"
-                   "share_date)"
-                   f"VALUES ('{self.report_date}',"
-                   f"{self.year}, {self.bonus},{self.increase},"
-                   f"{self.dividend},'{self.record_date}',"
-                   f"'{self.xrdr_date}','{self.share_date}')")
-        else:
-            sql = (f"INSERT INTO {table_name}"
-                   "(report_date, year, bonus, increase,"
-                   "dividend, record_date, xrdr_date)"
-                   f"VALUES ('{self.report_date}',"
-                   f"{self.year}, {self.bonus},{self.increase},"
-                   f"{self.dividend},'{self.record_date}',"
-                   f"'{self.xrdr_date}')")
-        return self.report_date, sql
-
-    def __repr__(self):
-        return str(self.year)
 
 
 def event_stock_flag():

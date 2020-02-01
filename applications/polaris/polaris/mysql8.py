@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 
 
-__version__ = '3.1.17'
+__version__ = '3.1.18'
 
 
 class mysqlBase(object):
@@ -21,6 +21,10 @@ class mysqlBase(object):
         :param engine: is the object returned from create_engine.
         :param session: contains the cursor object.
         """
+        self.account = header.account
+        self.host = header.host
+        self.port = header.port
+        self.database = header.database
         mysql_url = (
             f"mysql+pymysql://{header.account}:"
             f"{header.password}"
@@ -36,7 +40,10 @@ class mysqlBase(object):
             f"mysql engine <{header.account}@{header.host}>")
 
     def __str__(self):
-        return self.id_string
+        result = (
+            str(self.account), str(self.host),
+            str(self.port), str(self.database), str(self.charset))
+        return result
 
     def insert(self, sql):
         self.engine.execute(sql)
@@ -136,6 +143,12 @@ class mysqlHeader(object):
         self.host = host
         self.port = port
         self.charset = 'utf8'
+
+    def __str__(self):
+        result = (
+            str(self.account), str(self.host),
+            str(self.port), str(self.database), str(self.charset))
+        return result
 
 
 def create_table(table, engine):
