@@ -25,6 +25,24 @@ class StockEventBase(object):
     def __str__(self):
         return "<Stock Event Base>"
 
+    def data_clean(self, df):
+        for index, col in df.iteritems():
+            try:
+                if re.search('date', index):
+                    df[index] = pd.to_datetime(df[index])
+                elif re.search('int', index):
+                    df[index] = pd.to_numeric(df[index])
+                elif re.search('float', index):
+                    df[index] = pd.to_numeric(df[index])
+                elif re.search('char', index):
+                    pass
+                else:
+                    pass
+            except Exception:
+                ERROR(
+                    f"Error while record interest of {col['char_stock_code']}")
+        return df
+
     def update_date_time(self):
         """
         Get date of today.

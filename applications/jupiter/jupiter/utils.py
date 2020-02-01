@@ -7,7 +7,7 @@ import re
 from pandas import read_csv
 import functools
 import psutil
-from dev_global.env import CONF_FILE, LOG_FILE, SQL_FILE
+from dev_global.env import CONF_FILE, LOG_FILE, SQL_FILE, TIME_FMT
 
 
 def read_json(key, js_file):
@@ -107,6 +107,33 @@ def trans(x):
         return f"'{str(x)}'"
     else:
         return f"'{str(x)}'"
+
+
+def set_date_as_index(df):
+    df['date'] = pd.to_datetime(df['date'], format=TIME_FMT)
+    df.set_index('date', inplace=True)
+    # exception 1, date index not exists.
+    # exception 2, date data is not the date format.
+    return df
+
+
+def data_clean(df):
+    for index, col in df.iteritems():
+        try:
+            if re.search('date', index):
+                df[index] = pd.to_datetime(df[index])
+            elif re.search('int', index):
+                df[index] = pd.to_numeric(df[index])
+            elif re.search('float', index):
+                df[index] = pd.to_numeric(df[index])
+            elif re.search('char', index):
+                pass
+            else:
+                pass
+        except Exception as e:
+            ERROR(f"Error while data cleaning.")
+            ERROR(e)
+    return df
 
 
 def str2number(in_str):

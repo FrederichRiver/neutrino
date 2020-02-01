@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 import time
 from dev_global.env import CONF_FILE, GLOBAL_HEADER, TIME_FMT
-from jupiter.utils import ERROR, read_url
+from jupiter.utils import ERROR, read_url, set_date_as_index, data_clean
 from lxml import etree
 from venus.stock_base import StockEventBase, dataLine
 from venus.form import formInterest
@@ -19,24 +19,6 @@ class EventInterest(StockEventBase):
                 "stock_interest",
                 formInterest.__tablename__,
                 self.mysql.engine)
-
-    def data_clean(self, df):
-        for index, col in df.iteritems():
-            try:
-                if re.search('date', index):
-                    df[index] = pd.to_datetime(df[index])
-                elif re.search('int', index):
-                    df[index] = pd.to_numeric(df[index])
-                elif re.search('float', index):
-                    df[index] = pd.to_numeric(df[index])
-                elif re.search('char', index):
-                    pass
-                else:
-                    pass
-            except Exception:
-                ERROR(
-                    f"Error while record interest of {col['char_stock_code']}")
-        return df
 
     def resolve_interest_table(self, stock_code):
         """
@@ -138,14 +120,6 @@ class EventInterest(StockEventBase):
             except Exception as e:
                 ERROR(f"Error occurs while updating {stock_code}, trade_date={index}, factor={row['factor']}")
         # """
-
-
-def set_date_as_index(df):
-    df['date'] = pd.to_datetime(df['date'], format=TIME_FMT)
-    df.set_index('date', inplace=True)
-    # exception 1, date index not exists.
-    # exception 2, date data is not the date format.
-    return df
 
 
 if __name__ == "__main__":
