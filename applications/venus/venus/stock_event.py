@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # event_stock
-
+import pandas as pd
 from polaris.mysql8 import mysqlHeader
 from dev_global.env import GLOBAL_HEADER
 # from form import formStockManager
@@ -86,6 +86,17 @@ def event_init_stock():
         event.record_stock(stock)
 
 
+def event_download_finance_report():
+    from venus.finance_report import EventFinanceReport
+    event = EventFinanceReport(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock in stock_list:
+        print(f"Download finance report of {stock}.")
+        # event.update_balance_sheet(stock)
+        event.update_income_statement(stock)
+        event.update_balance_sheet(stock)
+        event.update_cashflow_sheet(stock)
+
 '''
 def event_record_stock():
     header = mysqlHeader('stock', 'stock2020', 'stock')
@@ -158,18 +169,7 @@ def event_rehabilitation():
         event.update_adjust_factor(stock)
 
 
-def event_download_finance_report():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = EventFinanceReport()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    for stock in stock_list:
-        # print(stock[2:])
-        print(f"Download finance report of {stock}.")
-        # event.update_balance_sheet(stock)
-        event.update_income_statement(stock)
-        event.update_balance_sheet(stock)
-        event.update_cashflow_sheet(stock)
+
 
 
 def event_download_trade_detail_data():
@@ -214,3 +214,6 @@ def event_finance_info():
         except Exception as e:
             print(e)
 '''
+
+if __name__ == "__main__":
+    event_download_finance_report()

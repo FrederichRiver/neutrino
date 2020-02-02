@@ -179,10 +179,34 @@ class dataLine(object):
         value = []
         result = []
         for index, row in df.iterrows():
+            print(index)
             value = []
             for col in df.columns:
                 value.append(trans(row[col]))
             result_sql = sql.format(','.join(value))
+            result.append(result_sql)
+        return result
+
+    def update_sql(self, df, primary_key):
+        """
+        Result: Return a list of sql.
+        """
+        value_list = ''
+        condition = ''
+        sql = f"UPDATE {self.table_name} set "
+        sql += "{} WHERE {}"
+        value = []
+        result = []
+        for index, row in df.iterrows():
+            value = []
+            for label in df.columns:
+                v = label + '=' + trans(row[label])
+                value.append(v)
+            value_list = ','.join(value)
+            condition = (
+                f"({primary_key[0]}={trans(row[primary_key[0]])},"
+                f"{primary_key[1]}={trans(row[primary_key[1]])})")
+            result_sql = sql.format(value_list, condition)
             result.append(result_sql)
         return result
 

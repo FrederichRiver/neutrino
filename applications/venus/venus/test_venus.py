@@ -52,13 +52,21 @@ def unit_test_dataline():
     import pandas as pd
     df = pd.DataFrame({
         'id': [1, 2, 3, 4, 5, 6],
-        'name': ['Alice', 'Bob', 'Cindy', 'Eric', 'Helen', 'Grace '],
+        'name': ['Alice', 'Bob', 'Cindy', 'Eric', 'Helen', 'Grace'],
         'math': [90, 89, 99, 78, 97, 93],
         'english': [89, 94, 80, 94, 94, 90]})
     dt = dataLine('test_interest')
     sql_list = dt.insert_sql(df)
+    sql_list = dt.update_sql(df, ['id', 'name'])
     for sql in sql_list:
         print(sql)
+
+
+def unit_test_financeReport():
+    from dev_global.env import GLOBAL_HEADER
+    from finance_report import EventFinanceReport
+    event = EventFinanceReport(GLOBAL_HEADER)
+    event.update_balance_sheet("SH601818")
 
 
 if __name__ == "__main__":
@@ -66,4 +74,5 @@ if __name__ == "__main__":
     # unit_test_stockEventBase()
     # unit_test_StockList()
     # unit_test_stock_interest()
-    unit_test_dataline()
+    # unit_test_dataline()
+    unit_test_financeReport()
