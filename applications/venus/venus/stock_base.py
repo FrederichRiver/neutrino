@@ -66,6 +66,7 @@ class StockEventBase(object):
         """
         # Return all kinds of securities in form stock list.
         # Result : List type data.
+        from venus.form import formStockManager
         result = self.mysql.session.query(
             formStockManager.stock_code).all()
         df = pd.DataFrame.from_dict(result)

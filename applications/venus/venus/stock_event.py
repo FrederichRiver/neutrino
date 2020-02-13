@@ -83,6 +83,16 @@ def event_flag_stock():
     pass
 
 
+def evet_flag_index():
+    import re
+    from venus.stock_flag import EventStockFlag
+    event = EventStockFlag(GLOBAL_HEADER)
+    stock_list = event.get_all_security_list()
+    for stock_code in stock_list:
+        if re.match(r'^SH0|^SZ9', stock_code):
+            event.flag_index(stock_code)
+
+
 def event_rehabilitation():
     pass
 
@@ -116,6 +126,7 @@ def event_download_finance_report():
         event.update_income_statement(stock)
         event.update_balance_sheet(stock)
         event.update_cashflow_sheet(stock)
+
 
 '''
 def event_record_stock():

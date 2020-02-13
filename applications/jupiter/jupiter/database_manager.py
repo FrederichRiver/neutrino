@@ -2,24 +2,14 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from polaris.mysql8 import mysqlHeader, mysqlBase, create_table
-# from form import (
-#    formTemplate,  formStockManager,
-#    formFinanceTemplate, formInfomation)
-from venus.stock_base import StockEventBase
 from dev_global.env import GLOBAL_HEADER
+from polaris.mysql8 import mysqlHeader, mysqlBase, create_table
+from venus.stock_base import StockEventBase
 
 
 __version__ = '1.4'
 
 """
-def event_initial_database(header):
-    mysql = mysqlBase(header)
-    create_table(formTemplate, mysql.engine)
-    create_table(formFinanceTemplate, mysql.engine)
-    create_table(formInfomation, mysql.engine)
-
-
 def event_drop_tables(header):
     mysql = mysqlBase(header)
     # self definition

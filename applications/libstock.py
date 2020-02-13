@@ -129,63 +129,6 @@ class EventStockPrice(StockEventBase):
         return df
 
 
-class EventFlag(StockEventBase):
-    def main_flag(self, stock_code):
-        if re.match(r'^SH0|^SZ9', stock_code):
-            self._flag_index(stock_code)
-        elif re.match(r'^SH6', stock_code):
-            self._flag_stock(stock_code)
-        elif re.match(r'^SZ[0|3|8]', stock_code):
-            self._flag_stock(stock_code)
-        else:
-            pass
-
-    def _flag_index(self, stock_code):
-        stock_name = fetch_name(stock_code)
-        result = self.mysql.session.query(
-            formStockManager.stock_code,
-            formStockManager.flag
-            ).filter_by(stock_code=stock_code)
-        if result:
-            result.update(
-                {"flag": '0'}
-            )
-            self.mysql.session.commit()
-        return 1
-
-    def _flag_stock(self, stock_code):
-        # format '1,S,<1.1,1.2,3.7>'
-        # 1- Stock, S(special treat, including double stars),
-        # numbers in '<>' means hangye, 1st class and 2nd class)
-        # st, stop
-        stock_name = fetch_name(stock_code)
-        result = self.mysql.session.query(
-            formStockManager.stock_code,
-            formStockManager.flag
-            ).filter_by(stock_code=stock_code)
-        if result:
-            result.update(
-                {"flag": '1'}
-            )
-            self.mysql.session.commit()
-        return 1
-
-    def fetch_name(self, s):
-        pass
-
-    def _flag_fund(self, stock_code):
-        pass
-
-    def _flag_future(self, stock_code):
-        pass
-
-    def _flag_gold(self, stock_code):
-        pass
-
-    def _flag_right(self, stock_code):
-        pass
-
-
 class EventTradeDataManager(StockEventBase):
     """
     It is a basic event, which fetch trade data and manage it.
@@ -363,18 +306,6 @@ class EventTradeDataManager(StockEventBase):
             print(f'{time.ctime()}: (Error 102) {e}')
 
 
-class EventCreateInterestTable(StockEventBase):
-    def create_interest_table(self):
-        from form import formInterest
-        self.fetch_all_stock_list()
-        for stock_code in self.stock_list:
-            print(f"{time.ctime()}: Create interest table {stock_code}")
-            create_table_from_table(
-                f"{stock_code}_interest",
-                formInterest.__tablename__,
-                self.mysql.engine)
-
-
 class EventRecordInterest(StockEventBase):
     def record_interest(self):
         self.fetch_all_stock_list()
@@ -410,35 +341,6 @@ class EventRecordInterest(StockEventBase):
                     self.mysql.session.commit()
 
 
-class codeFormat(object):
-    def __call__(self, stock_code):
-        if type(stock_code) == str:
-            stock_code = stock_code.upper()
-            if re.match(r'^[A-Z][A-Z]\d{6}', stock_code):
-                # format <SH600000> or <SZ000001>
-                pass
-            elif re.match(r'(\d{6}).([A-Z][A-Z])\Z', stock_code):
-                # format <600000.SH> or <0000001.SZ>
-                result = re.match(r'(\d{6}).([A-Z][A-Z]\Z)', stock_code)
-                stock_code = result.group(2)+result.group(1)
-            else:
-                stock_code = None
-            return stock_code
-
-    def net_ease_code(self, stock_code):
-        stock_code = self.__call__(stock_code)
-        if type(stock_code) == str:
-            if stock_code[:2] == 'SH':
-                stock_code = '0' + stock_code[2:]
-            elif stock_code[:2] == 'SZ':
-                stock_code = '1' + stock_code[2:]
-            else:
-                stock_code = None
-        else:
-            stock_code = None
-        return stock_code
-
-
 def str2zero(input_str, return_type='i'):
     if input_str != '--':
         return input_str
@@ -447,45 +349,6 @@ def str2zero(input_str, return_type='i'):
             return 'NULL'
         else:
             return 'NULL'
-
-
-def event_stock_flag():
-    header = mysqlHeader('root', '6414939', 'stock')
-    mysql = mysqlBase(header)
-    stock_list = fetch_no_flag_stock()
-    df = pd.DataFrame(stock_list, columns=['stock_code'])
-    df['flag'] = None
-    print(df.head(5))
-    for i in range(df.shape[0]):
-        if re.match(r'^SH0', df.loc[i, 'stock_code']):
-            df.loc[i, 'flag'] = 'index'
-            print(df.iloc[i].values)
-            sql = f"update stock_list set flag=\
-                   '{df.loc[i,'flag']}' where stock_code=\
-                    '{df.loc[i,'stock_code']}'"
-            mysql.session.execute(sql)
-            mysql.session.commit()
-        elif re.match(r'^SH6', df.loc[i, 'stock_code']):
-            df.loc[i, 'flag'] = 'stock'
-            sql = f"update stock_list set flag=\
-                   '{df.loc[i,'flag']}' where stock_code=\
-                    '{df.loc[i,'stock_code']}'"
-            mysql.session.execute(sql)
-            mysql.session.commit()
-        elif re.match(r'^SZ0', df.loc[i, 'stock_code']):
-            df.loc[i, 'flag'] = 'stock'
-            sql = f"update stock_list set flag=\
-                   '{df.loc[i,'flag']}' where stock_code=\
-                    '{df.loc[i,'stock_code']}'"
-            mysql.session.execute(sql)
-            mysql.session.commit()
-        elif re.match(r'^SZ3', df.loc[i, 'stock_code']):
-            df.loc[i, 'flag'] = 'stock'
-            sql = f"update stock_list set flag=\
-                   '{df.loc[i,'flag']}' where stock_code=\
-                    '{df.loc[i,'stock_code']}'"
-            mysql.session.execute(sql)
-            mysql.session.commit()
 
 
 class EventRehabilitation(StockEventBase):

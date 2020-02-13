@@ -1,0 +1,6 @@
+Jupiter是一个工具包。它包含了最基础的功能，如：
+1、网络功能：network
+2、任务管理功能：task manager
+3、数据库管理功能：database manager
+4、基本函数：utils
+5、交易日模型：trade date
