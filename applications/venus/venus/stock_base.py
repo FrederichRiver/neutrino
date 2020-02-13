@@ -54,7 +54,7 @@ class StockEventBase(object):
         Return stock code --> list.
         """
         query = self.mysql.condition_select(
-            "stock_manager", "stock_code", "flag='1'"
+            "stock_manager", "stock_code", "flag='t'"
         )
         df = pd.DataFrame.from_dict(query)
         self.stock_list = df[0].tolist()
@@ -94,6 +94,9 @@ class StockCodeFormat(object):
                 # format <600000.SH> or <000001.SZ>
                 result = re.match(r'(\d{6}).([A-Z][A-Z]\Z)', stock_code)
                 stock_code = result.group(2)+result.group(1)
+            elif re.match(r'[A-Z][A-Z]\d{6}', stock_code):
+                # format <SH600000> or <SZ000001>
+                pass
             else:
                 stock_code = None
             return stock_code
@@ -161,6 +164,7 @@ class StockList(object):
         stock_list += self.get_sz_stock()
         stock_list += self.get_cyb_stock()
         stock_list += self.get_zxb_stock()
+        stock_list += self.get_kcb_stock()
         return stock_list
 
 
@@ -212,4 +216,8 @@ class dataLine(object):
 
 
 if __name__ == "__main__":
-    pass
+    event = StockCodeFormat()
+    call_result = event('600000.SH')
+    func_result = event.net_ease_code('SH601818')
+    print(call_result)
+    print(func_result)

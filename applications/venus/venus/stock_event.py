@@ -3,8 +3,8 @@
 import pandas as pd
 from polaris.mysql8 import mysqlHeader
 from dev_global.env import GLOBAL_HEADER
-# from form import formStockManager
-# from dev import fetch_finance_info, fetch_cooperation_info
+from venus.stock_manager import EventTradeDataManager
+from venus.stock_flag import EventStockFlag
 import time
 
 __version__ = '1.0.12'
@@ -15,12 +15,32 @@ def event_record_stock():
 
 
 def event_download_stock_data():
-    pass
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    # stock_code = 'SH601818'
+    for stock_code in stock_list:
+        event.download_stock_data(stock_code)
 
 
 # delete, not use.
 def event_create_interest_table():
     pass
+
+
+def event_flag_quit_stock():
+    event = EventStockFlag(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    # stock_code = 'SH601818'
+    for stock_code in stock_list:
+        flag = event.flag_quit_stock(stock_code)
+        if flag:
+            flag = 'q'
+        else:
+            flag = 't'
+        sql = (
+            f"UPDATE stock_manager set flag='{flag}' "
+            f"WHERE stock_code='{stock_code}'")
+        event.mysql.engine.execute(sql)
 
 
 # event record interest
@@ -216,4 +236,5 @@ def event_finance_info():
 '''
 
 if __name__ == "__main__":
-    event_download_finance_report()
+    # event_download_finance_report()
+    event_download_stock_data()

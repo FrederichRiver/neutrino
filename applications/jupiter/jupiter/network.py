@@ -9,6 +9,16 @@ class RandomHeader(object):
         with open('config/header.json', 'r') as f:
             result = f.read()
             self.js = json.loads(result)
+        self.header = None
+
+    def set_user_agent(self):
+        index = randint(0, len(self.js)-1)
+        self.header = {"User-Agent": self.js[str(index)]}
+
+    def set_refer(self, reference):
+        if not self.header:
+            self.set_user_agent()
+        self.header['Referer'] = reference
 
     def __call__(self):
         index = randint(0, len(self.js)-1)

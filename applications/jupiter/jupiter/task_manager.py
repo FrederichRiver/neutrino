@@ -35,8 +35,8 @@ class taskManager(BackgroundScheduler):
             try:
                 self.func_list = {
                     # 'event_record_stock': event_record_stock,
-                    'event_init_stock': event_init_stock
-                    # 'event_download_stock_data': event_download_stock_data,
+                    'event_init_stock': event_init_stock,
+                    'event_download_stock_data': event_download_stock_data,
                     # 'event_record_interest': event_record_interest,
                     # 'event_flag_stock': event_flag_stock,
                     # 'event_rehabilitation': event_rehabilitation,

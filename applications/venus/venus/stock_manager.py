@@ -1,6 +1,11 @@
-from dev_global.env import CONF_FILE
+#!/usr/bin/python3
+import pandas as pd
+import numpy as np
+from dev_global.env import CONF_FILE, TIME_FMT
 from jupiter.utils import read_url, ERROR, drop_space, INFO
 from venus.stock_base import StockEventBase
+from sqlalchemy.types import Date, DECIMAL, Integer, NVARCHAR
+from venus.form import formStockManager
 
 
 class EventTradeDataManager(StockEventBase):
@@ -9,20 +14,20 @@ class EventTradeDataManager(StockEventBase):
     """
     # def __init__(self):
     #    super(StockEventBase, self).__init__()
-    def url_netease(self, query_code, start_date, end_date):
+    def url_netease(self, stock_code, start_date, end_date):
         url = read_url('URL_163_MONEY', CONF_FILE)
-        query_code = self.coder.net_ease_code(code)
+        query_code = self.coder.net_ease_code(stock_code)
         netease_url = url.format(query_code, start_date, end_date)
         return netease_url
 
-    def get_trade_data(
-            self, code, start_date='19901219', end_date=self.today()):
+    def get_trade_data(self, stock_code, end_date, start_date='19901219'):
         """
         read csv data and return dataframe type data.
         """
         # config file is a url file.
-        url = self.url_netease(query_code, start_date, end_date)
-        return pd.read_csv(url, encoding='gb18030')
+        url = self.url_netease(stock_code, start_date, end_date)
+        result = pd.read_csv(url, encoding='gb18030')
+        return result
 
     def get_stock_name(self, stock_code):
         """
@@ -129,14 +134,14 @@ class EventTradeDataManager(StockEventBase):
 
     def download_stock_data(self, stock_code):
         # print(stock_code)
-        result = self.fetch_trade_data_from_netease(stock_code)
+        result = self.get_trade_data(stock_code, self.today)
         result.columns = ['trade_date', 'stock_code',
                           'stock_name', 'close_price',
                           'highest_price', 'lowest_price',
                           'open_price', 'prev_close_price',
                           'change_rate', 'amplitude',
                           'volume', 'turnover']
-        result = self._data_cleaning(result)
+        result = self.data_cleaning(result)
         columetype = {
             'trade_date': Date,
             'stock_name': NVARCHAR(length=10),
@@ -206,3 +211,12 @@ class EventTradeDataManager(StockEventBase):
         except Exception as e:
             ERROR(f"Failed when download {stock_code} tick data.")
             ERROR(e)
+
+
+if __name__ == "__main__":
+    from dev_global.env import GLOBAL_HEADER
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    stock_code = 'SH601818'
+    # for stock_code in stock_list:
+    event.download_stock_data(stock_code)

@@ -20,7 +20,7 @@ class EventFinanceReport(StockEventBase):
             except Exception as e:
                 print(e)
             try:
-                #update_sql_list = dataline.update_sql(df, ['stock_code', 'report_period'])
+                # update_sql_list = dataline.update_sql(df, ['stock_code', 'report_period'])
                 update_sql_list = dataline.update_sql(df, ['c0', 'c1'])
             except Exception as e:
                 print(e)

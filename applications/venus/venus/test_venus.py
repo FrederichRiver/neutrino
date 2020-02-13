@@ -69,10 +69,20 @@ def unit_test_financeReport():
     event.update_balance_sheet("SH601818")
 
 
+def unit_test_stockcode():
+    from venus.stock_base import StockCodeFormat
+    event = StockCodeFormat()
+    call_result = event('600000.SH')
+    func_result = event.net_ease_code('SH601818')
+    print(call_result)
+    print(func_result)
+
+
 if __name__ == "__main__":
     # unit_test_NoneHeaderError()
     # unit_test_stockEventBase()
     # unit_test_StockList()
     # unit_test_stock_interest()
     # unit_test_dataline()
-    unit_test_financeReport()
+    # unit_test_financeReport()
+    unit_test_stockcode()

@@ -62,7 +62,7 @@ class databaseBackup(object):
         for db in self.database_list:
             compress_file = f"{self.backup_path}/{db}_{time.strftime('%Y-%m-%d_%H:%M:%S')}.tar.gz"
             print(compress_file)
-            compress_cmd = f"tar -czvf {compress_file} {self.temp_path}"
+            compress_cmd = f"tar -czvPf {compress_file} {self.temp_path}"
             print(compress_cmd)
             os.chdir(self.backup_path)
             os.system("pwd")
@@ -107,7 +107,7 @@ def table_batch_modify():
             event.mysql.engine.execute(sql)
         except Exception:
             pass
-
+"""
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -134,4 +134,3 @@ if __name__ == "__main__":
             print(e)
     else:
         pass
-"""

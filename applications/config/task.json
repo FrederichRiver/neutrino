@@ -1,7 +1,7 @@
 [
 	{
-		"task":"event_init_stock",
-		"time":"22:50"
+		"task":"event_download_stock_data",
+		"time":"23:00"
 	}
 
 ]
