@@ -60,6 +60,17 @@ class StockEventBase(object):
         self.stock_list = df[0].tolist()
         return self.stock_list
 
+    def get_all_index_list(self):
+        """
+        Return stock code --> list.
+        """
+        query = self.mysql.condition_select(
+            "stock_manager", "stock_code", "flag='i'"
+        )
+        df = pd.DataFrame.from_dict(query)
+        self.stock_list = df[0].tolist()
+        return self.stock_list
+
     def get_all_security_list(self):
         """
         Return stock code --> list
@@ -166,7 +177,11 @@ class StockList(object):
         stock_list += self.get_cyb_stock()
         stock_list += self.get_zxb_stock()
         stock_list += self.get_kcb_stock()
+        stock_list += self.get_b_stock()
         return stock_list
+
+    def get_fund(self):
+        pass
 
 
 class dataLine(object):

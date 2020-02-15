@@ -34,7 +34,7 @@ class EventTradeDataManager(StockEventBase):
         Searching stock name from net ease.
         """
         try:
-            result = self.get_trade_data(stock_code)
+            result = self.get_trade_data(stock_code, self.today)
             if not result.empty:
                 stock_name = drop_space(result.iloc[1, 2])
             else:
@@ -54,25 +54,35 @@ class EventTradeDataManager(StockEventBase):
         # else result = (,)
         if not result:
             self.create_stock_table(stock_code)
+            self.init_stock_data(stock_code)
 
     def check_stock(self, stock_code):
         """
         Check whether table <stock_code> exists.
         """
         result = self.mysql.select_one(
-            stock_code, 'stock_code', f"stock_code='{stock_code}'")
+            'stock_manager', 'stock_code', f"stock_code='{stock_code}'")
         return result
 
     def create_stock_table(self, stock_code):
         _, stock_name = self.get_stock_name(stock_code)
         if stock_name:
+            sql = (
+                f"Insert into stock_manager set "
+                f"stock_code='{stock_code}',"
+                f"stock_name='{stock_name}',"
+                f"gmt_create='{self.Today}'"
+            )
+            """
             stock_orm = formStockManager(
                 stock_code=stock_code,
                 stock_name=stock_name,
-                gmt_create=self.Today()
+                gmt_create=self.Today
                 )
             self.mysql.session.add(stock_orm)
             self.mysql.session.commit()
+            """
+            self.mysql.engine.execute(sql)
             self.mysql.create_table_from_table(
                 stock_code, 'template_stock')
             INFO(f"Create table {stock_code}.")
@@ -217,6 +227,6 @@ if __name__ == "__main__":
     from dev_global.env import GLOBAL_HEADER
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
-    stock_code = 'SH601818'
+    stock_code = 'SH600007'
     # for stock_code in stock_list:
-    event.download_stock_data(stock_code)
+    event.record_stock(stock_code)

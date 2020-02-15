@@ -10,12 +10,13 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from jupiter.utils import ERROR, INFO
 from venus.stock_event import (
-    event_record_stock,
+    event_record_new_stock,
     event_init_stock,
     event_download_stock_data,
     event_create_interest_table,
     event_record_interest,
     event_flag_stock,
+    event_flag_index,
     event_rehabilitation,
     event_cooperation_info, event_finance_info)
 
@@ -34,11 +35,12 @@ class taskManager(BackgroundScheduler):
             self.taskfile = taskfile
             try:
                 self.func_list = {
-                    # 'event_record_stock': event_record_stock,
+                    'event_record_new_stock': event_record_new_stock,
                     'event_init_stock': event_init_stock,
                     'event_download_stock_data': event_download_stock_data,
                     # 'event_record_interest': event_record_interest,
-                    # 'event_flag_stock': event_flag_stock,
+                    'event_flag_stock': event_flag_stock,
+                    'event_flag_index': event_flag_index
                     # 'event_rehabilitation': event_rehabilitation,
                     # 'event_cooperation_info': event_cooperation_info,
                     # 'event_finance_info': event_finance_info
@@ -83,6 +85,8 @@ class taskManager(BackgroundScheduler):
         for k in jsdata.keys():
             if k == 'day of week':
                 trigger = CronTrigger(day_of_week=jsdata['day of week'])
+            elif k == 'day':
+                trigger = CronTrigger(day=jsdata['day'])
             elif k == 'hour':
                 trigger = CronTrigger(hour=jsdata['hour'])
             elif k == 'time':

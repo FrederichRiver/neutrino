@@ -1,4 +1,4 @@
 #!/bin/sh
 
-python3 /opt/neutrino/neutrino.pyc start
+python3 /opt/neutrino/neutrino.py start
 

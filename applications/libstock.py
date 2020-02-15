@@ -796,14 +796,6 @@ class EventFinanceReport(StockEventBase):
             self.mysql.engine.execute(update_date_sql)
 
 
-def set_date_as_index(df):
-    df['date'] = pd.to_datetime(df['date'], format=TIME_FMT)
-    df.set_index('date', inplace=True)
-    # exception 1, date index not exists.
-    # exception 2, date data is not the date format.
-    return df
-
-
 def fetch_atr(stock_code):
     stock_conn = mysqlBase('root', '6414939', 'stock')
     sql = (

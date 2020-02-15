@@ -5,6 +5,7 @@ import os
 import re
 
 DEST = '/opt/neutrino/'
+DEST2 = '/home/friederich/Documents/dev/neutrino/applications/package/'
 
 
 def solve_dir(dir):
@@ -15,14 +16,16 @@ def solve_dir(dir):
     # files = os.listdir(dir)
     files = [
         'neutrino.py', 'message.py', 'manage_tool.py',
-        'config/conf.json', 'config/task.json',
-        'config/Neutrino']
+        'config/conf.json', 'config/Neutrino']
     for fi in files:
         obj_fi = dir + fi
         dest_fi = DEST + fi
+        dest_fi2 = DEST2 + fi
         if os.path.isfile(obj_fi):
             print(obj_fi)
             cmd = "cp -u -v %s %s" % (obj_fi, dest_fi)
+            os.system(cmd)
+            cmd = "cp -u -v %s %s" % (obj_fi, dest_fi2)
             os.system(cmd)
         elif os.path.isdir(fi):
             solve_dir(obj_fi+'/')

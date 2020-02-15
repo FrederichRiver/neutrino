@@ -5,19 +5,32 @@ from polaris.mysql8 import mysqlHeader
 from dev_global.env import GLOBAL_HEADER
 from venus.stock_manager import EventTradeDataManager
 from venus.stock_flag import EventStockFlag
+from venus.stock_base import StockList
 import time
 
 __version__ = '1.0.12'
 
 
-def event_record_stock():
-    pass
+def event_record_new_stock():
+    sl = StockList()
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = sl.get_stock()
+    for stock_code in stock_list:
+        event.record_stock(stock_code)
+        # event.init_stock_data(stock_code)
 
 
 def event_download_stock_data():
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
     # stock_code = 'SH601818'
+    for stock_code in stock_list:
+        event.download_stock_data(stock_code)
+
+
+def event_download_index_data():
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = event.get_all_index_list()
     for stock_code in stock_list:
         event.download_stock_data(stock_code)
 
@@ -80,16 +93,32 @@ def event_record_interest():
 
 
 def event_flag_stock():
-    pass
-
-
-def evet_flag_index():
     import re
     from venus.stock_flag import EventStockFlag
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_security_list()
     for stock_code in stock_list:
-        if re.match(r'^SH0|^SZ9', stock_code):
+        if re.match(r'^SH60|^SZ00|^SZ300', stock_code):
+            event.flag_stock(stock_code)
+
+
+def event_flag_b_stock():
+    import re
+    from venus.stock_flag import EventStockFlag
+    event = EventStockFlag(GLOBAL_HEADER)
+    stock_list = event.get_all_security_list()
+    for stock_code in stock_list:
+        if re.match(r'^SH900|^SZ200', stock_code):
+            event.flag_b_stock(stock_code)
+
+
+def event_flag_index():
+    import re
+    from venus.stock_flag import EventStockFlag
+    event = EventStockFlag(GLOBAL_HEADER)
+    stock_list = event.get_all_security_list()
+    for stock_code in stock_list:
+        if re.match(r'^SH000|^SH950|^SZ399', stock_code):
             event.flag_index(stock_code)
 
 
@@ -248,4 +277,7 @@ def event_finance_info():
 
 if __name__ == "__main__":
     # event_download_finance_report()
-    event_download_stock_data()
+    # event_download_stock_data()
+    # event_record_new_stock()
+    event_flag_quit_stock()
+    # event_flag_index()
