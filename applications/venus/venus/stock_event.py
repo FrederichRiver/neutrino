@@ -23,7 +23,6 @@ def event_record_new_stock():
 def event_download_stock_data():
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
-    # stock_code = 'SH601818'
     for stock_code in stock_list:
         event.download_stock_data(stock_code)
 
@@ -277,7 +276,7 @@ def event_finance_info():
 
 if __name__ == "__main__":
     # event_download_finance_report()
-    # event_download_stock_data()
+    event_download_stock_data()
     # event_record_new_stock()
-    event_flag_quit_stock()
+    # event_flag_quit_stock()
     # event_flag_index()

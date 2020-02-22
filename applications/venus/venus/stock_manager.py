@@ -100,7 +100,7 @@ class EventTradeDataManager(StockEventBase):
         """
         used when first time download stock data.
         """
-        result = self.get_trade_data(stock_code)
+        result = self.get_trade_data(stock_code, self.today)
         result.columns = ['trade_date', 'stock_code',
                           'stock_name', 'close_price',
                           'highest_price', 'lowest_price',
@@ -121,10 +121,6 @@ class EventTradeDataManager(StockEventBase):
             'volume': Integer(),
             'turnover': DECIMAL(20, 2)
         }
-        # stk = formStockManager(stock_code=stock_code,
-        #            gmt_modified=datetime.today())
-        # engine.session.add(stk)
-        # engine.session.commit()
         try:
             result.to_sql(name=stock_code,
                           con=self.mysql.engine,
@@ -143,6 +139,48 @@ class EventTradeDataManager(StockEventBase):
             ERROR(f"Problem when initially download {stock_code} data.")
 
     def download_stock_data(self, stock_code):
+        from datetime import date
+        query_result = self.mysql.select_one(
+            'stock_manager', 'gmt_modified', f"stock_code='{stock_code}'"
+        )
+        if query_result[0]:
+            update = query_result[0].strftime('%Y%m%d')
+        else:
+            update = '19901219'
+        result = self.get_trade_data(
+            stock_code, self.today, start_date=update)
+        result.columns = ['trade_date', 'stock_code',
+                          'stock_name', 'close_price',
+                          'highest_price', 'lowest_price',
+                          'open_price', 'prev_close_price',
+                          'change_rate', 'amplitude',
+                          'volume', 'turnover']
+        result = self.data_cleaning(result)
+        try:
+            result = result.sort_values('trade_date')
+            for index, row in result.iterrows():
+                insert_sql = (
+                    f"INSERT IGNORE into {stock_code} "
+                    "(trade_date,stock_name,close_price,"
+                    "highest_price,lowest_price,open_price,prev_close_price,"
+                    "change_rate,amplitude,volume,turnover)"
+                    f"VALUES('{row['trade_date']}','{row['stock_name']}',"
+                    f"{row['close_price']},{row['highest_price']},"
+                    f"{row['lowest_price']},{row['open_price']},"
+                    f"{row['prev_close_price']},{row['change_rate']},"
+                    f"{row['amplitude']},{row['volume']},{row['turnover']})"
+                    )
+                self.mysql.engine.execute(insert_sql)
+                update_sql = (
+                    f"UPDATE stock_manager "
+                    f"set gmt_modified='{row['trade_date']}' "
+                    f"Where stock_code='{stock_code}'")
+                self.mysql.engine.execute(update_sql)
+        except Exception as e:
+            ERROR(f"Failed when donwload {stock_code} data.")
+            ERROR(e)
+
+    def download_stock_data2(self, stock_code):
         # print(stock_code)
         result = self.get_trade_data(stock_code, self.today)
         result.columns = ['trade_date', 'stock_code',
@@ -175,7 +213,8 @@ class EventTradeDataManager(StockEventBase):
             sql = f"SELECT trade_date from {stock_code}"
             query = self.mysql.engine.execute(sql).fetchall()
             # t2 = result[-1][0]
-            result['trade_date'] = pd.to_datetime(result['trade_date'], format=TIME_FMT)
+            result['trade_date'] = pd.to_datetime(
+                result['trade_date'], format=TIME_FMT)
             result = result.sort_values('trade_date')
             # print(result.head(5))
             t2 = query[-1][0]
@@ -186,13 +225,15 @@ class EventTradeDataManager(StockEventBase):
                     insert_sql = (
                         f"INSERT into {stock_code} "
                         "(trade_date,stock_name,close_price,"
-                        "highest_price,lowest_price,open_price,prev_close_price,"
+                        "highest_price,lowest_price,open_price,"
+                        "prev_close_price,"
                         "change_rate,amplitude,volume,turnover)"
                         f"VALUES('{row['trade_date']}','{row['stock_name']}',"
                         f"{row['close_price']},{row['highest_price']},"
                         f"{row['lowest_price']},{row['open_price']},"
                         f"{row['prev_close_price']},{row['change_rate']},"
-                        f"{row['amplitude']},{row['volume']},{row['turnover']})"
+                        f"{row['amplitude']},{row['volume']},"
+                        f"{row['turnover']})"
                         )
                     self.mysql.engine.execute(insert_sql)
                     update_date = t1
@@ -229,4 +270,5 @@ if __name__ == "__main__":
     stock_list = event.get_all_stock_list()
     stock_code = 'SH600007'
     # for stock_code in stock_list:
-    event.record_stock(stock_code)
+    event.download_stock_data(stock_code)
+    # event.record_stock(stock_code)
