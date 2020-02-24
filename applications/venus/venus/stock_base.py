@@ -90,8 +90,12 @@ class StockEventBase(object):
         """
         content = requests.get(url, headers=header, timeout=3)
         content.encoding = content.apparent_encoding
-        result = etree.HTML(content.text)
-        return result
+        html = etree.HTML(content.text)
+        return html
+
+    def get_excel_object(self, url):
+        df = pd.read_excel(url)
+        return df
 
     def close(self):
         self.mysql.engine.close()
@@ -169,7 +173,8 @@ class StockList(object):
         return stock_list
 
     def get_xsb_stock(self):
-        pass
+        stock_list = [f"SH83{str(i).zfill(3)}" for i in range(1000)]
+        return stock_list
 
     def get_stock(self):
         stock_list = self.get_sh_stock()

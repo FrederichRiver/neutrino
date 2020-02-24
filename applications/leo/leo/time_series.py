@@ -160,72 +160,6 @@ class timeSeries(object):
             print(a[i])
         return a, df
 
-    def ma_fit(self, df, p):
-        """
-        Fit input df -> dataframe using ARMA model.
-        """
-        import numpy as np
-        for i in range(p):
-            self.df[f"x{-i-1}"] = self.df['x'].shift(i+1)
-        # print(self.df.head(5))
-        self.df.dropna(how='any', inplace=True)
-        b = self.df['x']
-        # print(b)
-        A = self.df.drop('x', axis=1)
-        # print(A)
-        b = np.array(b)
-        A = np.array(A)
-        M = np.linalg.inv(A.T.dot(A))
-        N = M.dot(A.T)
-        a = N.dot(b)
-        for i in range(p):
-            print(a[i])
-        return a
-
-    def arma_fit(self, df, p):
-        """
-        Fit input df -> dataframe using ARMA model.
-        """
-        import numpy as np
-        for i in range(p):
-            self.df[f"x{-i-1}"] = self.df['x'].shift(i+1)
-        # print(self.df.head(5))
-        self.df.dropna(how='any', inplace=True)
-        b = self.df['x']
-        # print(b)
-        A = self.df.drop('x', axis=1)
-        # print(A)
-        b = np.array(b)
-        A = np.array(A)
-        M = np.linalg.inv(A.T.dot(A))
-        N = M.dot(A.T)
-        a = N.dot(b)
-        for i in range(p):
-            print(a[i])
-        return a
-
-    def garch_fit(self, df, p):
-        """
-        Fit input df -> dataframe using GARCH model.
-        """
-        import numpy as np
-        for i in range(p):
-            self.df[f"x{-i-1}"] = self.df['x'].shift(i+1)
-        # print(self.df.head(5))
-        self.df.dropna(how='any', inplace=True)
-        b = self.df['x']
-        # print(b)
-        A = self.df.drop('x', axis=1)
-        # print(A)
-        b = np.array(b)
-        A = np.array(A)
-        M = np.linalg.inv(A.T.dot(A))
-        N = M.dot(A.T)
-        a = N.dot(b)
-        for i in range(p):
-            print(a[i])
-        return a
-
     def ar(self, df, a, p):
         df['y'] = 0
         for i in range(p):
@@ -251,8 +185,34 @@ class timeSeries(object):
         ax.set_ylabel('index')
         plt.show()
 
+    def _get_best_model(self, TS):
+        import statsmodels.tsa.api as smt
+        import numpy as np
+        best_aic = np.inf
+        best_order = None
+        best_mdl = None
 
-if __name__ == "__main__":
+        pq_rng = range(5)
+        d_rng = range(2)
+        for i in pq_rng:
+            for d in d_rng:
+                for j in pq_rng:
+                    try:
+                        tmp_mdl = smt.ARIMA(TS, order=(i, d, j)).fit(
+                            method='mle', trend='c', disp=-1
+                        )
+                        tmp_aic = tmp_mdl.aic
+                        if tmp_aic < best_aic:
+                            best_aic = tmp_aic
+                            best_order = (i, d, j)
+                            best_mdl = tmp_mdl
+                    except Exception:
+                        continue
+        # print('aic: {:6.5f} | order: {}'.format(best_aic, best_order))
+        return best_aic, best_order, best_mdl
+
+
+def ar_process():
     from dev_global.env import GLOBAL_HEADER
     # event = Stratagy(GLOBAL_HEADER)
     # event.baseline()
@@ -281,3 +241,62 @@ if __name__ == "__main__":
     predic['y'] = result['y']
     ts.test_plot(predic)
     ts.hypo_analysis(result['e'])
+
+
+def tsplot(y, lags=None, figsize=(10, 8), style='bmh'):
+    import statsmodels.tsa.api as smt
+    import matplotlib.pyplot as plt
+    import statsmodels.api as sm
+    import scipy.stats as scs
+    if not isinstance(y, pd.Series):
+        y = pd.Series(y)
+    with plt.style.context(style):
+        fig = plt.figure(figsize=figsize)
+        # mpl.rcParams['font.family'] = 'Ubuntu Mono'
+        layout = (3, 2)
+        ts_ax = plt.subplot2grid(layout, (0, 0), colspan=2)
+        acf_ax = plt.subplot2grid(layout, (1, 0))
+        pacf_ax = plt.subplot2grid(layout, (1, 1))
+        qq_ax = plt.subplot2grid(layout, (2, 0))
+        pp_ax = plt.subplot2grid(layout, (2, 1))
+
+        y.plot(ax=ts_ax)
+        ts_ax.set_title('Time Series Analysis Plots')
+        smt.graphics.plot_acf(y, lags=lags, ax=acf_ax, alpha=0.5)
+        smt.graphics.plot_pacf(y, lags=lags, ax=pacf_ax, alpha=0.5)
+        sm.qqplot(y, line='s', ax=qq_ax)
+        qq_ax.set_title('QQ Plot')
+        scs.probplot(y, sparams=(y.mean(), y.std()), plot=pp_ax)
+
+        plt.tight_layout()
+        # fig.show()
+    return fig
+
+
+if __name__ == "__main__":
+    from dev_global.env import GLOBAL_HEADER
+    # event = Stratagy(GLOBAL_HEADER)
+    # event.baseline()
+    # event.baseline_view()
+    import pandas as pd
+    import math
+    import numpy as np
+    from dev_global.env import TIME_FMT
+    event = StockEventBase(GLOBAL_HEADER)
+    df = event.mysql.select_values('SH000300', 'trade_date, amplitude')
+    # data cleaning
+    df.columns = ['trade_date', 'amplitude']
+    pd.to_datetime(df['trade_date'], format=TIME_FMT)
+    df.set_index('trade_date', inplace=True)
+    # data constructing
+    df['ln_amplitude'] = np.log(df['amplitude'])
+    df.dropna(inplace=True)
+    df = df[-90:]
+    ts = timeSeries(df['ln_amplitude'])
+
+    # Notice I've selected a specific time period to run this analysis
+    res_tup = ts._get_best_model(ts.df)
+    fig = tsplot(res_tup[2].resid, lags=30)
+    fig.show()
+    while 1:
+        pass

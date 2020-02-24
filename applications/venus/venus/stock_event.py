@@ -34,6 +34,13 @@ def event_download_index_data():
         event.download_stock_data(stock_code)
 
 
+def event_download_index_data():
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = event.get_all_index_list()
+    for stock_code in stock_list:
+        event.download_stock_data(stock_code)
+
+
 # delete, not use.
 def event_create_interest_table():
     pass
@@ -155,6 +162,16 @@ def event_download_finance_report():
         event.update_balance_sheet(stock)
         event.update_cashflow_sheet(stock)
 
+
+def event_update_shibor():
+    from venus.shibor import EventShibor
+    from datetime import date
+    event = EventShibor(GLOBAL_HEADER)
+    year_list = range(2006, date.today().year)
+    for year in year_list:
+        url = event.get_shibor_url(year)
+        df = event.get_excel_object(url)
+        event.get_shibor_data(df)
 
 '''
 def event_record_stock():

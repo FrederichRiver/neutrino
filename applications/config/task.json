@@ -2,6 +2,10 @@
 	{
 		"task":"event_download_stock_data",
 		"time":"23:00"
+	},
+	{
+		"task":"event_download_shibor",
+		"time":"22:00"
 	}
 
 ]

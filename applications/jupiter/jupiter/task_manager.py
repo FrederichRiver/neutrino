@@ -13,10 +13,12 @@ from venus.stock_event import (
     event_record_new_stock,
     event_init_stock,
     event_download_stock_data,
+    event_download_index_data,
     event_create_interest_table,
     event_record_interest,
     event_flag_stock,
     event_flag_index,
+    event_update_shibor,
     event_rehabilitation,
     event_cooperation_info, event_finance_info)
 
@@ -38,6 +40,8 @@ class taskManager(BackgroundScheduler):
                     'event_record_new_stock': event_record_new_stock,
                     'event_init_stock': event_init_stock,
                     'event_download_stock_data': event_download_stock_data,
+                    'event_download_index_data': event_download_index_data,
+                    'event_download_shibor': event_update_shibor,
                     # 'event_record_interest': event_record_interest,
                     'event_flag_stock': event_flag_stock,
                     'event_flag_index': event_flag_index

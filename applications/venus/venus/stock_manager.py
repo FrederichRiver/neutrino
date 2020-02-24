@@ -73,15 +73,6 @@ class EventTradeDataManager(StockEventBase):
                 f"stock_name='{stock_name}',"
                 f"gmt_create='{self.Today}'"
             )
-            """
-            stock_orm = formStockManager(
-                stock_code=stock_code,
-                stock_name=stock_name,
-                gmt_create=self.Today
-                )
-            self.mysql.session.add(stock_orm)
-            self.mysql.session.commit()
-            """
             self.mysql.engine.execute(sql)
             self.mysql.create_table_from_table(
                 stock_code, 'template_stock')
@@ -89,7 +80,7 @@ class EventTradeDataManager(StockEventBase):
 
     def data_cleaning(self, df):
         """
-        df is a DataFrame like data.
+        Param: df is a DataFrame like data.
         """
         df.drop(['stock_code'], axis=1, inplace=True)
         df.replace('None', np.nan, inplace=True)
@@ -176,75 +167,6 @@ class EventTradeDataManager(StockEventBase):
                     f"set gmt_modified='{row['trade_date']}' "
                     f"Where stock_code='{stock_code}'")
                 self.mysql.engine.execute(update_sql)
-        except Exception as e:
-            ERROR(f"Failed when donwload {stock_code} data.")
-            ERROR(e)
-
-    def download_stock_data2(self, stock_code):
-        # print(stock_code)
-        result = self.get_trade_data(stock_code, self.today)
-        result.columns = ['trade_date', 'stock_code',
-                          'stock_name', 'close_price',
-                          'highest_price', 'lowest_price',
-                          'open_price', 'prev_close_price',
-                          'change_rate', 'amplitude',
-                          'volume', 'turnover']
-        result = self.data_cleaning(result)
-        columetype = {
-            'trade_date': Date,
-            'stock_name': NVARCHAR(length=10),
-            'close_price': DECIMAL(7, 3),
-            'highest_price': DECIMAL(7, 3),
-            'lowest_price': DECIMAL(7, 3),
-            'open_price': DECIMAL(7, 3),
-            'prev_close_price': DECIMAL(7, 3),
-            'change_rate': DECIMAL(7, 3),
-            'amplitude': DECIMAL(7, 4),
-            'volume': Integer(),
-            'turnover': DECIMAL(20, 2)
-        }
-        # stk = formStockManager(stock_code=stock_code,
-        #            gmt_modified=datetime.today())
-        # engine.session.add(stk)
-        # engine.session.commit()
-        from datetime import date
-        try:
-            query = self.mysql.select_values(stock_code, 'trade_date')
-            sql = f"SELECT trade_date from {stock_code}"
-            query = self.mysql.engine.execute(sql).fetchall()
-            # t2 = result[-1][0]
-            result['trade_date'] = pd.to_datetime(
-                result['trade_date'], format=TIME_FMT)
-            result = result.sort_values('trade_date')
-            # print(result.head(5))
-            t2 = query[-1][0]
-            update_date = t2
-            for index, row in result.iterrows():
-                t1 = row['trade_date'].to_pydatetime().date()
-                if t1 > t2:
-                    insert_sql = (
-                        f"INSERT into {stock_code} "
-                        "(trade_date,stock_name,close_price,"
-                        "highest_price,lowest_price,open_price,"
-                        "prev_close_price,"
-                        "change_rate,amplitude,volume,turnover)"
-                        f"VALUES('{row['trade_date']}','{row['stock_name']}',"
-                        f"{row['close_price']},{row['highest_price']},"
-                        f"{row['lowest_price']},{row['open_price']},"
-                        f"{row['prev_close_price']},{row['change_rate']},"
-                        f"{row['amplitude']},{row['volume']},"
-                        f"{row['turnover']})"
-                        )
-                    self.mysql.engine.execute(insert_sql)
-                    update_date = t1
-            query = self.mysql.session.query(
-                        formStockManager.stock_code,
-                        formStockManager.gmt_modified
-                    ).filter_by(stock_code=stock_code)
-            if query:
-                query.update(
-                    {"gmt_modified": update_date})
-            self.mysql.session.commit()
         except Exception as e:
             ERROR(f"Failed when donwload {stock_code} data.")
             ERROR(e)
