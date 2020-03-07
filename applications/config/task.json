@@ -1,11 +1,20 @@
 [
 	{
 		"task":"event_download_stock_data",
-		"time":"23:00"
+		"work day":"23:00"
 	},
 	{
+		"task":"event_download_index_data",
+		"work day":"23:00"
+	},
+	{
+		"task":"event_record_new_stock",
+		"day":"1"
+	},
+	
+	{
 		"task":"event_download_shibor",
-		"time":"22:00"
+		"time":"23:00"
 	}
 
 ]

@@ -48,7 +48,7 @@ class EventShibor(StockEventBase):
 
 
 if __name__ == '__main__':
-    from dev_global.env import GLOBAL_HEADER, TIME_FMT
+    from dev_global.env import GLOBAL_HEADER, TIME_FMT, ERROR
     from datetime import date
     event = EventShibor(GLOBAL_HEADER)
     """

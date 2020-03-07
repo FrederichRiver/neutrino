@@ -98,6 +98,24 @@ class taskManager(BackgroundScheduler):
                 trigger = CronTrigger(
                     hour=int(m.group(1)),
                     minute=int(m.group(2)))
+            elif k == 'work day':
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                trigger = CronTrigger(
+                    day_of_week='mon,tue,wed,thu,fri',
+                    hour=int(m.group(1)),
+                    minute=int(m.group(2)))
+            elif k == 'sat':
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                trigger = CronTrigger(
+                    day_of_week='sat',
+                    hour=int(m.group(1)),
+                    minute=int(m.group(2)))
+            elif k == 'sun':
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                trigger = CronTrigger(
+                    day_of_week='sun',
+                    hour=int(m.group(1)),
+                    minute=int(m.group(2)))
             else:
                 trigger = None
         return trigger

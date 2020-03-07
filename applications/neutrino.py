@@ -18,7 +18,7 @@ from jupiter.utils import ERROR, INFO
 from sqlalchemy.ext.declarative import declarative_base
 from threading import Thread
 
-__version__ = '1.4.9'
+__version__ = '1.4.10'
 
 
 def neutrino(pid_file, log_file):
@@ -98,10 +98,10 @@ def main_function(taskfile=None, task_line_name=''):
     Base = declarative_base()
     mysql = mysqlBase(GLOBAL_HEADER)
     jobstores = {
-        'Task_plan_1': SQLAlchemyJobStore(
+        'default': SQLAlchemyJobStore(
             engine=mysql.engine, metadata=Base.metadata)
             }
-    executor = {'Task_plan_1': ThreadPoolExecutor(20)}
+    executor = {'default': ThreadPoolExecutor(20)}
     Neptune = taskManager(taskfile=taskfile,
                           jobstores=jobstores,
                           executors=executor)
@@ -113,7 +113,7 @@ def main_function(taskfile=None, task_line_name=''):
             Neptune.check_task_file()
         except Exception:
             ERROR("ERROR while checking task file.")
-        time.sleep(1800)
+        time.sleep(3600)
     return 1
 
 
@@ -148,8 +148,9 @@ if __name__ == '__main__':
             raise SystemExit(1)
         try:
             main_function(TASK_FILE, 'Neptune')
-        except Exception:
+        except Exception as e:
             ERROR("Error occurs while running task pipe line.")
+            print(e)
             raise SystemExit(1)
     elif sys.argv[1] == 'stop':
         if os.path.exists(PID_FILE):

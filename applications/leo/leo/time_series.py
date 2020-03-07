@@ -275,6 +275,7 @@ def tsplot(y, lags=None, figsize=(10, 8), style='bmh'):
 
 if __name__ == "__main__":
     from dev_global.env import GLOBAL_HEADER
+    from arch import arch_model
     # event = Stratagy(GLOBAL_HEADER)
     # event.baseline()
     # event.baseline_view()
@@ -282,21 +283,48 @@ if __name__ == "__main__":
     import math
     import numpy as np
     from dev_global.env import TIME_FMT
+    import datetime
     event = StockEventBase(GLOBAL_HEADER)
-    df = event.mysql.select_values('SH000300', 'trade_date, amplitude')
+    df = event.mysql.select_values('SH600000', 'trade_date, amplitude')
     # data cleaning
     df.columns = ['trade_date', 'amplitude']
     pd.to_datetime(df['trade_date'], format=TIME_FMT)
     df.set_index('trade_date', inplace=True)
     # data constructing
-    df['ln_amplitude'] = np.log(df['amplitude'])
+    df['ln_amplitude'] = np.log(df['amplitude']+1)
     df.dropna(inplace=True)
-    df = df[-90:]
-    ts = timeSeries(df['ln_amplitude'])
-
+    input_df = df[-120:-2]
+    base_line = df[-90:]
+    ts = timeSeries(input_df['ln_amplitude'])
+    # print(ts.df)
     # Notice I've selected a specific time period to run this analysis
-    res_tup = ts._get_best_model(ts.df)
-    fig = tsplot(res_tup[2].resid, lags=30)
-    fig.show()
+    # res_tup = ts._get_best_model(ts.df)
+    # p=1, o=1, q=2
+    # p = res_tup[1][0]
+    # o = res_tup[1][1]
+    # q = res_tup[1][2]
+    # print(p, o, q)
+    # am = arch_model(input_df['ln_amplitude'], p=1, o=1, q=2, dist='StudentsT')
+    am = arch_model(ts.df, p=1, o=1, q=2, dist='StudentsT')
+    res = am.fit(update_freq=5, disp='off')
+    # fig = tsplot(res.resid, lags=30)
+    # fig.show()
+    result = res.forecast(params=None, horizon=4)
+    plot_df = base_line['ln_amplitude']
+    temp_result = result.variance
+    temp_result = temp_result.dropna()
+    print(ts.df)
+    print(plot_df.tail(10))
+    print(temp_result)
+    """
+    import matplotlib.pyplot as plt
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.plot(plot_df)
+    ax.set_title('Shanghai 300 stocks', fontsize=18)
+    ax.set_xlabel('date')
+    ax.set_ylabel('index')
+    plt.show()
     while 1:
         pass
+    """

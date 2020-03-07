@@ -1,2 +1,2 @@
-__version__ = '1.1.13'
+__version__ = '1.2.14'
 __all__ = ['network', 'task_manager', 'utils', 'database_manager']
