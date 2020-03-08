@@ -3,6 +3,8 @@ import datetime
 import numpy as np
 import pandas as pd
 import re
+import requests
+from lxml import etree
 from dev_global.env import TIME_FMT
 from venus.msg import NoneHeaderError
 from polaris.mysql8 import (mysqlBase, mysqlHeader)
@@ -84,11 +86,11 @@ class StockEventBase(object):
         result = df['stock_code'].tolist()
         return result
 
-    def get_html_object(self, url, header):
+    def get_html_object(self, url, header=None):
         """
         result is a etree.HTML object
         """
-        content = requests.get(url, headers=header, timeout=3)
+        content = requests.get(url, headers=None, timeout=3)
         content.encoding = content.apparent_encoding
         html = etree.HTML(content.text)
         return html
@@ -96,6 +98,15 @@ class StockEventBase(object):
     def get_excel_object(self, url):
         df = pd.read_excel(url)
         return df
+
+    def get_html_table(self, url, attr=''):
+        # get html table from url.
+        # Return a string like table object.
+        # attr: [@class='table_bg001 border_box limit_scale scr_table']
+        html = self.get_html_object(url)
+        table_list = html.xpath(f"//table{attr}")
+        table = etree.tostring(table_list[0]).decode()
+        return table
 
     def close(self):
         self.mysql.engine.close()

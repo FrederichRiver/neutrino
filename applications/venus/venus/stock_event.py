@@ -132,8 +132,19 @@ def event_rehabilitation():
     pass
 
 
-def event_cooperation_info():
-    pass
+def event_record_cooperation_info():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.company import EventCompany
+    from jupiter.utils import ERROR, INFO
+    event = EventCompany(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    # stock_list = ['SH601818']
+    for stock_code in stock_list:
+        try:
+            event.get_cooperation_info(stock_code)
+        except Exception as e:
+            ERROR("Error occours while recording company infomation.")
+            ERROR(e)
 
 
 def event_finance_info():
@@ -293,7 +304,8 @@ def event_finance_info():
 
 if __name__ == "__main__":
     # event_download_finance_report()
-    event_download_stock_data()
+    # event_download_stock_data()
     # event_record_new_stock()
     # event_flag_quit_stock()
     # event_flag_index()
+    event_record_cooperation_info()

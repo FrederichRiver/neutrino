@@ -20,7 +20,7 @@ from venus.stock_event import (
     event_flag_index,
     event_update_shibor,
     event_rehabilitation,
-    event_cooperation_info, event_finance_info)
+    event_record_cooperation_info, event_finance_info)
 
 
 __version__ = '1.0.4'

@@ -20,15 +20,7 @@ __version__ = '1.6.8-beta'
 
 
 # ARIMA
-def arima_test():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StockEventBase()
-    event._init_database(header)
 
-    series = d['close']
-    model = ARIMA(series, order=(5, 1, 0))
-    model_fit = model.fit(disp=0)
-    print(model_fit.summary())
 
 
 def segment():
@@ -64,37 +56,6 @@ def segment():
 # Oil
 
 
-class stratagy_new(StratagyBase):
-    def __init__(self):
-        super(StratagyBase, self).__init__()
-
-    def run(self):
-        df = self.fetch_data('SH601818')
-        df = ma(df, 5)
-        df = ma(df, 10)
-        df = df[-20:]
-        print(df.head(5))
-
-
-def fetch_html_table(url, attr=''):
-    # get html table from url.
-    # Return a string like table object.
-    # attr: [@class='table_bg001 border_box limit_scale scr_table']
-    content = requests.get(url, timeout=3)
-    html = etree.HTML(content.text)
-    table_list = html.xpath(f"//table{attr}")
-    table = etree.tostring(table_list[0]).decode()
-    return table
-
-
-def table_2_dataframe():
-    url = f"http://quotes.money.163.com/f10/zycwzb_{stock_code[2:]}.html#01c02"
-    table = fetch_html_table(url, attr="[@class='table_bg001 border_box limit_sale scr_table']")
-    t = pd.read_html(table)[0]
-    result = t.T
-    return result
-
-
 def fetch_finance_info(stock_code):
     url = f"http://quotes.money.163.com/f10/zycwzb_{stock_code[2:]}.html#01c02"
     table = fetch_html_table(url, attr="[@class='table_bg001 border_box limit_sale scr_table']")
@@ -113,37 +74,6 @@ def fetch_finance_info(stock_code):
             mysql.engine.execute(sql)
         except Exception as e:
             mysql.engine.execute(update_sql)
-
-
-def fetch_cooperation_info(stock_code):
-    url = f"http://quotes.money.163.com/f10/gszl_{stock_code[2:]}.html#01f02"
-    table = fetch_html_table(url, attr="[@class='table_bg001 border_box limit_sale table_details']")
-    t = pd.read_html(table)[0]
-    # print(t.iloc[12, 1])
-    header = mysqlHeader('root', '6414939', 'test')
-    mysql = mysqlBase(header)
-    insert_sql = (
-        "INSERT INTO cooperation_info ("
-        "stock_code, short_name, name, english_name, legal_representative, address,"
-        "chairman, secratery, main_business, business_scope, introduction)"
-        "VALUES ( "
-        f"'{stock_code}','{t.iloc[2, 1]}','{t.iloc[2, 1]}','{t.iloc[3, 1]}',"
-        f"'{t.iloc[6, 1]}','{t.iloc[1, 3]}','{t.iloc[4, 3]}','{t.iloc[5, 3]}',"
-        f"'{t.iloc[10, 1]}','{t.iloc[11, 1]}','{t.iloc[12, 1]}')"
-    )
-    update_sql = (
-        f"UPDATE cooperation_info set short_name='{t.iloc[1, 1]}',"
-        f"name='{t.iloc[2, 1]}', english_name='{t.iloc[3, 1]}',"
-        f"legal_representative='{t.iloc[6, 1]}', address='{t.iloc[1, 3]}',"
-        f"chairman='{t.iloc[4, 3]}', secratery='{t.iloc[5, 3]}',"
-        f"main_business='{t.iloc[10, 1]}', business_scope='{t.iloc[11, 1]}',"
-        f"introduction='{t.iloc[12, 1]}' "
-        f"WHERE stock_code='{stock_code}'"
-        )
-    try:
-        mysql.engine.execute(insert_sql)
-    except Exception:
-        mysql.engine.execute(update_sql)
 
 
 class Stratagy1(StockEventBase):
