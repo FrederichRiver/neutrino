@@ -113,7 +113,7 @@ def main_function(taskfile=None, task_line_name=''):
             Neptune.check_task_file()
         except Exception:
             ERROR("ERROR while checking task file.")
-        time.sleep(1800)
+        time.sleep(3600)
     return 1
 
 

@@ -1,9 +1,11 @@
 #! /usr/bin/env python3
 import requests
-from libmysql8 import mysqlHeader, mysqlBase
+from polaris.mysql8 import mysqlHeader, mysqlBase
 from lxml import etree
 import hashlib
 import re
+from sqlalchemy import Column, String, Integer, Float, Date, Text
+from sqlalchemy.ext.declarative import declarative_base
 
 
 __version__ = '1.0.1'
@@ -16,6 +18,7 @@ class article(object):
         self.content = ""
         self.date = None
         self.source = ""
+        self.url = ""
 
     def _get_date(self, html):
         date_string = html.xpath("//div[@class='post_time_source']/text()")

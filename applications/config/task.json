@@ -1,20 +1,30 @@
 [
 	{
 		"task":"event_download_stock_data",
-		"work day":"23:00"
+		"work day":"18:00"
 	},
 	{
-		"task":"event_download_index_data",
-		"work day":"23:00"
+		"task":"event_flag_stock",
+		"day":"2"
 	},
 	{
-		"task":"event_record_new_stock",
+		"task":"event_download_netease_news",
+		"time":"00:25"
+	},
+	{
+		"task":"event_flag_quit_stock",
 		"day":"1"
 	},
-	
+	{
+		"task":"event_flag_index",
+		"day":"3"
+	},
 	{
 		"task":"event_download_shibor",
 		"time":"23:00"
+	},
+	{
+		"task":"event_download_index_data",
+		"time":"22:00"
 	}
-
 ]

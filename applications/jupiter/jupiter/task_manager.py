@@ -21,7 +21,7 @@ from venus.stock_event import (
     event_update_shibor,
     event_rehabilitation,
     event_record_cooperation_info, event_finance_info)
-
+from taurus.nlp_event import event_download_netease_news
 
 __version__ = '1.0.4'
 
@@ -44,9 +44,10 @@ class taskManager(BackgroundScheduler):
                     'event_download_shibor': event_update_shibor,
                     # 'event_record_interest': event_record_interest,
                     'event_flag_stock': event_flag_stock,
-                    'event_flag_index': event_flag_index
+                    'event_flag_index': event_flag_index,
+                    'event_download_netease_news': event_download_netease_news,
                     # 'event_rehabilitation': event_rehabilitation,
-                    # 'event_cooperation_info': event_cooperation_info,
+                    'event_record_cooperation_info': event_record_cooperation_info
                     # 'event_finance_info': event_finance_info
                 }
             except Exception:
@@ -63,10 +64,12 @@ class taskManager(BackgroundScheduler):
             # job_resolve
             try:
                 job = self.func_list[self.job_resolve(task)]
+                trigger = self.trigger_resolve(task)
             except KeyError:
                 ERROR(f"Job {self.job_resolve(task)} could not be found.")
+            except Exception as e:
+                ERROR(e)
             # trigger_resolve
-            trigger = self.trigger_resolve(task)
             if job and trigger:
                 tasklist[job] = trigger
         # print(tasklist)
@@ -87,8 +90,8 @@ class taskManager(BackgroundScheduler):
         Resolve the trigger.
         """
         for k in jsdata.keys():
-            if k == 'day of week':
-                trigger = CronTrigger(day_of_week=jsdata['day of week'])
+            if k == 'day_of_week':
+                trigger = CronTrigger(day_of_week=jsdata['day_of_week'])
             elif k == 'day':
                 trigger = CronTrigger(day=jsdata['day'])
             elif k == 'hour':
@@ -99,19 +102,19 @@ class taskManager(BackgroundScheduler):
                     hour=int(m.group(1)),
                     minute=int(m.group(2)))
             elif k == 'work day':
-                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['work day'])
                 trigger = CronTrigger(
                     day_of_week='mon,tue,wed,thu,fri',
                     hour=int(m.group(1)),
                     minute=int(m.group(2)))
             elif k == 'sat':
-                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['sat'])
                 trigger = CronTrigger(
                     day_of_week='sat',
                     hour=int(m.group(1)),
                     minute=int(m.group(2)))
             elif k == 'sun':
-                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['time'])
+                m = re.match(r'(\d{1,2}):(\d{2})', jsdata['sun'])
                 trigger = CronTrigger(
                     day_of_week='sun',
                     hour=int(m.group(1)),
