@@ -222,20 +222,6 @@ def event_init_stock_data():
         event.init_stock_data(stock[0])
 
 
-def event_create_interest_table():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = EventCreateInterestTable()
-    event._init_database(header)
-    event.create_interest_table()
-
-
-def event_record_interest():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = EventRecordInterest()
-    event._init_database(header)
-    event.record_interest()
-
-
 def event_flag_stock():
     header = mysqlHeader('root', '6414939', 'test')
     event = EventFlag()

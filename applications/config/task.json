@@ -12,6 +12,14 @@
 		"time":"00:25"
 	},
 	{
+		"task":"event_init_interest",
+		"time":"03:00"
+	},
+	{
+		"task":"event_record_interest",
+		"time":"05:25"
+	},
+	{
 		"task":"event_flag_quit_stock",
 		"day":"1"
 	},

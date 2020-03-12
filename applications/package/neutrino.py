@@ -102,9 +102,11 @@ def main_function(taskfile=None, task_line_name=''):
             engine=mysql.engine, metadata=Base.metadata)
             }
     executor = {'default': ThreadPoolExecutor(20)}
+    default_job = {'max_instance': 5}
     Neptune = taskManager(taskfile=taskfile,
                           jobstores=jobstores,
-                          executors=executor)
+                          executors=executor,
+                          job_defaults=default_job)
     Neptune.start()
     INFO(f"{task_line_name} start.")
     while True:

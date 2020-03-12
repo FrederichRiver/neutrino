@@ -6,7 +6,6 @@ import re
 import requests
 from lxml import etree
 from dev_global.env import TIME_FMT
-from venus.msg import NoneHeaderError
 from polaris.mysql8 import (mysqlBase, mysqlHeader)
 from jupiter.utils import trans
 
