@@ -293,7 +293,7 @@ if __name__ == "__main__":
     # data constructing
     df['ln_amplitude'] = np.log(df['amplitude']+1)
     df.dropna(inplace=True)
-    input_df = df[-120:-2]
+    input_df = df[-120:-1]
     base_line = df[-90:]
     ts = timeSeries(input_df['ln_amplitude'])
     # print(ts.df)
@@ -309,7 +309,7 @@ if __name__ == "__main__":
     res = am.fit(update_freq=5, disp='off')
     # fig = tsplot(res.resid, lags=30)
     # fig.show()
-    result = res.forecast(params=None, horizon=4)
+    result = res.forecast(params=None, horizon=1)
     plot_df = base_line['ln_amplitude']
     temp_result = result.variance
     temp_result = temp_result.dropna()

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from taurus.news_downloader import newsSpider
+from polaris.mysql8 import mysqlHeader
 from dev_global.env import SOFT_PATH
 
 

@@ -66,7 +66,7 @@ def event_flag_quit_stock():
 def event_init_interest():
     from venus.stock_interest import EventInterest
     event = EventInterest(GLOBAL_HEADER)
-    event.fetch_all_stock_list()
+    event.get_all_stock_list()
     for stock_code in event.stock_list:
         # stock code format: SH600000
         try:
@@ -89,7 +89,7 @@ def event_record_interest():
     import numpy as np
     import re
     event = EventInterest(GLOBAL_HEADER)
-    event.fetch_all_stock_list()
+    event.get_all_stock_list()
     for stock_code in event.stock_list:
         tab = event.resolve_interst_table(stock_code)
         if not tab.empty:
