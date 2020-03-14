@@ -14,7 +14,7 @@ __all__ = [
     'event_download_index_data', 'event_flag_quit_stock',
     'event_init_interest', 'event_record_interest',
     'event_flag_stock', 'event_flag_b_stock',
-    'event_flag_index', 'event_rehabilitation,
+    'event_flag_index', 'event_rehabilitation',
     'event_record_cooperation_info', 'event_finance_info',
     'event_init_stock', 'event_download_finance_report',
     'event_update_shibor']

@@ -22,6 +22,7 @@ class EventShibor(StockEventBase):
         return result_date
 
     def get_shibor_data(self, df):
+        from jupiter.utils import ERROR
         try:
             if not df.empty:
                 df.columns = [

@@ -9,8 +9,10 @@ import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from jupiter.utils import ERROR, INFO
+# modules loaded into module list
 import venus.stock_event
 import taurus.nlp_event
+import jupiter.database_manager
 from venus.stock_event import (
     event_record_new_stock,
     event_init_stock,
@@ -32,6 +34,11 @@ __version__ = '1.1.5'
 
 
 class taskManager(BackgroundScheduler):
+    """
+    Task manager is a object to manage tasks.
+    It will run tasks according to task.json file.
+    It will auto load modules without reboot system.
+    """
     def __init__(self, taskfile=None, gconfig={}, **options):
         super(BackgroundScheduler, self).__init__(
             gconfig=gconfig, **options)
@@ -61,8 +68,12 @@ class taskManager(BackgroundScheduler):
                 }
             except Exception:
                 ERROR("Function list initial failed.")
+            self.reload_event()
 
     def reload_event(self):
+        """
+        This function will reload modules automatically.
+        """
         import imp
         try:
             for mod in self.module_list:
@@ -186,23 +197,4 @@ class task(object):
 
 
 if __name__ == "__main__":
-    from dev_global.env import TASK_FILE, GLOBAL_HEADER
-    from polaris.mysql8 import mysqlBase
-    from apscheduler.executors.pool import ThreadPoolExecutor
-    from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-    from sqlalchemy.ext.declarative import declarative_base
-
-    Base = declarative_base()
-    mysql = mysqlBase(GLOBAL_HEADER)
-    jobstores = {
-        'default': SQLAlchemyJobStore(
-            engine=mysql.engine, metadata=Base.metadata)
-            }
-    executor = {'default': ThreadPoolExecutor(20)}
-    default_job = {'max_instance': 5}
-    Neptune = taskManager(taskfile='/home/friederich/Documents/dev/applications/neutrino/config/task.json',
-                          jobstores=jobstores,
-                          executors=executor,
-                          job_defaults=default_job)
-    Neptune.start()
-    Neptune.reload_event()
+    pass

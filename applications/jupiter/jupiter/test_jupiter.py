@@ -47,6 +47,29 @@ def unit_test_fun_trans():
         print(row[1], utils.trans(row[1]))
 
 
+def unit_test_task_module_reload():
+    from dev_global.env import TASK_FILE, GLOBAL_HEADER
+    from polaris.mysql8 import mysqlBase
+    from apscheduler.executors.pool import ThreadPoolExecutor
+    from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+    from sqlalchemy.ext.declarative import declarative_base
+
+    Base = declarative_base()
+    mysql = mysqlBase(GLOBAL_HEADER)
+    jobstores = {
+        'default': SQLAlchemyJobStore(
+            engine=mysql.engine, metadata=Base.metadata)
+            }
+    executor = {'default': ThreadPoolExecutor(20)}
+    default_job = {'max_instance': 5}
+    tf = '/home/friederich/Documents/dev/applications/neutrino/config/task.json'
+    Neptune = taskManager(
+        taskfile=tf, jobstores=jobstores,
+        executors=executor, job_defaults=default_job)
+    Neptune.start()
+    Neptune.reload_event()
+
+
 def test_fun():
     print(time_var)
 

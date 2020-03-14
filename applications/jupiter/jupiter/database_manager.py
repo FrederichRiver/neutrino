@@ -8,6 +8,7 @@ from venus.stock_base import StockEventBase
 
 
 __version__ = '1.4'
+__all__ = ['event_mysql_backup', 'event_initial_database']
 
 """
 def event_drop_tables(header):
@@ -50,7 +51,8 @@ class databaseBackup(object):
     def compress(self):
         import time
         for db in self.database_list:
-            compress_file = f"{self.backup_path}/{db}_{time.strftime('%Y-%m-%d_%H:%M:%S')}.tar.gz"
+            zip_time = time.strftime('%Y-%m-%d_%H:%M:%S')
+            compress_file = f"{self.backup_path}/{db}_{zip_time}.tar.gz"
             print(compress_file)
             compress_cmd = f"tar -czvPf {compress_file} {self.temp_path}"
             print(compress_cmd)
@@ -65,12 +67,15 @@ class databaseBackup(object):
         import re
         file_list = os.listdir(self.backup_path)
         for f in file_list:
-            m = re.match(r'(\w+)_(\d{4}\-\d{2}\-\d{2}_\d{2}:\d{2}:\d{2})\.(tar\.gz)', f)
+            m = re.match(
+                r'(\w+)_(\d{4}\-\d{2}\-\d{2}_\d{2}:\d{2}:\d{2})\.(tar\.gz)',
+                f)
             if m:
                 self.get_backup_time(f)
 
     def get_backup_time(self, file_name):
-        import re, time
+        import re
+        import time
         # (\d{1,2}):(\d{2})
         m = re.match(r'(\w+)_(\d{4}\-\d{2}\-\d{2})', file_name)
         if m:
@@ -78,8 +83,29 @@ class databaseBackup(object):
             print(t)
 
 
-def event_database_backup():
-    pass
+def event_initial_database():
+    from dev_global.env import GLOBAL_HEADER
+    from jupiter.utils import ERROR
+    from venus.form import formTemplate, formFinanceTemplate, formInfomation
+    try:
+        mysql = mysqlBase(GLOBAL_HEADER)
+        create_table(formTemplate, mysql.engine)
+        create_table(formFinanceTemplate, mysql.engine)
+        create_table(formInfomation, mysql.engine)
+    except Exception:
+        ERROR("Database initialize failed.")
+
+
+def event_mysql_backup():
+    from jupiter.database_manager import databaseBackup
+    from jupiter.utils import ERROR
+    try:
+        event = databaseBackup()
+        event.get_database_list()
+        event.backup()
+    except Exception:
+        ERROR("Database backup failed.")
+
 
 # modify tables batchly
 

@@ -2,7 +2,9 @@
 import os
 
 root_path = '/home/friederich/Documents/dev/neutrino/applications'
-lib_list = ['dev_global', 'jupiter', 'polaris', 'venus', 'saturn', 'leo', 'taurus']
+lib_list = [
+    'dev_global', 'jupiter', 'polaris',
+    'venus', 'saturn', 'leo', 'taurus']
 for lib in lib_list:
     os.chdir(f"{root_path}/{lib}")
     build_cmd = f"python3 setup.py sdist"
