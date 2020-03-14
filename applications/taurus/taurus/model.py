@@ -50,6 +50,8 @@ class article(object):
         self.url = ""
 
     def _get_date(self, html):
+        if not isinstance(html, 'lxml.etree._Element'):
+            raise TypeError('html type error')
         date_string = html.xpath("//div[@class='post_time_source']/text()")
         for s in date_string:
             result = re.search(r'\d{4}\-\d{2}\-\d{2}', s)
@@ -58,12 +60,16 @@ class article(object):
         return None
 
     def _get_title(self, html):
+        if not isinstance(html, 'lxml.etree._Element'):
+            raise TypeError('html type error')
         title = html.xpath("//div/h1/text()")
         if title:
             title = title[0]
         return title
 
     def _get_source(self, html):
+        if not isinstance(html, 'lxml.etree._Element'):
+            raise TypeError('html type error')
         source = html.xpath("//div[@class='ep-source cDGray']/span[@class='left']/text()")
         if source:
             result = re.split(r'：', source[0])
@@ -72,6 +78,8 @@ class article(object):
             return None
 
     def _get_author(self, html):
+        if not isinstance(html, 'lxml.etree._Element'):
+            raise TypeError('html type error')
         author = html.xpath("//span[@class='ep-editor']/text()")
         if author:
             result = re.split(r'：', author[0])

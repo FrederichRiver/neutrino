@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-import utils
-import network
+import jupiter.utils
+import jupiter.network
 import dev_global
-import database_manager
+import jupiter.database_manager
 import numpy as np
 import pandas as pd
 import datetime
@@ -45,6 +45,13 @@ def unit_test_fun_trans():
     for index, row in df.iterrows():
         print(row[0], utils.trans(row[0]))
         print(row[1], utils.trans(row[1]))
+
+
+def test_fun():
+    print(time_var)
+
+
+time_var = datetime.datetime.now()
 
 
 if __name__ == '__main__':

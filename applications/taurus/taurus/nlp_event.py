@@ -4,6 +4,8 @@ from taurus.news_downloader import newsSpider
 from polaris.mysql8 import mysqlHeader
 from dev_global.env import SOFT_PATH
 
+__all__ = ['event_download_netease_news']
+
 
 def event_download_netease_news():
     header = mysqlHeader('stock', 'stock2020', 'natural_language')
@@ -17,3 +19,7 @@ def event_download_netease_news():
     for url in event.href:
         art = event.extract_article(url)
         event.record_article(art)
+
+
+if __name__ == "__main__":
+    event_download_netease_news()

@@ -9,6 +9,15 @@ from venus.stock_base import StockList
 import time
 
 __version__ = '1.0.12'
+__all__ = [
+    'event_record_new_stock', 'event_download_stock_data',
+    'event_download_index_data', 'event_flag_quit_stock',
+    'event_init_interest', 'event_record_interest',
+    'event_flag_stock', 'event_flag_b_stock',
+    'event_flag_index', 'event_rehabilitation,
+    'event_record_cooperation_info', 'event_finance_info',
+    'event_init_stock', 'event_download_finance_report',
+    'event_update_shibor']
 
 
 def event_record_new_stock():
@@ -23,13 +32,6 @@ def event_record_new_stock():
 def event_download_stock_data():
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
-    for stock_code in stock_list:
-        event.download_stock_data(stock_code)
-
-
-def event_download_index_data():
-    event = EventTradeDataManager(GLOBAL_HEADER)
-    stock_list = event.get_all_index_list()
     for stock_code in stock_list:
         event.download_stock_data(stock_code)
 
@@ -64,6 +66,7 @@ def event_flag_quit_stock():
 
 # event record interest
 def event_init_interest():
+    from threading import Thread
     from venus.stock_interest import EventInterest
     event = EventInterest(GLOBAL_HEADER)
     event.get_all_stock_list()

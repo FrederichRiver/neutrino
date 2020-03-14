@@ -9,6 +9,8 @@ import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from jupiter.utils import ERROR, INFO
+import venus.stock_event
+import taurus.nlp_event
 from venus.stock_event import (
     event_record_new_stock,
     event_init_stock,
@@ -24,8 +26,9 @@ from venus.stock_event import (
     event_rehabilitation,
     event_record_cooperation_info, event_finance_info)
 from taurus.nlp_event import event_download_netease_news
+import jupiter.test_jupiter as test
 
-__version__ = '1.0.4'
+__version__ = '1.1.5'
 
 
 class taskManager(BackgroundScheduler):
@@ -36,6 +39,7 @@ class taskManager(BackgroundScheduler):
         if not taskfile:
             ERROR("Task file is not found.")
         else:
+            self.module_list = [venus.stock_event, taurus.nlp_event]
             self.taskfile = taskfile
             try:
                 self.func_list = {
@@ -51,11 +55,24 @@ class taskManager(BackgroundScheduler):
                     'event_flag_quit_stock': event_flag_quit_stock,
                     'event_download_netease_news': event_download_netease_news,
                     # 'event_rehabilitation': event_rehabilitation,
-                    'event_record_cooperation_info': event_record_cooperation_info
+                    'event_record_cooperation_info': event_record_cooperation_info,
                     # 'event_finance_info': event_finance_info
+                    'test': test.test_fun
                 }
             except Exception:
                 ERROR("Function list initial failed.")
+
+    def reload_event(self):
+        import imp
+        try:
+            for mod in self.module_list:
+                imp.reload(mod)
+                for func in mod.__all__:
+                    # print(mod.__name__, func)
+                    self.func_list[func] = eval(f"{mod.__name__}.{func}")
+        except Exception as e:
+            ERROR(e)
+            ERROR(f"Can not find module {mod.__name__}, {func}.")
 
     def task_resolve(self, jsdata):
         """
@@ -169,7 +186,23 @@ class task(object):
 
 
 if __name__ == "__main__":
-    x = '5:30'
-    m = re.match(r'(\d{1,2}):(\d{2})', x)
-    print(m.group(1))
-    # task.add_job(test, 'interval', seconds=10, id='my_job')
+    from dev_global.env import TASK_FILE, GLOBAL_HEADER
+    from polaris.mysql8 import mysqlBase
+    from apscheduler.executors.pool import ThreadPoolExecutor
+    from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+    from sqlalchemy.ext.declarative import declarative_base
+
+    Base = declarative_base()
+    mysql = mysqlBase(GLOBAL_HEADER)
+    jobstores = {
+        'default': SQLAlchemyJobStore(
+            engine=mysql.engine, metadata=Base.metadata)
+            }
+    executor = {'default': ThreadPoolExecutor(20)}
+    default_job = {'max_instance': 5}
+    Neptune = taskManager(taskfile='/home/friederich/Documents/dev/applications/neutrino/config/task.json',
+                          jobstores=jobstores,
+                          executors=executor,
+                          job_defaults=default_job)
+    Neptune.start()
+    Neptune.reload_event()

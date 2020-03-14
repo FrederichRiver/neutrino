@@ -4,6 +4,7 @@ import json
 import re
 import requests
 from lxml import etree
+from jupiter.utils import ERROR
 from taurus.model import article
 from polaris.mysql8 import mysqlHeader, mysqlBase
 from sqlalchemy import Column, String, Integer, Float, Date, Text
@@ -139,19 +140,20 @@ class newsSpider(object):
         self.href += result
 
     def extract_article(self, url):
-        art = article()
-        text = requests.get(url)
-        h = etree.HTML(text.text)
-        content = h.xpath("//div[@class='post_text']/p/text()")
-        art.url = url
-        art.title = art._get_title(h)
-        art.author = art._get_author(h)
-        art.date = art._get_date(h)
-        art.source = art._get_source(h)
-        content = h.xpath("//div[@class='post_text']/p")
-        art.content = art._text_clean(content)        
-        # if art.title:
-        #    self.article_set.append(art)
+        try:
+            art = article()
+            text = requests.get(url)
+            h = etree.HTML(text.text)
+            content = h.xpath("//div[@class='post_text']/p/text()")
+            art.url = url
+            art.title = art._get_title(h)
+            art.author = art._get_author(h)
+            art.date = art._get_date(h)
+            art.source = art._get_source(h)
+            content = h.xpath("//div[@class='post_text']/p")
+            art.content = art._text_clean(content)
+        except Exception as e:
+            ERROR(e)
         return art
 
     def record_article(self, art):
@@ -175,7 +177,7 @@ class newsSpider(object):
         try:
             with open(href_file, 'r') as f:
                 url = f.readline()
-                print(url)
+                # print(url)
                 self.href.append(url)
         except Exception as e:
             print(e)
