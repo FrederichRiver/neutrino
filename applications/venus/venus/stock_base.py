@@ -214,7 +214,6 @@ class dataLine(object):
         value = []
         result = []
         for index, row in df.iterrows():
-            print(index)
             value = []
             for col in df.columns:
                 value.append(trans(row[col]))

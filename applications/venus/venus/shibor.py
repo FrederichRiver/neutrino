@@ -13,7 +13,7 @@ class EventShibor(StockEventBase):
         return url
 
     def get_last_update(self):
-        release_date = event.mysql.select_values('shibor', 'release_date')
+        release_date = self.mysql.select_values('shibor', 'release_date')
         d = release_date[0].tolist()
         if d:
             result_date = d[-1]
@@ -22,6 +22,7 @@ class EventShibor(StockEventBase):
         return result_date
 
     def get_shibor_data(self, df):
+        from dev_global.env import GLOBAL_HEADER, TIME_FMT
         from jupiter.utils import ERROR
         try:
             if not df.empty:

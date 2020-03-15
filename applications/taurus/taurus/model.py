@@ -8,7 +8,7 @@ from sqlalchemy import Column, String, Integer, Float, Date, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 article_base = declarative_base()
@@ -50,7 +50,7 @@ class article(object):
         self.url = ""
 
     def _get_date(self, html):
-        if not isinstance(html, 'lxml.etree._Element'):
+        if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         date_string = html.xpath("//div[@class='post_time_source']/text()")
         for s in date_string:
@@ -60,7 +60,7 @@ class article(object):
         return None
 
     def _get_title(self, html):
-        if not isinstance(html, 'lxml.etree._Element'):
+        if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         title = html.xpath("//div/h1/text()")
         if title:
@@ -68,7 +68,7 @@ class article(object):
         return title
 
     def _get_source(self, html):
-        if not isinstance(html, 'lxml.etree._Element'):
+        if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         source = html.xpath("//div[@class='ep-source cDGray']/span[@class='left']/text()")
         if source:
@@ -78,7 +78,7 @@ class article(object):
             return None
 
     def _get_author(self, html):
-        if not isinstance(html, 'lxml.etree._Element'):
+        if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         author = html.xpath("//span[@class='ep-editor']/text()")
         if author:

@@ -1,12 +1,5 @@
 #!/usr/bin/python3
-# event_stock
-import pandas as pd
-from polaris.mysql8 import mysqlHeader
-from dev_global.env import GLOBAL_HEADER
-from venus.stock_manager import EventTradeDataManager
-from venus.stock_flag import EventStockFlag
-from venus.stock_base import StockList
-import time
+
 
 __version__ = '1.0.12'
 __all__ = [
@@ -19,8 +12,25 @@ __all__ = [
     'event_init_stock', 'event_download_finance_report',
     'event_update_shibor']
 
+# Event Trade Data Manager
+
+
+def event_init_stock():
+    """
+    Init database from a blank stock list.
+    """
+    from dev_global.env import GLOBAL_HEADER
+    from venus.stock_manager import EventTradeDataManager
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = create_stock_list()
+    for stock in stock_list:
+        event.record_stock(stock)
+
 
 def event_record_new_stock():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.stock_base import StockList
+    from venus.stock_manager import EventTradeDataManager
     sl = StockList()
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = sl.get_stock()
@@ -30,6 +40,8 @@ def event_record_new_stock():
 
 
 def event_download_stock_data():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.stock_manager import EventTradeDataManager
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
     for stock_code in stock_list:
@@ -37,6 +49,8 @@ def event_download_stock_data():
 
 
 def event_download_index_data():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.stock_manager import EventTradeDataManager
     event = EventTradeDataManager(GLOBAL_HEADER)
     stock_list = event.get_all_index_list()
     for stock_code in stock_list:
@@ -49,6 +63,8 @@ def event_create_interest_table():
 
 
 def event_flag_quit_stock():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.stock_flag import EventStockFlag
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
     # stock_code = 'SH601818'
@@ -66,6 +82,7 @@ def event_flag_quit_stock():
 
 # event record interest
 def event_init_interest():
+    import time
     from threading import Thread
     from venus.stock_interest import EventInterest
     event = EventInterest(GLOBAL_HEADER)
@@ -73,14 +90,7 @@ def event_init_interest():
     for stock_code in event.stock_list:
         # stock code format: SH600000
         try:
-            taskline = Thread(
-                target=event.insert_interest_table_into_sql,
-                args=(stock_code,),
-                name=stock_code,
-                daemon=True)
-            taskline.start()
-            # event.insert_interest_table_into_sql(stock_code)
-            time.sleep(1)
+            event.insert_interest_table_into_sql(stock_code)
         except Exception:
             ERROR(f"Error while recording interest of {stock_code}")
 
@@ -103,6 +113,7 @@ def event_record_interest():
 
 def event_flag_stock():
     import re
+    from dev_global.env import GLOBAL_HEADER
     from venus.stock_flag import EventStockFlag
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_security_list()
@@ -113,6 +124,7 @@ def event_flag_stock():
 
 def event_flag_b_stock():
     import re
+    from dev_global.env import GLOBAL_HEADER
     from venus.stock_flag import EventStockFlag
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_security_list()
@@ -123,6 +135,7 @@ def event_flag_b_stock():
 
 def event_flag_index():
     import re
+    from dev_global.env import GLOBAL_HEADER
     from venus.stock_flag import EventStockFlag
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_security_list()
@@ -154,18 +167,8 @@ def event_finance_info():
     pass
 
 
-def event_init_stock():
-    """
-    Init database from a blank stock list.
-    """
-    event = EventTradeDataManager()
-    event._init_database(GLOBAL_HEADER)
-    stock_list = create_stock_list()
-    for stock in stock_list:
-        event.record_stock(stock)
-
-
 def event_download_finance_report():
+    from dev_global.env import GLOBAL_HEADER
     from venus.finance_report import EventFinanceReport
     event = EventFinanceReport(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
@@ -178,8 +181,9 @@ def event_download_finance_report():
 
 
 def event_update_shibor():
-    from venus.shibor import EventShibor
     from datetime import date
+    from dev_global.env import GLOBAL_HEADER
+    from venus.shibor import EventShibor
     event = EventShibor(GLOBAL_HEADER)
     year_list = range(2006, date.today().year)
     for year in year_list:
@@ -187,44 +191,8 @@ def event_update_shibor():
         df = event.get_excel_object(url)
         event.get_shibor_data(df)
 
+
 '''
-def event_record_stock():
-    header = mysqlHeader('stock', 'stock2020', 'stock')
-    event = EventTradeDataManager()
-    event._init_database(header)
-    event.security_list = event.fetch_all_security_list()
-    for stock in event.security_list:
-        event.record_stock(stock)
-
-
-def event_download_stock_data():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = EventTradeDataManager()
-    event._init_database(header)
-    from form import formStockManager
-    result = event.mysql.session.query(
-            formStockManager.stock_code).all()
-    # result format:
-    # (stock_code,)
-    result = event.fetch_all_stock_list()
-    for stock in result:
-        print(f"{time.ctime()}: Download {stock} stock data.")
-        event.download_stock_data(stock)
-
-
-def event_init_stock_data():
-    header = mysqlHeader('stock', 'stock2020', 'stock')
-    event = EventTradeDataManager()
-    event._init_database(header)
-    result = event.mysql.session.query(
-            formStockManager.stock_code).all()
-    # result format:
-    # (stock_code,)
-    for stock in result:
-        print(f"{time.ctime()}: Download {stock[0]} stock data.")
-        event.init_stock_data(stock[0])
-
-
 def event_flag_stock():
     header = mysqlHeader('root', '6414939', 'test')
     event = EventFlag()

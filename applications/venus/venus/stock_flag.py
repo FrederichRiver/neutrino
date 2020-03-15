@@ -1,10 +1,5 @@
 #!/usr/bin/python3
-import json
 from venus.stock_base import StockEventBase
-from dev_global.env import GLOBAL_HEADER
-from venus.form import formStockManager
-# from jupiter.network import RandomHeader
-import requests
 
 
 class EventStockFlag(StockEventBase):
@@ -25,6 +20,7 @@ class EventStockFlag(StockEventBase):
             return False
 
     def flag_index(self, stock_code):
+        from venus.form import formStockManager
         result = self.mysql.session.query(
             formStockManager.stock_code,
             formStockManager.flag
@@ -37,6 +33,7 @@ class EventStockFlag(StockEventBase):
         return 1
 
     def flag_stock(self, stock_code):
+        from venus.form import formStockManager
         result = self.mysql.session.query(
             formStockManager.stock_code,
             formStockManager.flag
@@ -49,6 +46,7 @@ class EventStockFlag(StockEventBase):
         return 1
 
     def flag_b_stock(self, stock_code):
+        from venus.form import formStockManager
         result = self.mysql.session.query(
             formStockManager.stock_code,
             formStockManager.flag
@@ -63,6 +61,7 @@ class EventStockFlag(StockEventBase):
 
 if __name__ == "__main__":
     import re
+    from dev_global.env import GLOBAL_HEADER
     from venus.stock_flag import EventStockFlag
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_security_list()

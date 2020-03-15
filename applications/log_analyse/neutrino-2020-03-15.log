@@ -1,0 +1,6 @@
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+2020-03-15 11:00:00 [INFO]: Running job "event_download_netease_news (trigger: cron[hour='11', minute='0'], next run at: 2020-03-15 11:00:00 CST)" (scheduled at 2020-03-15 11:00:00+08:00)
+2020-03-15 11:00:40 [ERROR]: isinstance() arg 2 must be a type or tuple of types
+/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1062, "Duplicate entry 'https://money.163.com/20/0314/10/F7M2E0AU00258152.html' for key 'url'")
+  result = self._query(query)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

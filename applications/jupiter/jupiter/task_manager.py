@@ -180,7 +180,7 @@ class taskManager(BackgroundScheduler):
                     self.add_job(k, trigger=v, id=k.__name__)
                     print(f'add job {k.__name__}\n')
                 jobexist = False
-            self.task_report()
+            # self.task_report()
         except Exception as e:
             ERROR("Append task error: ", e)
 
