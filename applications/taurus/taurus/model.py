@@ -50,6 +50,7 @@ class article(object):
         self.url = ""
 
     def _get_date(self, html):
+        import lxml
         if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         date_string = html.xpath("//div[@class='post_time_source']/text()")
@@ -60,6 +61,7 @@ class article(object):
         return None
 
     def _get_title(self, html):
+        import lxml
         if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         title = html.xpath("//div/h1/text()")
@@ -68,6 +70,7 @@ class article(object):
         return title
 
     def _get_source(self, html):
+        import lxml
         if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         source = html.xpath("//div[@class='ep-source cDGray']/span[@class='left']/text()")
@@ -78,6 +81,7 @@ class article(object):
             return None
 
     def _get_author(self, html):
+        import lxml
         if not isinstance(html, lxml.etree._Element):
             raise TypeError('html type error')
         author = html.xpath("//span[@class='ep-editor']/text()")

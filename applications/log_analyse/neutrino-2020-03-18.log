@@ -1,0 +1,87 @@
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+2020-03-15 23:00:00 [INFO]: Running job "event_update_shibor (trigger: cron[hour='23', minute='0'], next run at: 2020-03-15 23:00:00 CST)" (scheduled at 2020-03-15 23:00:00+08:00)
+2020-03-15 23:00:01 [ERROR]: 0
+2020-03-15 23:00:01 [ERROR]: 0
+2020-03-15 23:00:01 [ERROR]: 0
+2020-03-15 23:00:01 [ERROR]: 0
+2020-03-15 23:00:01 [ERROR]: 0
+2020-03-15 23:00:01 [ERROR]: 0
+2020-03-15 23:00:02 [ERROR]: 0
+2020-03-15 23:00:02 [ERROR]: 0
+2020-03-15 23:00:02 [ERROR]: 0
+2020-03-15 23:00:02 [ERROR]: 0
+2020-03-15 23:00:02 [ERROR]: 0
+2020-03-15 23:00:02 [ERROR]: 0
+2020-03-15 23:00:03 [ERROR]: 0
+2020-03-15 23:00:03 [ERROR]: 0
+2020-03-15 23:00:03 [INFO]: Job "event_update_shibor (trigger: cron[hour='23', minute='0'], next run at: 2020-03-16 23:00:00 CST)" executed successfully
+2020-03-15 23:03:20 [INFO]: Checking task file.
+2020-03-15 23:03:20 [INFO]: Task file checking successd.
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Jobstore default:
+    event_download_netease_news (trigger: cron[hour='11', minute='0'], next run at: 2020-03-16 11:00:00 CST)
+    event_init_interest (trigger: cron[hour='12', minute='0'], next run at: 2020-03-16 12:00:00 CST)
+    event_download_stock_data (trigger: cron[day_of_week='mon,tue,wed,thu,fri', hour='18', minute='0'], next run at: 2020-03-16 18:00:00 CST)
+    event_record_interest (trigger: cron[hour='19', minute='0'], next run at: 2020-03-16 19:00:00 CST)
+    event_download_index_data (trigger: cron[hour='22', minute='0'], next run at: 2020-03-16 22:00:00 CST)
+    event_update_shibor (trigger: cron[hour='23', minute='0'], next run at: 2020-03-16 23:00:00 CST)
+    event_flag_quit_stock (trigger: cron[day='1'], next run at: 2020-04-01 00:00:00 CST)
+    event_flag_stock (trigger: cron[day='2'], next run at: 2020-04-02 00:00:00 CST)
+    event_flag_index (trigger: cron[day='3'], next run at: 2020-04-03 00:00:00 CST)
+
+2020-03-17 11:08:52 [INFO]: Job "event_download_netease_news (trigger: cron[hour='11', minute='0'], next run at: 2020-03-18 11:00:00 CST)" executed successfully
+2020-03-17 12:00:00 [INFO]: Running job "event_init_interest (trigger: cron[hour='12', minute='0'], next run at: 2020-03-17 12:00:00 CST)" (scheduled at 2020-03-17 12:00:00+08:00)
+2020-03-17 12:00:00 [ERROR]: Job "event_init_interest (trigger: cron[hour='12', minute='0'], next run at: 2020-03-18 12:00:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 93, in event_init_interest
+    event.insert_interest_table_into_sql(stock_code)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_interest.py", line 42, in insert_interest_table_into_sql
+    result = pd.read_html(
+AttributeError: 'EventInterest' object has no attribute 'resolve_table'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 95, in event_init_interest
+    ERROR(f"Error while recording interest of {stock_code}")
+NameError: name 'ERROR' is not defined
+2020-03-17 12:03:26 [INFO]: Checking task file.
+2020-03-17 12:03:26 [INFO]: Task file checking successd.
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+2020-03-18 12:00:00 [INFO]: Running job "event_init_interest (trigger: cron[hour='12', minute='0'], next run at: 2020-03-18 12:00:00 CST)" (scheduled at 2020-03-18 12:00:00+08:00)
+2020-03-18 12:00:00 [ERROR]: Job "event_init_interest (trigger: cron[hour='12', minute='0'], next run at: 2020-03-19 12:00:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 93, in event_init_interest
+    event.insert_interest_table_into_sql(stock_code)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_interest.py", line 42, in insert_interest_table_into_sql
+    result = pd.read_html(
+AttributeError: 'EventInterest' object has no attribute 'resolve_table'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 95, in event_init_interest
+    ERROR(f"Error while recording interest of {stock_code}")
+NameError: name 'ERROR' is not defined
+2020-03-18 12:03:30 [INFO]: Checking task file.
+2020-03-18 12:03:30 [INFO]: Task file checking successd.
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+2020-03-18 18:11:33 [INFO]: Job "event_download_stock_data (trigger: cron[day_of_week='mon,tue,wed,thu,fri', hour='18', minute='0'], next run at: 2020-03-19 18:00:00 CST)" executed successfully
+2020-03-18 19:00:00 [INFO]: Running job "event_record_interest (trigger: cron[hour='19', minute='0'], next run at: 2020-03-19 19:00:00 CST)" (scheduled at 2020-03-18 19:00:00+08:00)
+2020-03-18 19:00:00 [ERROR]: Job "event_record_interest (trigger: cron[hour='19', minute='0'], next run at: 2020-03-19 19:00:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 108, in event_record_interest
+    tab = event.resolve_interst_table(stock_code)
+AttributeError: 'EventInterest' object has no attribute 'resolve_interst_table'
+2020-03-18 19:03:31 [INFO]: Checking task file.
+2020-03-18 19:03:31 [INFO]: Task file checking successd.

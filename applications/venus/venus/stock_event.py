@@ -101,10 +101,11 @@ def event_record_interest():
     """
     import numpy as np
     import re
+    from venus.stock_interest import EventInterest
     event = EventInterest(GLOBAL_HEADER)
     event.get_all_stock_list()
     for stock_code in event.stock_list:
-        tab = event.resolve_interst_table(stock_code)
+        tab = event.resolve_interest_table(stock_code)
         if not tab.empty:
             tab.replace(['--'], np.nan, inplace=True)
             tab = event.data_clean(tab)
@@ -185,7 +186,7 @@ def event_update_shibor():
     from dev_global.env import GLOBAL_HEADER
     from venus.shibor import EventShibor
     event = EventShibor(GLOBAL_HEADER)
-    year_list = range(2006, date.today().year)
+    year_list = range(2006, date.today().year + 1)
     for year in year_list:
         url = event.get_shibor_url(year)
         df = event.get_excel_object(url)
@@ -265,4 +266,5 @@ if __name__ == "__main__":
     # event_record_new_stock()
     # event_flag_quit_stock()
     # event_flag_index()
-    event_record_cooperation_info()
+    # event_record_cooperation_info()
+    event_update_shibor()

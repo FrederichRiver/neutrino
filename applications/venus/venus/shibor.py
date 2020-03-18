@@ -14,8 +14,8 @@ class EventShibor(StockEventBase):
 
     def get_last_update(self):
         release_date = self.mysql.select_values('shibor', 'release_date')
-        d = release_date[0].tolist()
-        if d:
+        if not release_date.empty:
+            d = release_date[0].tolist()
             result_date = d[-1]
         else:
             result_date = datetime.date(2004, 1, 1)
@@ -35,6 +35,7 @@ class EventShibor(StockEventBase):
                 last_update = self.get_last_update()
                 # filter the datetime already updated.
                 df = df[df['release_date'] > last_update]
+                print(df)
                 for index, row in df.iterrows():
                     sql = (
                         f"INSERT IGNORE INTO shibor "
@@ -50,25 +51,11 @@ class EventShibor(StockEventBase):
 
 
 if __name__ == '__main__':
-    from dev_global.env import GLOBAL_HEADER, TIME_FMT, ERROR
     from datetime import date
+    from dev_global.env import GLOBAL_HEADER
     event = EventShibor(GLOBAL_HEADER)
-    """
-    url = event.get_shibor_url(2020)
-    df = event.get_excel_object(url)
-    df.columns = [
-                    'release_date', 'overnight', '1W', '2W',
-                    '1M', '3M', '6M', '9M', '1Y']
-    import pandas as pd
-    df['release_date'] = pd.to_datetime(df['release_date'], format=TIME_FMT)
-    df = df[df['release_date'] > date(2020, 1, 31)]
-    print(df.head(5))
-    d = event.mysql.select_values('shibor', 'release_date')
-    d = d[0].tolist()
-    print(d[-1])
-    print(type(d[-1]))
-    """
-    year_list = range(2006, date.today().year)
-    url = event.get_shibor_url(2020)
+    year_list = range(2006, date.today().year + 1)
+    year = 2020
+    url = event.get_shibor_url(year)
     df = event.get_excel_object(url)
     event.get_shibor_data(df)
