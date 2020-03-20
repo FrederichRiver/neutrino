@@ -11,7 +11,7 @@ from sqlalchemy import Column, String, Integer, Float, Date, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.1'
+__version__ = 1
 
 article_base = declarative_base()
 
@@ -153,6 +153,7 @@ class newsSpider(object):
             content = h.xpath("//div[@class='post_text']/p")
             art.content = art._text_clean(content)
         except Exception as e:
+            ERROR("Extract article failed.")
             ERROR(e)
         return art
 

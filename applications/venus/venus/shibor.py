@@ -13,6 +13,7 @@ class EventShibor(StockEventBase):
         return url
 
     def get_last_update(self):
+        import datetime
         release_date = self.mysql.select_values('shibor', 'release_date')
         if not release_date.empty:
             d = release_date[0].tolist()

@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-__version__ = 1
 
-
-def test():
+class Fomalhaut(object):
     pass

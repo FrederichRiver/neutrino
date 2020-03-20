@@ -1,15 +1,6 @@
 #!/usr/bin/python3
-
-from jupiter.database_manager import databaseBackup
-
-
-def event_initial_database(header):
-    from dev_global.env import GLOBAL_HEADER
-    from venus.form import formTemplate, formFinanceTemplate, formInfomation
-    mysql = mysqlBase(GLOBAL_HEADER)
-    create_table(formTemplate, mysql.engine)
-    create_table(formFinanceTemplate, mysql.engine)
-    create_table(formInfomation, mysql.engine)
+from jupiter.database_manager import event_database_backup, event_mysql_backup
+__version__ = '1.0.2'
 
 
 if __name__ == "__main__":
@@ -17,18 +8,8 @@ if __name__ == "__main__":
         print("maint init|backup")
         raise SystemExit(1)
     if sys.argv[1] == "init":
-        try:
-            # header = mysqlHeader('stock', 'stock2020', 'stock')
-            header = mysqlHeader('root', '6414939', 'test')
-            event_initial_database(header)
-        except Exception as e:
-            print(e)
+        event_initial_database()
     elif sys.argv[1] == "backup":
-        try:
-            event = databaseBackup()
-            event.get_database_list()
-            event.backup()
-        except Exception as e:
-            print(e)
+        event_mysql_backup()
     else:
         pass

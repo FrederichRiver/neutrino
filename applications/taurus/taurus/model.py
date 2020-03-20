@@ -8,7 +8,7 @@ from sqlalchemy import Column, String, Integer, Float, Date, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.2'
+__version__ = 2
 
 
 article_base = declarative_base()

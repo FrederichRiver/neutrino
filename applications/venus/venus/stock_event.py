@@ -83,7 +83,7 @@ def event_flag_quit_stock():
 # event record interest
 def event_init_interest():
     import time
-    from threading import Thread
+    from dev_global.env import GLOBAL_HEADER
     from venus.stock_interest import EventInterest
     event = EventInterest(GLOBAL_HEADER)
     event.get_all_stock_list()
@@ -101,6 +101,7 @@ def event_record_interest():
     """
     import numpy as np
     import re
+    from dev_global.env import GLOBAL_HEADER
     from venus.stock_interest import EventInterest
     event = EventInterest(GLOBAL_HEADER)
     event.get_all_stock_list()
