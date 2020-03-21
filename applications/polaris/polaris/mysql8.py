@@ -8,10 +8,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
-import pandas as pd
 
 
-__version__ = '3.1.18'
+__version__ = '3.1.19'
 
 
 class mysqlBase(object):
@@ -70,15 +69,24 @@ class mysqlBase(object):
         """
         Return a DataFrame type result.
         """
+        import pandas as pd
         sql = f"SELECT {field} from {table}"
         select_value = self.engine.execute(sql)
         result = pd.DataFrame(select_value)
         return result
 
+    def update_value(self, table, field, value, condition):
+        sql = (f"UPDATE {table} set {field}={value} WHERE {condition}")
+        try:
+            self.engine.execute(sql)
+        except Exception as e:
+            pass
+
     def condition_select(self, table, field, condition):
         """
         Return a DataFrame type result.
         """
+        import pandas as pd
         sql = f"SELECT {field} from {table} WHERE {condition}"
         select_value = self.engine.execute(sql)
         result = pd.DataFrame(select_value)

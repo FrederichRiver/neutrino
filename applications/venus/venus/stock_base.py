@@ -107,6 +107,24 @@ class StockEventBase(object):
         table = etree.tostring(table_list[0]).decode()
         return table
 
+    def update_stock_manager(self, stock_code: str, option='update'):
+        if option == 'update':
+            col = 'gmt_modified'
+        elif option == 'xrdr':
+            col = 'gmt_xrdr'
+        elif option == 'balance':
+            col = 'gmt_balance'
+        elif option == 'income':
+            col = 'gmt_income'
+        elif option == 'cashflow':
+            col = 'gmt_cashflow'
+        else:
+            col = None
+        if col:
+            self.mysql.update_value(
+                'stock_manager', col,
+                f"'{self.Today}'", f"stock_code='{stock_code}'")
+
     def close(self):
         self.mysql.engine.close()
 
@@ -208,7 +226,7 @@ class dataLine(object):
         """
         Result: Return a list of sql.
         """
-        sql = f"INSERT into {self.table_name} ("
+        sql = f"INSERT IGNORE into {self.table_name} ("
         sql += ','.join(df.columns)
         sql += ") VALUES ({})"
         value = []
