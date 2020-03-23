@@ -34,11 +34,12 @@ class EventFinanceReport(StockEventBase):
         df = pd.read_csv(url, encoding='gb18030')
         if not df.empty:
             df = df.T
+            # drop the last line
             result = df.iloc[1:]
         else:
             result = df
         result.replace(['--'], np.nan, inplace=True)
-        print(result.iloc[-1:].index)
+        print(result.iloc[:-1].index)
         result.drop(result.iloc[-1:].index, axis=0, inplace=True)
         # result.columns = ['c'+str(i) for i in range(108)]
         result.columns = balance_column

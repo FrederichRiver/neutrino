@@ -183,11 +183,11 @@ def event_download_finance_report():
 
 
 def event_update_shibor():
-    from datetime import date
+    import pandas
     from dev_global.env import GLOBAL_HEADER
     from venus.shibor import EventShibor
     event = EventShibor(GLOBAL_HEADER)
-    year_list = range(2006, date.today().year + 1)
+    year_list = range(2006, pandas.Timestamp.today().year + 1)
     for year in year_list:
         url = event.get_shibor_url(year)
         df = event.get_excel_object(url)
@@ -213,9 +213,6 @@ def event_rehabilitation():
         print(f"Calculating adjust factor of {stock}")
         event.rehabilitate(stock)
         event.update_adjust_factor(stock)
-
-
-
 
 
 def event_download_trade_detail_data():

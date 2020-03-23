@@ -13,13 +13,13 @@ class EventShibor(StockEventBase):
         return url
 
     def get_last_update(self):
-        import datetime
+        import pandas
         release_date = self.mysql.select_values('shibor', 'release_date')
         if not release_date.empty:
             d = release_date[0].tolist()
-            result_date = d[-1]
+            result_date = pandas.Timestamp(d[-1])
         else:
-            result_date = datetime.date(2004, 1, 1)
+            result_date = pandas.Timestamp('2004-01-01')
         return result_date
 
     def get_shibor_data(self, df):
@@ -36,7 +36,7 @@ class EventShibor(StockEventBase):
                 last_update = self.get_last_update()
                 # filter the datetime already updated.
                 df = df[df['release_date'] > last_update]
-                print(df)
+                # print(df)
                 for index, row in df.iterrows():
                     sql = (
                         f"INSERT IGNORE INTO shibor "
