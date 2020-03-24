@@ -64,6 +64,7 @@ class taskManager(BackgroundScheduler):
                     # 'event_rehabilitation': event_rehabilitation,
                     'event_record_cooperation_info': event_record_cooperation_info,
                     # 'event_finance_info': event_finance_info
+                    'event_mysql_backup': event_mysql_backup,
                     'test': test.test_fun
                 }
             except Exception:

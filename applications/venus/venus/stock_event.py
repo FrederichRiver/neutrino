@@ -85,6 +85,7 @@ def event_init_interest():
     import time
     from dev_global.env import GLOBAL_HEADER
     from venus.stock_interest import EventInterest
+    from jupiter.utils import ERROR
     event = EventInterest(GLOBAL_HEADER)
     event.get_all_stock_list()
     for stock_code in event.stock_list:

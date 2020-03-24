@@ -28,8 +28,10 @@ def event_drop_tables(header):
 class databaseBackup(object):
     def __init__(self):
         self.database_list = []
-        self.temp_path = '/home/friederich/Downloads/tmp'
-        self.backup_path = '/home/friederich/Downloads/neutrino'
+        # self.temp_path = '/home/friederich/Downloads/tmp'
+        # self.backup_path = '/home/friederich/Downloads/neutrino'
+        self.temp_path = '/root/tmp'
+        self.backup_path = '/root/backup'
         self.user = 'root'
         self.pwd = '6414939'
 
