@@ -91,9 +91,12 @@ def event_init_interest():
     for stock_code in event.stock_list:
         # stock code format: SH600000
         try:
-            event.insert_interest_table_into_sql(stock_code)
-        except Exception:
-            ERROR(f"Error while recording interest of {stock_code}")
+            df = event.resolve_interest_table(stock_code)
+            event.batch_insert_interest_to_sql(df)
+            # event.insert_interest_table_into_sql(stock_code)
+        except Exception as e:
+            ERROR(e)
+            ERROR(f"Error while initializing interest of {stock_code}")
 
 
 def event_record_interest():
@@ -266,4 +269,5 @@ if __name__ == "__main__":
     # event_flag_quit_stock()
     # event_flag_index()
     # event_record_cooperation_info()
-    event_update_shibor()
+    # event_update_shibor()
+    event_init_interest()

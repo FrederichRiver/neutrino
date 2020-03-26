@@ -13,24 +13,9 @@ from jupiter.utils import ERROR, INFO
 import venus.stock_event
 import taurus.nlp_event
 import jupiter.database_manager
-from venus.stock_event import (
-    event_record_new_stock,
-    event_init_stock,
-    event_download_stock_data,
-    event_download_index_data,
-    event_create_interest_table,
-    event_init_interest,
-    event_record_interest,
-    event_flag_stock,
-    event_flag_index,
-    event_flag_quit_stock,
-    event_update_shibor,
-    event_rehabilitation,
-    event_record_cooperation_info, event_finance_info)
-from taurus.nlp_event import event_download_netease_news
 import jupiter.test_jupiter as test
 
-__version__ = '1.1.5'
+__version__ = '1.1.6'
 
 
 class taskManager(BackgroundScheduler):
@@ -46,11 +31,15 @@ class taskManager(BackgroundScheduler):
         if not taskfile:
             ERROR("Task file is not found.")
         else:
-            self.module_list = [venus.stock_event, taurus.nlp_event]
+            self.module_list = [
+                venus.stock_event, taurus.nlp_event,
+                jupiter.database_manager]
             self.taskfile = taskfile
+            self.func_list = {}
+            """
             try:
                 self.func_list = {
-                    'event_record_new_stock': event_record_new_stock,
+                    'event_record_new_stock': venus.stock_event.event_record_new_stock,
                     'event_init_stock': event_init_stock,
                     'event_download_stock_data': event_download_stock_data,
                     'event_download_index_data': event_download_index_data,
@@ -61,14 +50,13 @@ class taskManager(BackgroundScheduler):
                     'event_flag_index': event_flag_index,
                     'event_flag_quit_stock': event_flag_quit_stock,
                     'event_download_netease_news': event_download_netease_news,
-                    # 'event_rehabilitation': event_rehabilitation,
                     'event_record_cooperation_info': event_record_cooperation_info,
-                    # 'event_finance_info': event_finance_info
                     'event_mysql_backup': event_mysql_backup,
                     'test': test.test_fun
                 }
             except Exception:
                 ERROR("Function list initial failed.")
+            """
             self.reload_event()
 
     def reload_event(self):

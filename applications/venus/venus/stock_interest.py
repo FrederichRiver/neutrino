@@ -41,7 +41,7 @@ class EventInterest(StockEventBase):
         # result is a list of DataFrame table.
         result = pd.read_html(
             url, attrs={'class': 'table_bg001 border_box limit_sale'})
-        if not result:
+        if result:
             tab = result[0]
             tab.columns = [
                 'report_date', 'int_year', 'float_bonus',
@@ -59,13 +59,13 @@ class EventInterest(StockEventBase):
         tab = self.resolve_interest_table(stock_code)
         tab.replace(['--'], np.nan, inplace=True)
         tab.to_sql(
-            'test_interest', self.mysql.engine.connect(),
+            'stock_interest', self.mysql.engine.connect(),
             if_exists="append", index=False)
 
     def batch_insert_interest_to_sql(self, df):
         from venus.stock_base import dataLine
         if not df.empty:
-            dataline = dataLine('test_interest')
+            dataline = dataLine('stock_interest')
             sql_list = dataline.insert_sql(df)
             for sql in sql_list:
                 try:
