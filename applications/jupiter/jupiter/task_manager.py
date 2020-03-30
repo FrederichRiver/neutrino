@@ -12,6 +12,7 @@ from jupiter.utils import ERROR, INFO
 # modules loaded into module list
 import venus.stock_event
 import taurus.nlp_event
+import saturn.finance_event
 import jupiter.database_manager
 import jupiter.test_jupiter as test
 
@@ -33,7 +34,7 @@ class taskManager(BackgroundScheduler):
         else:
             self.module_list = [
                 venus.stock_event, taurus.nlp_event,
-                jupiter.database_manager]
+                jupiter.database_manager, saturn.finance_event]
             self.taskfile = taskfile
             self.func_list = {}
             """

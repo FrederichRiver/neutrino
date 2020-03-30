@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 
-__version__ = '1.0.12'
+__version__ = '1.2.14'
 __all__ = [
     'event_record_new_stock', 'event_download_stock_data',
     'event_download_index_data', 'event_flag_quit_stock',
@@ -10,7 +10,8 @@ __all__ = [
     'event_flag_index', 'event_rehabilitation',
     'event_record_cooperation_info', 'event_finance_info',
     'event_init_stock', 'event_download_finance_report',
-    'event_update_shibor']
+    'event_update_shibor', 'event_download_trade_detail_data',
+    'event_get_hk_list', 'event_record_orgid']
 
 # Event Trade Data Manager
 
@@ -91,9 +92,11 @@ def event_init_interest():
     for stock_code in event.stock_list:
         # stock code format: SH600000
         try:
-            df = event.resolve_interest_table(stock_code)
-            event.batch_insert_interest_to_sql(df)
-            # event.insert_interest_table_into_sql(stock_code)
+            tab = event.resolve_interest_table(stock_code)
+            if not tab.empty:
+                tab.replace(['--'], np.nan, inplace=True)
+                tab = event.data_clean(tab)
+                event.batch_insert_interest_to_sql(tab)
         except Exception as e:
             ERROR(e)
             ERROR(f"Error while initializing interest of {stock_code}")
@@ -103,18 +106,7 @@ def event_record_interest():
     """
     Insert interest line by line.
     """
-    import numpy as np
-    import re
-    from dev_global.env import GLOBAL_HEADER
-    from venus.stock_interest import EventInterest
-    event = EventInterest(GLOBAL_HEADER)
-    event.get_all_stock_list()
-    for stock_code in event.stock_list:
-        tab = event.resolve_interest_table(stock_code)
-        if not tab.empty:
-            tab.replace(['--'], np.nan, inplace=True)
-            tab = event.data_clean(tab)
-            event.insert_interest_to_sql(tab)
+    pass
 
 
 def event_flag_stock():
@@ -198,6 +190,44 @@ def event_update_shibor():
         event.get_shibor_data(df)
 
 
+def event_download_trade_detail_data():
+    from dev_global.env import GLOBAL_HEADER
+    from polaris.mysql8 import mysqlHeader
+    from venus.stock_manager import EventTradeDataManager
+    import datetime
+    from jupiter.utils import ERROR
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    today = datetime.date.today()
+    trade_date_list = [
+        (today - datetime.timedelta(days=i)).strftime('%Y%m%d') for i in range(1, 6)
+    ]
+    stock_list = event.get_all_stock_list()
+    for trade_date in trade_date_list:
+        for stock in stock_list:
+            # print(f"Download detail trade data {stock}: {trade_date}")
+            try:
+                event.get_trade_detail_data(stock, trade_date)
+            except Exception as e:
+                ERROR(e)
+
+
+def event_get_hk_list():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.cninfo import cninfoSpider
+    event = cninfoSpider(GLOBAL_HEADER)
+    df = event.get_hk_stock_list()
+    event._insert_stock_manager(df)
+
+
+def event_record_orgid():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.cninfo import cninfoSpider
+    event = cninfoSpider(GLOBAL_HEADER)
+    df = event.get_stock_list()
+    event._update_stock_manager(df)
+    df = event.get_hk_stock_list()
+    event._update_stock_manager(df)
+
 '''
 def event_flag_stock():
     header = mysqlHeader('root', '6414939', 'test')
@@ -218,20 +248,6 @@ def event_rehabilitation():
         event.rehabilitate(stock)
         event.update_adjust_factor(stock)
 
-
-def event_download_trade_detail_data():
-    header = mysqlHeader('root', '6414939', 'test')
-    trade_date_list = ["20200113","20200114","20200115","20200116","20200117"]
-    event = EventTradeDetail()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    for trade_date in trade_date_list:
-        for stock in stock_list:
-            print(f"Download detail trade data {stock}: {trade_date}")
-            try:
-                event.fetch_trade_detail_data(stock, trade_date)
-            except Exception:
-                pass
 
 
 def event_cooperation_info():
@@ -270,4 +286,5 @@ if __name__ == "__main__":
     # event_flag_index()
     # event_record_cooperation_info()
     # event_update_shibor()
-    event_init_interest()
+    # event_init_interest()
+    event_download_trade_detail_data()

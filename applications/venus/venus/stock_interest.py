@@ -35,6 +35,7 @@ class EventInterest(StockEventBase):
         Used for batch insert.
         """
         import pandas as pd
+        import numpy as np
         from jupiter.utils import ERROR, read_url, data_clean
         url = read_url('URL_fh_163', CONF_FILE)
         url = url.format(stock_code[2:])
@@ -54,13 +55,6 @@ class EventInterest(StockEventBase):
         else:
             tab = pd.DataFrame()
         return tab
-
-    def insert_interest_table_into_sql(self, stock_code):
-        tab = self.resolve_interest_table(stock_code)
-        tab.replace(['--'], np.nan, inplace=True)
-        tab.to_sql(
-            'stock_interest', self.mysql.engine.connect(),
-            if_exists="append", index=False)
 
     def batch_insert_interest_to_sql(self, df):
         from venus.stock_base import dataLine

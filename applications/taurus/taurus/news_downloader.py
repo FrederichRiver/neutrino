@@ -11,24 +11,9 @@ from sqlalchemy import Column, String, Integer, Float, Date, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = 1
+__version__ = '1.2.4'
 
 article_base = declarative_base()
-
-
-class spider(object):
-    def __init__(self):
-        self.start_url = None
-
-    def fetch_start_url(self, url):
-        if re.match(r'(https?)://.', url):
-            self.start_url = url
-        else:
-            raise UrlFormatError
-
-    def query_url(self, url):
-        # query whether url exists.
-        return True
 
 
 class formArticle(article_base):
@@ -42,7 +27,7 @@ class formArticle(article_base):
     content = Column(Text)
 
 
-class newsSpider(object):
+class newsSpiderBase(object):
     def __init__(self, header, path):
         self.mysql = mysqlBase(header)
         self.url_list = []
@@ -60,6 +45,17 @@ class newsSpider(object):
             for url in self.href:
                 f.write(str(url) + '\n')
 
+    def load_href_file(self, href_file):
+        try:
+            with open(href_file, 'r') as f:
+                url = f.readline()
+                # print(url)
+                self.href.append(url)
+        except Exception as e:
+            print(e)
+
+
+class neteaseNewsSpider(newsSpiderBase):
     def generate_url_list(self):
         self._chn_list()
         self._hk_list()
@@ -71,6 +67,8 @@ class newsSpider(object):
         self._forexchange_list()
         self._chairman_list()
         self._bc_list()
+        self._business_list()
+        self._house_list()
 
     def _chn_list(self):
         chn_start_url = "https://money.163.com/special/002557S6/newsdata_gp_index.js?callback=data_callback"
@@ -132,6 +130,18 @@ class newsSpider(object):
         chairman_url_list = [f"http://money.163.com/special/00259CTD/data-yihuiman_0{i}.js?callback=data_callback" for i in range(2, 10)]
         self.url_list += chairman_url_list
 
+    def _business_list(self):
+        business_start_url = "http://money.163.com/special/002557RF/data_idx_shangye.js?callback=data_callback"
+        self.url_list.append(business_start_url)
+        business_url_list = [f"http://money.163.com/special/002557RF/data_idx_shangye_0{i}.js?callback=data_callback" for i in range(2, 10)]
+        self.url_list += business_url_list
+
+    def _house_list(self):
+        house_start_url = "http://money.163.com/special/002534NU/house2010.html"
+        self.url_list.append(house_start_url)
+        house_url_list = [f"http://money.163.com/special/002534NU/house2010_{str(i).zfill(2)}.html" for i in range(2, 21)]
+        self.url_list += house_url_list
+
     def extract_href(self, url):
         resp = requests.get(url)
         result = re.findall(
@@ -174,14 +184,9 @@ class newsSpider(object):
         except Exception as e:
             print(e)
 
-    def load_href_file(self, href_file):
-        try:
-            with open(href_file, 'r') as f:
-                url = f.readline()
-                # print(url)
-                self.href.append(url)
-        except Exception as e:
-            print(e)
+
+class SinaNewsSpider(newsSpiderBase):
+    pass
 
 
 if __name__ == "__main__":

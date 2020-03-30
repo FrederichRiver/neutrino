@@ -3,6 +3,17 @@ import json
 from random import randint
 
 
+class cookie(object):
+    def __init__(self):
+        self.js = None
+        with open('config/cookie.json', 'r') as f:
+            result = f.read()
+            self.js = json.loads(result)
+
+    def get_cookie(self, name: str) -> str:
+        return self.js[name]
+
+
 class RandomHeader(object):
     def __init__(self):
         self.js = None
@@ -26,6 +37,28 @@ class RandomHeader(object):
         return header
 
 
+class userAgent(object):
+    """
+    Example:
+    object = usrAgent()
+    result = object(), get a str type result which is User_Agent.
+    result = object.random_agent, get a random User_Agent from liboratory.
+    """
+    def __init__(self):
+        self.js = None
+        with open('config/header.json', 'r') as f:
+            result = f.read()
+            self.js = json.loads(result)
+        self.header = None
+
+    def random_agent(self) -> str:
+        i = randint(0, len(self.js)-1)
+        return self.js[str(i)]
+
+    def __call__(self):
+        return self.js["10"]
+
+
 def delay(n):
     """
     Delay delta time not longer than n seconds.
@@ -45,3 +78,9 @@ def fetch_html_object(url, header):
     response.encoding = response.apparent_encoding
     result = etree.HTML(response.text)
     return result
+
+
+if __name__ == "__main__":
+    cuky = cookie()
+    result = cuky.get_cookie('cninfo')
+    print(result)

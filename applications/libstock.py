@@ -368,17 +368,6 @@ class EventRehabilitation(StockEventBase):
                         factor=row['factor']))
 
 
-class EventTradeDetail(StockEventBase):
-    def fetch_trade_detail_data(self, stock_code, trade_date):
-        year = '2019'
-        # trade_date format: '20191118'
-        code = self.coder.net_ease_code(stock_code)
-        url = f"http://quotes.money.163.com/cjmx/{year}/{trade_date}/{code}.xls"
-        df = pd.read_excel(url)
-        filename = f"csv/{stock_code}_{trade_date}.csv"
-        df.to_csv(filename, encoding='gb18030')
-
-
 class EventFinanceReport(StockEventBase):
     def update_balance_sheet(self, stock_code):
         url = f"http://quotes.money.163.com/service/zcfzb_{stock_code[2:]}.html"

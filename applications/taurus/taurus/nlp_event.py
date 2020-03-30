@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 
-from taurus.news_downloader import newsSpider
-from polaris.mysql8 import mysqlHeader
-from dev_global.env import SOFT_PATH
+from taurus.news_downloader import neteaseNewsSpider
 
 
 __version__ = 3
@@ -10,8 +8,10 @@ __all__ = ['event_download_netease_news']
 
 
 def event_download_netease_news():
+    from polaris.mysql8 import mysqlHeader
+    from dev_global.env import SOFT_PATH
     header = mysqlHeader('stock', 'stock2020', 'natural_language')
-    event = newsSpider(header, SOFT_PATH)
+    event = neteaseNewsSpider(header, SOFT_PATH)
     event.generate_url_list()
     for url in event.url_list:
         event.extract_href(url)

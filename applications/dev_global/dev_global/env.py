@@ -24,3 +24,4 @@ MANUAL = SOFT_PATH + 'config/Neutrino'
 TIME_FMT = '%Y-%m-%d'
 
 GLOBAL_HEADER = mysqlHeader('stock', 'stock2020', 'stock')
+VIEWER_HEADER = mysqlHeader('view', 'view2020', 'stock')

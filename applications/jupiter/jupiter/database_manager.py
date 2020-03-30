@@ -105,6 +105,7 @@ def event_mysql_backup():
         event = databaseBackup()
         event.get_database_list()
         event.backup()
+        event.compress()
     except Exception:
         ERROR("Database backup failed.")
 

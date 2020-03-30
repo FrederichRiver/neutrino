@@ -276,9 +276,10 @@ def tsplot(y, lags=None, figsize=(10, 8), style='bmh'):
 if __name__ == "__main__":
     from dev_global.env import GLOBAL_HEADER
     from arch import arch_model
-    # event = Stratagy(GLOBAL_HEADER)
-    # event.baseline()
-    # event.baseline_view()
+    event = Stratagy(GLOBAL_HEADER)
+    event.baseline()
+    event.baseline_view()
+    """
     import pandas as pd
     import math
     import numpy as np
@@ -316,6 +317,7 @@ if __name__ == "__main__":
     print(ts.df)
     print(plot_df.tail(10))
     print(temp_result)
+    """
     """
     import matplotlib.pyplot as plt
     fig = plt.figure()

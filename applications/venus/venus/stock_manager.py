@@ -173,14 +173,15 @@ class EventTradeDataManager(StockEventBase):
 
     def get_trade_detail_data(self, stock_code, trade_date):
         # trade_date format: '20191118'
+        root_path = '/root/download/'
         code = self.coder.net_ease_code(stock_code)
         url = read_url("URL_tick_data", CONF_FILE).format(
             trade_date[:4], trade_date, code)
         try:
             df = pd.read_excel(url)
-            csv_path = "/home/friederich/Documents/dev/neutrino/csv/"
-            filename = csv_path + f"{stock_code}_{trade_date}.csv"
-            df.to_csv(filename, encoding='gb18030')
+            filename = root_path + f"{stock_code}_{trade_date}.csv"
+            if not df.empty:
+                df.to_csv(filename, encoding='gb18030')
         except Exception as e:
             ERROR(f"Failed when download {stock_code} tick data.")
             ERROR(e)

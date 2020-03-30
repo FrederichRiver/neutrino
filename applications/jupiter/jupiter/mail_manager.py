@@ -37,9 +37,10 @@ class MailSender(object):
                 message['To'].split(','),
                 message.as_string())
             smtpObj.quit()
-            print('Success!')
+            # print('Success!')
         except smtplib.SMTPException as e:
-            print("Failed!", e)
+            # print("Failed!", e)
+            pass
 
     def mail_list(self):
         """
