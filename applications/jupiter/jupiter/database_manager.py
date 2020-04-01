@@ -7,7 +7,7 @@ from polaris.mysql8 import mysqlHeader, mysqlBase, create_table
 from venus.stock_base import StockEventBase
 
 
-__version__ = '1.4'
+__version__ = '1.1.5'
 __all__ = ['event_mysql_backup', 'event_initial_database']
 
 """
@@ -28,10 +28,10 @@ def event_drop_tables(header):
 class databaseBackup(object):
     def __init__(self):
         self.database_list = []
-        # self.temp_path = '/home/friederich/Downloads/tmp'
-        # self.backup_path = '/home/friederich/Downloads/neutrino'
-        self.temp_path = '/root/tmp'
-        self.backup_path = '/root/backup'
+        self.temp_path = '/home/friederich/Downloads/tmp/'
+        self.backup_path = '/home/friederich/Downloads/neutrino/'
+        # self.temp_path = '/root/tmp/'
+        # self.backup_path = '/root/backup/'
         self.user = 'root'
         self.pwd = '6414939'
 
@@ -46,15 +46,15 @@ class databaseBackup(object):
                 f"mysqldump -u {self.user} "
                 f"--password={self.pwd} "
                 f"--databases {db}"
-                f" > {self.temp_path}/{db}.sql"
+                f" > {self.temp_path}{db}.sql"
                 )
             os.system(dumpcmd)
 
     def compress(self):
         import time
         for db in self.database_list:
-            zip_time = time.strftime('%Y-%m-%d_%H:%M:%S')
-            compress_file = f"{self.backup_path}/{db}_{zip_time}.tar.gz"
+            zip_time = time.strftime('%Y-%m-%d')
+            compress_file = f"{self.backup_path}{db}_{zip_time}.tar.gz"
             print(compress_file)
             compress_cmd = f"tar -czvPf {compress_file} {self.temp_path}"
             print(compress_cmd)
@@ -68,21 +68,24 @@ class databaseBackup(object):
     def remove_old_backup(self):
         import re
         file_list = os.listdir(self.backup_path)
+        temp_list = {}
         for f in file_list:
-            m = re.match(
-                r'(\w+)_(\d{4}\-\d{2}\-\d{2}_\d{2}:\d{2}:\d{2})\.(tar\.gz)',
-                f)
-            if m:
-                self.get_backup_time(f)
+            file_name, file_time = self.get_backup_time(self.backup_path + f)
+            temp_list[file_name] = file_time
 
     def get_backup_time(self, file_name):
         import re
         import time
+        from dev_global.env import TIME_FMT
+        import os
+        result = os.stat(file_name)
+        print(result.st_mtime)
+        return file_name, result.st_mtime
         # (\d{1,2}):(\d{2})
-        m = re.match(r'(\w+)_(\d{4}\-\d{2}\-\d{2})', file_name)
-        if m:
-            t = time.strftime(m.group(2))
-            print(t)
+        # m = re.match(r'(\w+)_(\d{4}\-\d{2}\-\d{2})', file_name)
+        # if m:
+            #t = time.strftime(TIME_FMT, m.group(1))
+            #print(t)
 
 
 def event_initial_database():
@@ -110,6 +113,10 @@ def event_mysql_backup():
         ERROR("Database backup failed.")
 
 
+def test():
+    event = databaseBackup()
+    event.get_backup_time('/home/friederich/Documents/dev/neutrino/applications/neutrino.py')
+    event.remove_old_backup()
 # modify tables batchly
 
 """
@@ -145,11 +152,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
     elif sys.argv[1] == "test":
-        try:
-            bk = databaseBackup()
-            bk.get_database_list()
-            bk.backup()
-        except Exception as e:
-            print(e)
+        test()
     else:
         pass

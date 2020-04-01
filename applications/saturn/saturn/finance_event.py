@@ -3,7 +3,7 @@
 
 from saturn.data_view import EventView
 
-__all__ = ['event_plot']
+__all__ = ['event_plot', ]
 
 
 def event_plot():

@@ -23,39 +23,6 @@ __version__ = '1.6.8-beta'
 
 
 
-def segment():
-    import numpy as np
-    import matplotlib.pyplot as plt
-
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StockEventBase()
-    event._init_database(header)
-
-    stock_code = 'SH601818'
-    sql = f"SELECT close_price from {stock_code}"
-    result = event.mysql.engine.execute(sql).fetchall()
-    seg = []
-    for data in result:
-        seg.append(data[0])
-    seg = seg[:50]
-    seg = np.array(seg)
-    seg_fil = wavelet_nr(seg)
-    plt.plot(seg)
-    plt.plot(seg_fil)
-    plt.show()
-
-# FFT
-# SHIBOR
-# 26EMA
-# BullingBand
-# VIX
-# SHANGHAI
-# US Dollar
-# Gold
-# Metal
-# Oil
-
-
 def fetch_finance_info(stock_code):
     url = f"http://quotes.money.163.com/f10/zycwzb_{stock_code[2:]}.html#01c02"
     table = fetch_html_table(url, attr="[@class='table_bg001 border_box limit_sale scr_table']")
@@ -154,40 +121,3 @@ class TradeDate(object):
             (year, 10, 6), (year, 10, 7)
             ]
         return holiday
-
-
-def delay(delta):
-    time.sleep(random.randint(0, delta))
-
-
-def str2float(content):
-    import re
-    content = content.replace(',', '')
-    try:
-        result = float(content)
-    except Exception:
-        result = 0
-    # print(type(result))
-    return result
-
-
-if __name__ == "__main__":
-    # segment()
-    from env import global_header
-    from utils import RandomHeader
-    """
-    td = TradeDate()
-    days = td.chinese_holiday(2019)
-    print('yes') if (2019, 5, 3) in days else print('no')
-    """
-    event = TotalStock()
-    rh = RandomHeader()
-    event._init_database(global_header)
-    # event.update_stock_structure('SZ002230')
-    event.stock_list = event.fetch_all_stock_list()
-    # event.update_stock_structure('SH600000')
-    # event.calculate_stock_structure('SH600001')
-    for stock in event.stock_list:
-        print(stock)
-        event.hexun_stock_structure(stock, rh())
-        event.calculate_stock_structure(stock)

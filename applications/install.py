@@ -16,7 +16,8 @@ def solve_dir(dir):
     # files = os.listdir(dir)
     files = [
         'neutrino.py', 'message.py', 'manage_tool.py',
-        'config/conf.json', 'config/Neutrino', 'config/task.json']
+        'config/conf.json', 'config/Neutrino', 'config/task.json',
+        'config/cookie.json']
     for fi in files:
         obj_fi = dir + fi
         dest_fi = DEST + fi

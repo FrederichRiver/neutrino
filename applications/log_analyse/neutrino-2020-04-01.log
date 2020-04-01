@@ -1,0 +1,73 @@
+2020-03-27 23:23:47 [INFO]: Checking task file.
+2020-03-27 23:23:47 [INFO]: Task file checking successd.
+2020-03-27 23:24:00 [INFO]: Running job "event_init_interest (trigger: cron[hour='23', minute='24'], next run at: 2020-03-27 23:24:00 CST)" (scheduled at 2020-03-27 23:24:00+08:00)
+2020-03-30 01:23:55 [INFO]: Added job "event_record_orgid" to job store "default"
+add job event_record_orgid
+
+2020-03-30 01:23:55 [INFO]: Added job "event_get_hk_list" to job store "default"
+add job event_get_hk_list
+
+2020-03-30 02:23:55 [INFO]: Checking task file.
+2020-03-30 02:23:55 [ERROR]: cannot import name 'neteaseNewsSpider'
+2020-03-30 02:23:55 [ERROR]: Can not find module taurus.nlp_event, event_record_orgid.
+2020-03-30 02:23:55 [INFO]: Task file checking successd.
+2020-03-30 02:23:55 [ERROR]: Job event_plot could not be found.
+2020-03-30 03:23:55 [INFO]: Checking task file.
+2020-03-30 03:23:55 [ERROR]: cannot import name 'neteaseNewsSpider'
+2020-03-30 03:23:55 [ERROR]: Can not find module taurus.nlp_event, event_record_orgid.
+2020-03-30 03:23:55 [INFO]: Task file checking successd.
+2020-03-30 03:23:55 [ERROR]: Job event_plot could not be found.
+
+2020-04-01 07:00:00 [INFO]: Running job "event_plot (trigger: cron[hour='7', minute='0'], next run at: 2020-04-01 07:00:00 CST)" (scheduled at 2020-04-01 07:00:00+08:00)
+/usr/local/lib/python3.6/dist-packages/mpl_finance.py:22: DeprecationWarning: 
+
+  =================================================================
+
+   WARNING: `mpl_finance` is deprecated:
+
+    Please use `mplfinance` instead (no hyphen, no underscore).
+
+    To install: `pip install --upgrade mplfinance` 
+
+   For more information, see: https://pypi.org/project/mplfinance/
+
+  =================================================================
+
+  category=DeprecationWarning)
+/usr/local/lib/python3.6/dist-packages/pandas/plotting/_matplotlib/converter.py:103: FutureWarning: Using an implicitly registered datetime converter for a matplotlib plotting method. The converter was registered by pandas on import. Future versions of pandas will require you to explicitly register matplotlib converters.
+
+To register the converters:
+	>>> from pandas.plotting import register_matplotlib_converters
+	>>> register_matplotlib_converters()
+  warnings.warn(msg, FutureWarning)
+2020-04-01 07:00:00 [WARNING]: findfont: Font family ['sans-serif'] not found. Falling back to DejaVu Sans.
+2020-04-01 07:00:00 [WARNING]: findfont: Font family ['sans-serif'] not found. Falling back to DejaVu Sans.
+2020-04-01 07:00:00 [INFO]: Job "event_plot (trigger: cron[hour='7', minute='0'], next run at: 2020-04-02 07:00:00 CST)" executed successfully
+2020-04-01 07:11:44 [INFO]: Checking task file.
+2020-04-01 07:11:44 [INFO]: Task file checking successd.
+/usr/local/lib/python3.6/dist-packages/pymysql/cursors.py:170: Warning: (1300, "Invalid utf8mb4 character string: '800495'")
+  result = self._query(query)
+2020-04-01 11:15:00 [INFO]: Running job "event_record_orgid (trigger: cron[hour='11', minute='15'], next run at: 2020-04-01 11:15:00 CST)" (scheduled at 2020-04-01 11:15:00+08:00)
+2020-04-01 11:15:00 [ERROR]: Job "event_record_orgid (trigger: cron[hour='11', minute='15'], next run at: 2020-04-02 11:15:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 225, in event_record_orgid
+    event = cninfoSpider(GLOBAL_HEADER)
+  File "/usr/local/lib/python3.6/dist-packages/venus/cninfo.py", line 16, in __init__
+    self.http_user_agent = userAgent()
+  File "/usr/local/lib/python3.6/dist-packages/jupiter/network.py", line 49, in __init__
+    with open('config/header.json', 'r') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'config/header.json'
+2020-04-01 13:15:00 [INFO]: Running job "event_get_hk_list (trigger: cron[hour='13', minute='15'], next run at: 2020-04-01 13:15:00 CST)" (scheduled at 2020-04-01 13:15:00+08:00)
+2020-04-01 13:15:00 [ERROR]: Job "event_get_hk_list (trigger: cron[hour='13', minute='15'], next run at: 2020-04-02 13:15:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/venus/stock_event.py", line 217, in event_get_hk_list
+    event = cninfoSpider(GLOBAL_HEADER)
+  File "/usr/local/lib/python3.6/dist-packages/venus/cninfo.py", line 16, in __init__
+    self.http_user_agent = userAgent()
+  File "/usr/local/lib/python3.6/dist-packages/jupiter/network.py", line 49, in __init__
+    with open('config/header.json', 'r') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'config/header.json'
