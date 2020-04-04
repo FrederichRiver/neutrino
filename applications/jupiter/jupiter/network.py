@@ -5,8 +5,9 @@ from random import randint
 
 class cookie(object):
     def __init__(self):
+        from dev_global.env import COOKIE_FILE
         self.js = None
-        with open('config/cookie.json', 'r') as f:
+        with open(COOKIE_FILE, 'r') as f:
             result = f.read()
             self.js = json.loads(result)
 
@@ -16,8 +17,9 @@ class cookie(object):
 
 class RandomHeader(object):
     def __init__(self):
+        from dev_global.env import HEAD_FILE
         self.js = None
-        with open('config/header.json', 'r') as f:
+        with open(HEAD_FILE, 'r') as f:
             result = f.read()
             self.js = json.loads(result)
         self.header = None

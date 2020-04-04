@@ -84,6 +84,7 @@ def event_flag_quit_stock():
 # event record interest
 def event_init_interest():
     import time
+    import np
     from dev_global.env import GLOBAL_HEADER
     from venus.stock_interest import EventInterest
     from jupiter.utils import ERROR
