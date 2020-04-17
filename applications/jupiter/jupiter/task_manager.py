@@ -37,27 +37,6 @@ class taskManager(BackgroundScheduler):
                 jupiter.database_manager, saturn.finance_event]
             self.taskfile = taskfile
             self.func_list = {}
-            """
-            try:
-                self.func_list = {
-                    'event_record_new_stock': venus.stock_event.event_record_new_stock,
-                    'event_init_stock': event_init_stock,
-                    'event_download_stock_data': event_download_stock_data,
-                    'event_download_index_data': event_download_index_data,
-                    'event_download_shibor': event_update_shibor,
-                    'event_record_interest': event_record_interest,
-                    'event_init_interest': event_init_interest,
-                    'event_flag_stock': event_flag_stock,
-                    'event_flag_index': event_flag_index,
-                    'event_flag_quit_stock': event_flag_quit_stock,
-                    'event_download_netease_news': event_download_netease_news,
-                    'event_record_cooperation_info': event_record_cooperation_info,
-                    'event_mysql_backup': event_mysql_backup,
-                    'test': test.test_fun
-                }
-            except Exception:
-                ERROR("Function list initial failed.")
-            """
             self.reload_event()
 
     def reload_event(self):

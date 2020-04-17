@@ -58,6 +58,7 @@ class EventInterest(StockEventBase):
 
     def batch_insert_interest_to_sql(self, df):
         from venus.stock_base import dataLine
+        from jupiter.utils import ERROR
         if not df.empty:
             dataline = dataLine('stock_interest')
             sql_list = dataline.insert_sql(df)

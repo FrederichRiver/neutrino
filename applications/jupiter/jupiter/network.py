@@ -47,8 +47,9 @@ class userAgent(object):
     result = object.random_agent, get a random User_Agent from liboratory.
     """
     def __init__(self):
+        from dev_global.env import HEAD_FILE
         self.js = None
-        with open('config/header.json', 'r') as f:
+        with open(HEAD_FILE, 'r') as f:
             result = f.read()
             self.js = json.loads(result)
         self.header = None

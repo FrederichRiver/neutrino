@@ -130,6 +130,7 @@ class MySQLServer(object):
             info('MySQL table checking failure: %s' % e)
             return 0
 
+
 if __name__ == "__main__":
     ms = MySQLServer('stock', libencrypt.mydecrypt('wAKO0tFJ8ZH38RW4WseZnQ=='), 'stock_index')
     print("select version")

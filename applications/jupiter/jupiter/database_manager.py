@@ -28,10 +28,10 @@ def event_drop_tables(header):
 class databaseBackup(object):
     def __init__(self):
         self.database_list = []
-        self.temp_path = '/home/friederich/Downloads/tmp/'
-        self.backup_path = '/home/friederich/Downloads/neutrino/'
-        # self.temp_path = '/root/tmp/'
-        # self.backup_path = '/root/backup/'
+        # self.temp_path = '/home/friederich/Downloads/tmp/'
+        # self.backup_path = '/home/friederich/Downloads/neutrino/'
+        self.temp_path = '/root/tmp/'
+        self.backup_path = '/root/backup/'
         self.user = 'root'
         self.pwd = '6414939'
 
@@ -79,7 +79,7 @@ class databaseBackup(object):
         from dev_global.env import TIME_FMT
         import os
         result = os.stat(file_name)
-        print(result.st_mtime)
+        # print(result.st_mtime)
         return file_name, result.st_mtime
         # (\d{1,2}):(\d{2})
         # m = re.match(r'(\w+)_(\d{4}\-\d{2}\-\d{2})', file_name)
