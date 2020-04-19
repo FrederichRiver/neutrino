@@ -25,7 +25,7 @@ class EventView(StockEventBase):
         plt.rcParams['font.sans-serif'] = [u'SimHei']
         plt.rcParams['axes.unicode_minus'] = False
         # plt.show()
-        img_path = f"/root/img/{stock_code}.png"
+        img_path = f"/var/www/neutrino/static/images/{stock_code}.png"
         plt.savefig(img_path, format='png')
 
     def kplot(self, df):

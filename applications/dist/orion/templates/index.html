@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geek Fred</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css'%}" />
+</head>
+<body>
+    <div class="main_frame">
+        <dl>
+            <dt>
+                <div class="d1">
+                    <img src="{% static 'images/SH000300.png'%}">
+                </div>
+            </dt>
+        </dl>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>date</th>
+                <th>close price</th>
+            </tr>
+            {% for row in stock_data %}
+                <tr>
+                    <td>{{ row.trade_date }}</td>
+                    <td>{{ row.close_price }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        
+    </div>   
+</body>
+</html>
