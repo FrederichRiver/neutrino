@@ -7,21 +7,10 @@ from polaris.mysql8 import mysqlHeader, mysqlBase, create_table
 from venus.stock_base import StockEventBase
 
 
-__version__ = '1.1.5'
+__version__ = '1.1.6'
 __all__ = ['event_mysql_backup', 'event_initial_database']
 
-"""
-def event_drop_tables(header):
-    mysql = mysqlBase(header)
-    # self definition
-    table_list = mysql.session.query(
-            formStockList.stock_code
-            ).filter_by(flag='0').all()
-    for dataline in table_list:
-        table_name = "{}_interest".format(dataline[0])
-        print(table_name)
-        mysql.drop_table(table_name)
-"""
+
 # event back up
 
 
@@ -36,7 +25,7 @@ class databaseBackup(object):
         self.pwd = '6414939'
 
     def get_database_list(self):
-        self.database_list = ['stock']
+        self.database_list = ['stock', 'natural_language']
         return self.database_list
 
     def backup(self):
@@ -61,7 +50,7 @@ class databaseBackup(object):
             os.chdir(self.backup_path)
             os.system("pwd")
             os.system(compress_cmd)
-        print("compress complete!")
+        # print("compress complete!")
         # remove_cmd = f"rm -rf {backup_path}"
         # os.system(remove_cmd)
 
@@ -79,13 +68,7 @@ class databaseBackup(object):
         from dev_global.env import TIME_FMT
         import os
         result = os.stat(file_name)
-        # print(result.st_mtime)
         return file_name, result.st_mtime
-        # (\d{1,2}):(\d{2})
-        # m = re.match(r'(\w+)_(\d{4}\-\d{2}\-\d{2})', file_name)
-        # if m:
-            #t = time.strftime(TIME_FMT, m.group(1))
-            #print(t)
 
 
 def event_initial_database():
@@ -112,28 +95,6 @@ def event_mysql_backup():
     except Exception:
         ERROR("Database backup failed.")
 
-
-def test():
-    event = databaseBackup()
-    event.get_backup_time('/home/friederich/Documents/dev/neutrino/applications/neutrino.py')
-    event.remove_old_backup()
-# modify tables batchly
-
-"""
-def table_batch_modify():
-    header = mysqlHeader('root', '6414939', 'test')
-    # self definition
-    event = StockEventBase()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    for stock in stock_list:
-        print(stock)
-        try:
-            sql = f"alter table {stock} add column stock_quantity int"
-            event.mysql.engine.execute(sql)
-        except Exception:
-            pass
-"""
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

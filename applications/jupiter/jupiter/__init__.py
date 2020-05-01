@@ -1,4 +1,4 @@
-__version__ = '1.5.24'
+__version__ = '1.5.25'
 __all__ = ['network', 'task_manager', 'utils', 'database_manager']
 
 # v1.3.19: Modify event_backup, compress after backup.
@@ -6,3 +6,4 @@ __all__ = ['network', 'task_manager', 'utils', 'database_manager']
 # v1.4.21: Add class userAgent.
 # v1.5.22: Add class cookie.
 # v1.5.23: Debug.
+# v1.5.25: Mail attachment.

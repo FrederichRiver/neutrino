@@ -70,6 +70,7 @@ class EventInterest(StockEventBase):
 
     def price_adjust(self, stock_code):
         import datetime
+        from jupiter.utils import ERROR
         select_col = (
             "trade_date,close_price,prev_close_price"
         )
