@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__version__ = '1.0.11'
+__version__ = '1.0.12'
 
 
 formTemplate = declarative_base()
@@ -46,6 +46,8 @@ class formStockManager(formTemplate):
     __tablename__ = 'stock_manager'
     stock_code = Column(String(10), primary_key=True)
     stock_name = Column(String(20))
+    orgId = Column(String(20))
+    short_code = Column(String(10))
     gmt_create = Column(Date)
     gmt_modified = Column(Date)
     gmt_xrdr = Column(Date)

@@ -1,0 +1,20 @@
+[
+    {
+        "Type": "plain",
+        "Title": "Close Price",
+        "Reciever": ["Fred<hezhiyuan_tju@163.com>"],
+        "Content": "close_price.txt",
+        "Attachment": [
+            {
+                "url": "/home/friederich/Documents/dev/neutrino/applications/dist/data.xls",
+                "alias": "data.xls"
+            }
+        ]
+    },
+    {
+        "Type": "html",
+        "Title": "Guest mail",
+        "Reciever": ["Fred<hezhiyuan_tju@163.com>"],
+        "Content": "guest_mail.html"
+    }
+]

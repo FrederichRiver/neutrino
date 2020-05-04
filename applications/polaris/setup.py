@@ -5,6 +5,7 @@ setup(
         name='polaris',
         version=v,
         packages=find_packages(),
+        install_requires=['sqlalchemy',],
         author='Fred Monster',
         author_email='hezhiyuan_tju@163.com',
         url='https://github.com/FrederichRiver/neutrino',

@@ -127,17 +127,4 @@ class cninfoSpider(spiderBase):
 
 
 if __name__ == "__main__":
-    from dev_global.env import GLOBAL_HEADER
-    # event = announceSpiderBase()
-    # event._set_param()
-    # event.run()
-    # event = spiderBase()
-    # event.test()
-    event = cninfoSpider(GLOBAL_HEADER)
-    # df = event.get_stock_list()
-    # df = event.get_hk_stock_list()
-    df = event.get_fund_stock_list()
-    for index, row in df.iterrows():
-        print(row['code'], row['zwjc'])
-    # event._insert_stock_manager(df)
-    # event._update_stock_manager(df)
+    pass
