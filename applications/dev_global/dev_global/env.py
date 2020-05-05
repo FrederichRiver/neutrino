@@ -1,23 +1,22 @@
 #!/usr/bin/python3
-
+import os
 from polaris.mysql8 import mysqlHeader
 
 """
 global environment varibles
 
 """
-SERVER = True
 
 PYTHON_VERSION = 3.6
 LOCAL_TIME_ZONE = 'Beijing'
 TIME_FMT = '%Y-%m-%d'
 
 
-if SERVER:
-    ROOT_PATH = '~/Documents/dev/neutrino/applications/'
+if os.getenv('SERVER') == 'MARS':
+    ROOT_PATH = '/root/'
     SOFT_PATH = '/opt/neutrino/'
 else:
-    ROOT_PATH = '/root/'
+    ROOT_PATH = '~/Documents/dev/neutrino/applications/'
     SOFT_PATH = '/opt/neutrino/'
 
 

@@ -35,7 +35,8 @@ class taskManager(BackgroundScheduler):
         else:
             self.module_list = [
                 venus.stock_event, taurus.nlp_event,
-                jupiter.database_manager, saturn.finance_event]
+                jupiter.database_manager, saturn.finance_event,
+                jupiter.mail_manager]
             self.taskfile = taskfile
             self.func_list = {}
             self.reload_event()

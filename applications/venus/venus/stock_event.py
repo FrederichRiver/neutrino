@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 
-__version__ = '1.2.14'
+__version__ = '1.2.15'
 __all__ = [
     'event_record_new_stock', 'event_download_stock_data',
     'event_download_index_data', 'event_flag_quit_stock',
@@ -11,7 +11,10 @@ __all__ = [
     'event_record_cooperation_info', 'event_finance_info',
     'event_init_stock', 'event_download_finance_report',
     'event_update_shibor', 'event_download_trade_detail_data',
-    'event_get_hk_list', 'event_record_orgid', 'event_download_balance_data']
+    'event_get_hk_list', 'event_record_orgid',
+    'event_download_balance_data', 'event_download_cashflow_data',
+    'event_download_income_data'
+    ]
 
 # Event Trade Data Manager
 
@@ -232,6 +235,7 @@ def event_record_orgid():
 
 def event_download_balance_data():
     from dev_global.env import GLOBAL_HEADER
+    from jupiter.utils import ERROR
     from venus.finance_report import EventFinanceReport
     event = EventFinanceReport(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
@@ -239,7 +243,31 @@ def event_download_balance_data():
         try:
             event.update_balance(stock_code)
         except Exception as e:
-            ERROR("Error occours while recording balance sheet.")
+            ERROR(f"Error occours while recording {stock_code} balance sheet.")
+
+def event_download_cashflow_data():
+    from dev_global.env import GLOBAL_HEADER
+    from jupiter.utils import ERROR
+    from venus.finance_report import EventFinanceReport
+    event = EventFinanceReport(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock_code in stock_list:
+        try:
+            event.update_cashflow(stock_code)
+        except Exception as e:
+            ERROR(f"Error occours while recording {stock_code} cashflow sheet.")
+
+def event_download_income_data():
+    from dev_global.env import GLOBAL_HEADER
+    from jupiter.utils import ERROR
+    from venus.finance_report import EventFinanceReport
+    event = EventFinanceReport(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock_code in stock_list:
+        try:
+            event.update_income(stock_code)
+        except Exception as e:
+            ERROR(f"Error occours while recording {stock_code} income sheet.")
 
 
 '''

@@ -74,13 +74,17 @@ class databaseBackup(object):
 def event_initial_database():
     from dev_global.env import GLOBAL_HEADER
     from jupiter.utils import ERROR
+    from polaris.mysql8 import create_table, mysqlBase, mysqlHeader
     from venus.form import formTemplate, formFinanceTemplate, formInfomation
     try:
+        # root_header = mysqlHeader('root', '6414939', 'stock')
+        # mysql = mysqlBase(root_header)
         mysql = mysqlBase(GLOBAL_HEADER)
         create_table(formTemplate, mysql.engine)
         create_table(formFinanceTemplate, mysql.engine)
         create_table(formInfomation, mysql.engine)
-    except Exception:
+    except Exception as e:
+        ERROR(e)
         ERROR("Database initialize failed.")
 
 
@@ -102,9 +106,7 @@ if __name__ == "__main__":
         raise SystemExit(1)
     if sys.argv[1] == "init":
         try:
-            # header = mysqlHeader('stock', 'stock2020', 'stock')
-            header = mysqlHeader('root', '6414939', 'test')
-            event_initial_database(header)
+            event_initial_database()
         except Exception as e:
             print(e)
     elif sys.argv[1] == "backup":
@@ -114,5 +116,3 @@ if __name__ == "__main__":
             print(e)
     elif sys.argv[1] == "test":
         test()
-    else:
-        pass

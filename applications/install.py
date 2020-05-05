@@ -5,7 +5,10 @@ import os
 import re
 
 DEST = '/opt/neutrino/'
-DEST2 = '/home/friederich/Documents/dev/neutrino/applications/package/'
+
+SERVER = os.getenv('SERVER')
+if not SERVER:
+    DEST2 = '/home/friederich/Documents/dev/neutrino/applications/package/'
 
 
 def solve_dir(dir):
@@ -21,17 +24,17 @@ def solve_dir(dir):
     for fi in files:
         obj_fi = dir + fi
         dest_fi = DEST + fi
-        dest_fi2 = DEST2 + fi
+        
         if os.path.isfile(obj_fi):
             print(obj_fi)
             cmd = "cp -u -v %s %s" % (obj_fi, dest_fi)
             os.system(cmd)
-            cmd = "cp -u -v %s %s" % (obj_fi, dest_fi2)
-            os.system(cmd)
+            if not SERVER:
+                dest_fi2 = DEST2 + fi
+                cmd = "cp -u -v %s %s" % (obj_fi, dest_fi2)
+                os.system(cmd)
         elif os.path.isdir(fi):
             solve_dir(obj_fi+'/')
-        else:
-            pass
 
 
 if __name__ == "__main__":

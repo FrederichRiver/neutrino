@@ -7,5 +7,7 @@
 	"URL_hexun_stockstructure": "http://stockdata.stock.hexun.com/2009_gbjg_{}.shtml",
 	"URL_tick_data": "http://quotes.money.163.com/cjmx/{0}/{1}/{2}.xls",
 	"URL_balance":"http://quotes.money.163.com/service/zcfzb_{}.html",
+	"URL_cashflow":"http://quotes.money.163.com/service/xjllb_{}.html",
+	"URL_income":"http://quotes.money.163.com/service/lrb_{}.html",
 	"path_template":"/opt/neutrino/template/"
 }

@@ -32,7 +32,7 @@ class formInterest(formTemplate):
     """
     This is the template of stock interest.
     """
-    __tablename__ = 'template_stock_interest'
+    __tablename__ = 'stock_interest'
     report_date = Column(Date, primary_key=True)
     char_stock_code = Column(String(10), primary_key=True)
     int_year = Column(Integer)
@@ -79,41 +79,6 @@ class formStock(formTemplate):
 
     def __str__(self):
         return "<Stock template>"
-
-
-class formFinance(formFinanceTemplate):
-    __tablename__ = 'finance_factor'
-    report_period = Column(Date, primary_key=True)
-    stock_code = Column(String(10), primary_key=True)
-    roe = Column(Float)
-    pe = Column(Float)
-    ttm = Column(Float)
-    roic = Column(Float)
-    croic = Column(Float)
-    ebit = Column(Float)
-    ebitda = Column(Float)
-    noplat = Column(Float)
-
-
-class formCashFlow(formFinanceTemplate):
-    __tablename__ = 'cash_flow_sheet'
-    report_period = Column(Date, primary_key=True)
-    stock_code = Column(String(10), primary_key=True)
-    r1_cash_flow_from_operating_activities = Column(Float)
-    r2_cash_flow_from_investment = Column(Float)
-    r3_cash_flow_from_finance_activities = Column(Float)
-    r4_effect_of_foriegn_exchange_rate_changes_on_cash_effect = Column(Float)
-    r5_net_increase_in_cash_and_cash_equivalent = Column(Float)
-    r1_1_cash_received_from_sales_of_goods_or_rendering_services = Column(Float)
-    r1_2_subtotal_of_cash_inflow_from_operating = Column(Float)
-    r1_3_subtotal_of_cash_outflow_from_operating = Column(Float)
-    r1_4_captial_expenditure = Column(Float)
-    r2_1_subtotal_of_cash_inflow_from_investment = Column(Float)
-    r2_2_subtotal_of_cash_outflow_from_investment = Column(Float)
-    r3_1_subtotal_of_cash_inflow_from_finance = Column(Float)
-    r3_2_subtotal_of_cash_outflow_from_finance = Column(Float)
-    r5_1_cash_and_cash_equivalent_at_the_beginning_of_period = Column(Float)
-    r5_2_cash_and_cash_equivalent_at_the_end_of_period = Column(Float)
 
 
 class formBalance(formFinanceTemplate):
@@ -231,8 +196,6 @@ class formBalance(formFinanceTemplate):
 
 
 balance_column = [
-    'float_assets',
-    'float_c1_current_assets',
     'float_c1_1',
     'float_c1_2',
     'float_c1_3',
@@ -257,7 +220,7 @@ balance_column = [
     'float_c1_22',
     'float_c1_23',
     'float_c1_24',
-    'float_c2_non_current_assets',
+    'float_c1_current_assets',
     'float_c2_1',
     'float_c2_2',
     'float_c2_3',
@@ -283,8 +246,8 @@ balance_column = [
     'float_c2_23',
     'float_c2_24',
     'float_c2_25',
-    'float_liability',
-    'float_c3_current_liability',
+    'float_c2_non_current_assets',
+    'float_assets',
     'float_c3_1',
     'float_c3_2',
     'float_c3_3',
@@ -316,7 +279,7 @@ balance_column = [
     'float_c3_29',
     'float_c3_30',
     'float_c3_31',
-    'float_c4_long_term_liability',
+    'float_c3_current_liability',
     'float_c4_1',
     'float_c4_2',
     'float_c4_3',
@@ -325,8 +288,8 @@ balance_column = [
     'float_c4_6',
     'float_c4_7',
     'float_c4_8',
-    'float_owner_equity',
-    'float_c6_equity_attributable_to_parent_company',
+    'float_c4_long_term_liability',
+    'float_liability',
     'float_c6_1',
     'float_c6_2',
     'float_c6_3',
@@ -337,37 +300,205 @@ balance_column = [
     'float_c6_8',
     'float_c6_9',
     'float_c6_10',
+    'float_c6_equity_attributable_to_parent_company',
     'float_c7_minority_interest',
+    'float_owner_equity',
     'float_liability_and_equity'
 ]
 
 
 class formIncomeStatement(formFinanceTemplate):
-    __tablename__ = 'income_statement_sheet'
+    __tablename__ = 'income_statement'
+    report_date = Column(Date, primary_key=True)
+    char_stock_code = Column(String(10), primary_key=True)
+    float_c1 = Column(Float, comment='total_revenue')
+    float_c2 = Column(Float, comment='revenue')
+    float_c3 = Column(Float, comment='interest_income')
+    float_c4 = Column(Float, comment='')
+    float_c5 = Column(Float, comment='')
+    float_c6 = Column(Float, comment='')
+    float_c7 = Column(Float, comment='')
+    float_c8 = Column(Float, comment='')
+    float_c9 = Column(Float, comment='')
+    float_c10 = Column(Float, comment='')
+    float_c11 = Column(Float, comment='')
+    float_c12 = Column(Float, comment='')
+    float_c13 = Column(Float, comment='rd expense')
+    float_c14 = Column(Float, comment='')
+    float_c15 = Column(Float, comment='')
+    float_c16 = Column(Float, comment='')
+    float_c17 = Column(Float, comment='')
+    float_c18 = Column(Float, comment='')
+    float_c19 = Column(Float, comment='')
+    float_c20 = Column(Float, comment='')
+    float_c21 = Column(Float, comment='')
+    float_c22 = Column(Float, comment='')
+    float_c23 = Column(Float, comment='')
+    float_c24 = Column(Float, comment='financial expense')
+    float_c25 = Column(Float, comment='')
+    float_c26 = Column(Float, comment='investment income')
+    float_c27 = Column(Float, comment='')
+    float_c28 = Column(Float, comment='')
+    float_c29 = Column(Float, comment='')
+    float_c30 = Column(Float, comment='')
+    float_c31 = Column(Float, comment='')
+    float_c32 = Column(Float, comment='')
+    float_c33 = Column(Float, comment='')
+    float_c34 = Column(Float, comment='')
+    float_c35 = Column(Float, comment='')
+    float_c36 = Column(Float, comment='')
+    float_c37 = Column(Float, comment='total profit')
+    float_c38 = Column(Float, comment='')
+    float_c39 = Column(Float, comment='income tax')
+    float_c40 = Column(Float, comment='')
+    float_c41 = Column(Float, comment='net profit')
+    float_c42 = Column(Float, comment='')
+    float_c43 = Column(Float, comment='minority interest')
+    float_c44 = Column(Float, comment='')
+    float_c45 = Column(Float, comment='')
+
+income_column = [f"float_c{i+1}" for i in range(45)]
+
+"""
+class formIncomeStatement(formFinanceTemplate):
+    __tablename__ = 'income_statement'
     report_period = Column(Date, primary_key=True)
-    stock_code = Column(String(10), primary_key=True)
-    r1_total_revenue = Column(Float, comment='')
-    r2_total_cost = Column(Float, comment='')
-    r3_profit_from_operation = Column(Float, comment='')
-    r4_net_profit = Column(Float, comment='')
-    r1_1_revenue = Column(Float, comment='')
-    r1_2_interest_income = Column(Float, comment='')
-    r1_3_other_operating_income = Column(Float, comment='')
-    r2_1_operating_cost = Column(Float, comment='')
-    r2_2_rd_expense = Column(Float, comment='')
-    r2_3_ga_expense = Column(Float, comment='')
-    r2_4_selling_expense = Column(Float, comment='')
-    r2_5_finance_expense = Column(Float, comment='')
-    r3_1_non_operating_income = Column(Float, comment='')
-    r3_2_non_operating_expense = Column(Float, comment='')
-    r3_3_disposal_loss_on_non_current_asset = Column(Float, comment='')
-    r3_4_profit_before_tax = Column(Float, comment='')
-    r3_5_income_tax = Column(Float, comment='')
-    r3_6_unrealized_investment_loss = Column(Float, comment='')
+    r1_revenue = Column(Float, comment='')
+    r2_less_cost_of_sales = Column(Float, comment='')
+    r3_sales_tax = Column(Float)
+    r4_gross_profit = Column(Float)
+    r5_add_other_operating_income = Column(Float)
+    r6_less_other_operating_expense = Column(Float)
+    r7_less_selling_and_distribution_expense = Column(Float)
+    r8_g_a_expense = Column(Float)
+    r9_finance_expense = Column(Float)
+    r10_profit_from_operation = Column(Float)
+    
+    r12_subsidy_income = Column(Float)
+    r13_non_operating_income = Column(Float)
+    r14_less_non_operating_expense = Column(Float)
+    r15_profit_before_tax = Column(Float)
+    r16_less_income_tax = Column(Float)
+    r17_ = Column(Float)
+    r18_add_unrealised_investment_losses = Column(Float)
+    
+    r20_add_retained_profit = Column(Float)
+    r21_other_transfer_in = Column(Float)
+    r22_profit_available_for_distribution = Column(Float)
+    r23_less_appropriation_of_statutory_surplus_reserves = Column(Float)
+    r24_appropriation_of_statutory_welfare_fund = Column(Float)
+    r25_appropriation_of_staff_incentive_and_welfare_fund = Column(Float)
+    r26_appropriation_of_reserve_fund = Column(Float)
+    r27_appropriation_of_enterprise_expansion_fund = Column(Float)
+    r28_captial_redemption = Column(Float)
+    r29_profit_avaliable_for_owners_distribution = Column(Float)
+    r30_less_appropriation_of_preference_share_dividend = Column(Float)
+    r31_appropriation_of_discretionary_surplus_reserve = Column(Float)
+    r32_appropriation_of_ordinary_share_dividend = Column(Float)
+    r33_transfer_from_ordinary_share_dividend_to_paid_in_capital = Column(Float)
+    r34_retained_profit_after_appropriation = Column(Float)
+    r35_supplementary_infomation = Column(Float)
+"""
 
+class formCashFlow(formFinanceTemplate):
+    __tablename__ = 'cashflow'
+    report_date = Column(Date, primary_key=True)
+    char_stock_code = Column(String(10), primary_key=True)
+    float_c1 = Column(Float, comment='')
+    float_c2 = Column(Float, comment='')
+    float_c3 = Column(Float, comment='')
+    float_c4 = Column(Float, comment='')
+    float_c5 = Column(Float, comment='')
+    float_c6 = Column(Float, comment='')
+    float_c7 = Column(Float, comment='')
+    float_c8 = Column(Float, comment='')
+    float_c9 = Column(Float, comment='')
+    float_c10 = Column(Float, comment='')
+    float_c11 = Column(Float, comment='')
+    float_c12 = Column(Float, comment='')
+    float_c13 = Column(Float, comment='')
+    float_c14 = Column(Float, comment='')
+    float_c15 = Column(Float, comment='')
+    float_c16 = Column(Float, comment='')
+    float_c17 = Column(Float, comment='')
+    float_c18 = Column(Float, comment='')
+    float_c19 = Column(Float, comment='')
+    float_c20 = Column(Float, comment='')
+    float_c21 = Column(Float, comment='')
+    float_c22 = Column(Float, comment='')
+    float_c23 = Column(Float, comment='')
+    float_c24 = Column(Float, comment='')
+    float_c25 = Column(Float, comment='')
+    float_c26 = Column(Float, comment='')
+    float_c27 = Column(Float, comment='')
+    float_c28 = Column(Float, comment='')
+    float_c29 = Column(Float, comment='')
+    float_c30 = Column(Float, comment='')
+    float_c31 = Column(Float, comment='')
+    float_c32 = Column(Float, comment='')
+    float_c33 = Column(Float, comment='')
+    float_c34 = Column(Float, comment='')
+    float_c35 = Column(Float, comment='')
+    float_c36 = Column(Float, comment='')
+    float_c37 = Column(Float, comment='')
+    float_c38 = Column(Float, comment='')
+    float_c39 = Column(Float, comment='')
+    float_c40 = Column(Float, comment='')
+    float_c41 = Column(Float, comment='')
+    float_c42 = Column(Float, comment='')
+    float_c43 = Column(Float, comment='')
+    float_c44 = Column(Float, comment='')
+    float_c45 = Column(Float, comment='')
+    float_c46 = Column(Float, comment='')
+    float_c47 = Column(Float, comment='')
+    float_c48 = Column(Float, comment='')
+    float_c49 = Column(Float, comment='')
+    float_c50 = Column(Float, comment='')
+    float_c51 = Column(Float, comment='')
+    float_c52 = Column(Float, comment='')
+    float_c53 = Column(Float, comment='')
+    float_c54 = Column(Float, comment='')
+    float_c55 = Column(Float, comment='')
+    float_c56 = Column(Float, comment='')
+    float_c57 = Column(Float, comment='')
+    float_c58 = Column(Float, comment='')
+    float_c59 = Column(Float, comment='')
+    float_c60 = Column(Float, comment='')
+    float_c61 = Column(Float, comment='')
+    float_c62 = Column(Float, comment='')
+    float_c63 = Column(Float, comment='')
+    float_c64 = Column(Float, comment='')
+    float_c65 = Column(Float, comment='')
+    float_c66 = Column(Float, comment='')
+    float_c67 = Column(Float, comment='')
+    float_c68 = Column(Float, comment='')
+    float_c69 = Column(Float, comment='')
+    float_c70 = Column(Float, comment='')
+    float_c71 = Column(Float, comment='')
+    float_c72 = Column(Float, comment='')
+    float_c73 = Column(Float, comment='')
+    float_c74 = Column(Float, comment='')
+    float_c75 = Column(Float, comment='')
+    float_c76 = Column(Float, comment='')
+    float_c77 = Column(Float, comment='')
+    float_c78 = Column(Float, comment='')
+    float_c79 = Column(Float, comment='')
+    float_c80 = Column(Float, comment='')
+    float_c81 = Column(Float, comment='')
+    float_c82 = Column(Float, comment='')
+    float_c83 = Column(Float, comment='')
+    float_c84 = Column(Float, comment='')
+    float_c85 = Column(Float, comment='')
+    float_c86 = Column(Float, comment='')
+    float_c87 = Column(Float, comment='')
+    float_c88 = Column(Float, comment='')
+    float_c89 = Column(Float, comment='')
 
-class formCashFlowSupplymentary(formFinanceTemplate):
-    __tablename__ = 'cashflow_supplymentary'
+cashflow_column = [f"float_c{i+1}" for i in range(89)]
+"""
+
+class formCashFlow(formFinanceTemplate):
+    __tablename__ = 'cashflow'
     report_period = Column(Date, primary_key=True)
     stock_code = Column(String(10), primary_key=True)
     r1_net_profit = Column(Float, comment='')
@@ -407,42 +538,6 @@ class formCashFlowSupplymentary(formFinanceTemplate):
 
 """
 
-class formIncomeStatement(formFinanceTemplate):
-    __tablename__ = 'income_statement'
-    report_period = Column(Date, primary_key=True)
-    r1_revenue = Column(Float, comment='')
-    r2_less_cost_of_sales = Column(Float, comment='')
-    r3_sales_tax = Column(Float)
-    r4_gross_profit = Column(Float)
-    r5_add_other_operating_income = Column(Float)
-    r6_less_other_operating_expense = Column(Float)
-    r7_less_selling_and_distribution_expense = Column(Float)
-    r8_g_a_expense = Column(Float)
-    r9_finance_expense = Column(Float)
-    r10_profit_from_operation = Column(Float)
-    r11_add_investment_income = Column(Float)
-    r12_subsidy_income = Column(Float)
-    r13_non_operating_income = Column(Float)
-    r14_less_non_operating_expense = Column(Float)
-    r15_profit_before_tax = Column(Float)
-    r16_less_income_tax = Column(Float)
-    r17_minority_interest = Column(Float)
-    r18_add_unrealised_investment_losses = Column(Float)
-    r19_net_profit = Column(Float)
-    r20_add_retained_profit = Column(Float)
-    r21_other_transfer_in = Column(Float)
-    r22_profit_available_for_distribution = Column(Float)
-    r23_less_appropriation_of_statutory_surplus_reserves = Column(Float)
-    r24_appropriation_of_statutory_welfare_fund = Column(Float)
-    r25_appropriation_of_staff_incentive_and_welfare_fund = Column(Float)
-    r26_appropriation_of_reserve_fund = Column(Float)
-    r27_appropriation_of_enterprise_expansion_fund = Column(Float)
-    r28_captial_redemption = Column(Float)
-    r29_profit_avaliable_for_owners_distribution = Column(Float)
-    r30_less_appropriation_of_preference_share_dividend = Column(Float)
-    r31_appropriation_of_discretionary_surplus_reserve = Column(Float)
-    r32_appropriation_of_ordinary_share_dividend = Column(Float)
-    r33_transfer_from_ordinary_share_dividend_to_paid_in_capital = Column(Float)
-    r34_retained_profit_after_appropriation = Column(Float)
-    r35_supplementary_infomation = Column(Float)
-"""
+if __name__ == "__main__":
+    x = [f"c{i+1}" for i in range(90)]
+    print(x[-1])
