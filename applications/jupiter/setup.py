@@ -5,7 +5,7 @@ setup(
         name='jupiter',
         version=v,
         packages=find_packages(),
-        install_requires=['psutil',],
+        # install_requires=['psutil>=5.7.0',],
         author='Fred Monster',
         author_email='hezhiyuan_tju@163.com',
         url='https://github.com/FrederichRiver/neutrino',

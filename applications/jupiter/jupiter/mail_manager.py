@@ -4,11 +4,11 @@ import json
 import os
 import smtplib
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
 from email.header import Header
 
 
-__version__ = '2.0.2'
+__version__ = '2.0.10'
+__all__ = ['event_send_mail']
 
 
 class MailServer(object):
@@ -54,7 +54,8 @@ class MailServer(object):
 
     def auto_load_mail(self):
         import json
-        mail_list = json.loads(open("/home/friederich/Documents/dev/neutrino/applications/config/mail_config.json").read())
+        # mail_list = json.loads(open("/home/friederich/Documents/dev/neutrino/applications/config/mail_config.json").read())
+        mail_list = json.loads(open("/opt/neutrino/config/mail_config.json").read())
         for mail_param in mail_list:
             mail = self.mail_resolve(mail_param)
             self.send_mail(self.sender, mail())
@@ -72,13 +73,18 @@ class MailServer(object):
                 mail_obj.add_attach(a())
         return mail_obj
 
+    def server_shutdown(self):
+        self.mail_server.quit()
+
 class MailContentBase(object):
     def __init__(self, MAIL_TYPE):
         import datetime
         from email.mime.multipart import MIMEMultipart
         self.mail_content = MIMEMultipart()
         self.mail_type = MAIL_TYPE
-        self.template_path = '/home/friederich/Documents/dev/neutrino/applications/template/'   
+        # self.template_path = '/home/friederich/Documents/dev/neutrino/applications/template/'   
+        self.template_path = '/opt/neutrino/template/'   
+
 
     def set_mail(self, **args):
         for k in args.keys():
@@ -115,7 +121,7 @@ class MailAttachmentBase(object):
         self. __attachment = MIMEText( open(url, 'rb').read(), 'base64', 'utf-8')
 
     def set_attach(self, attach_file):
-        self. __attachment["Content-Type"] = auto_content_type(attach_file)
+        self. __attachment["Content-Type"] = auto_content_type2(attach_file)
         self. __attachment.add_header('Content-Disposition','attachment',filename = attach_file)
 
     def __call__(self):
@@ -141,22 +147,6 @@ class guest_mail(MailContentBase):
 class MailDefException(Exception):
     def __str__(self, func_name):
         return f"{func_name} has not been defined."
-"""
-text/plain（纯文本）
-text/html（HTML文档）
-application/xhtml+xml（XHTML文档）
-image/gif（GIF图像）
-image/jpeg（JPEG图像）【PHP中为：image/pjpeg】
-image/png（PNG图像）【PHP中为：image/x-png】
-video/mpeg（MPEG动画）
-application/octet-stream（任意的二进制数据）
-application/pdf（PDF文档）
-application/msword（Microsoft Word文件）
-message/rfc822（RFC 822形式）
-multipart/alternative（HTML邮件的HTML形式和纯文本形式，相同内容使用不同形式表示）
-application/x-www-form-urlencoded（使用HTTP的POST方法提交的表单）
-multipart/form-data（同上，但主要用于表单提交时伴随文件上传的场合）
-"""       
 
 
 def auto_content_type(filename):
@@ -184,25 +174,24 @@ def auto_content_type(filename):
         return 'text/plain'    
 
 
+def auto_content_type2(filename):
+    import mimetypes
+    return mimetypes.guess_type(filename)[0]
+
 def test():
     from datetime import date
-    l = ['Fred<hezhiyuan_tju@163.com>','Guest<362381761@qq.com>']
-    t = "This is a test."
-    att_path = '/home/friederich/Documents/dev/neutrino/applications/dist/data.xls'
     Mercury = MailServer()
     Mercury.smtp_ssl_config()
-    mail_content = guest_mail('plain')
-    mail_content.set_mail(mail_list = l, title = f"Close Price {date.today()}", content = "This is a test.")
-    att1 = MailAttachmentBase(att_path)
-    att1.set_attach('data.xls')
-    mail_content.add_attach(att1())
-    result = mail_content.get_mail_content()
-    Mercury.send_mail(Mercury.sender, result)
+    # Mercury.auto_load_mail()
+    Mercury.server_shutdown()
+
+def event_send_mail():
+    from datetime import date
+    mercury = MailServer()
+    mercury.smtp_ssl_config()
+    mercury.auto_load_mail()
+    mercury.server_shutdown()
 
 if __name__ == "__main__":
-    filename = 'test-doc-pdf'
-    filename = filename.upper()
-    Mercury = MailServer()
-    Mercury.smtp_ssl_config()
-    mail_content = guest_mail('plain')
-    Mercury.auto_load_mail()
+    filename = 'test-doc.xlsx'
+    test()

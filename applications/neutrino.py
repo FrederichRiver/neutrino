@@ -18,7 +18,7 @@ from jupiter.utils import ERROR, INFO
 from sqlalchemy.ext.declarative import declarative_base
 from threading import Thread
 
-__version__ = '1.5.11'
+__version__ = '1.5.12'
 
 
 def neutrino(pid_file, log_file):
@@ -110,7 +110,7 @@ def main_function(taskfile=None, task_line_name=''):
     Neptune.start()
     INFO(f"{task_line_name} start.")
     while True:
-        INFO("Checking task file.")
+        # INFO("Checking task file.")
         try:
             Neptune.reload_event()
             Neptune.check_task_file()

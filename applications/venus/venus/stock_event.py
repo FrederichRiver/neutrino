@@ -11,7 +11,7 @@ __all__ = [
     'event_record_cooperation_info', 'event_finance_info',
     'event_init_stock', 'event_download_finance_report',
     'event_update_shibor', 'event_download_trade_detail_data',
-    'event_get_hk_list', 'event_record_orgid']
+    'event_get_hk_list', 'event_record_orgid', 'event_download_balance_data']
 
 # Event Trade Data Manager
 
@@ -228,6 +228,19 @@ def event_record_orgid():
     event._update_stock_manager(df)
     df = event.get_hk_stock_list()
     event._update_stock_manager(df)
+
+
+def event_download_balance_data():
+    from dev_global.env import GLOBAL_HEADER
+    from venus.finance_report import EventFinanceReport
+    event = EventFinanceReport(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock_code in stock_list:
+        try:
+            event.update_balance(stock_code)
+        except Exception as e:
+            ERROR("Error occours while recording balance sheet.")
+
 
 '''
 def event_flag_stock():

@@ -11,14 +11,14 @@ formFinanceTemplate = declarative_base()
 formInfomation = declarative_base()
 
 
-class cooperation_info(formInfomation):
-    __tablename__ = 'cooperation_info'
+class company_info(formInfomation):
+    __tablename__ = 'company_info'
     # index = Column(Integer, nullable=False, autoincrement=True)
-    name = Column(String(100))
+    company_name = Column(String(100))
     english_name = Column(String(100))
     stock_code = Column(String(10), primary_key=True)
     # type: 1,state enterprise; 2,
-    type = Column(Integer)
+    # type = Column(Integer)
     legal_representative = Column(String(20))
     address = Column(String(100))
     chairman = Column(String(20))
@@ -29,7 +29,9 @@ class cooperation_info(formInfomation):
 
 
 class formInterest(formTemplate):
-    # This is the template of stock interest.
+    """
+    This is the template of stock interest.
+    """
     __tablename__ = 'template_stock_interest'
     report_date = Column(Date, primary_key=True)
     char_stock_code = Column(String(10), primary_key=True)
@@ -46,14 +48,14 @@ class formStockManager(formTemplate):
     __tablename__ = 'stock_manager'
     stock_code = Column(String(10), primary_key=True)
     stock_name = Column(String(20))
-    orgId = Column(String(20))
+    orgId = Column(String(25))
     short_code = Column(String(10))
-    gmt_create = Column(Date)
-    gmt_modified = Column(Date)
-    gmt_xrdr = Column(Date)
-    gmt_balance = Column(Date)
-    gmt_income = Column(Date)
-    gmt_cashflow = Column(Date)
+    create_date = Column(Date)
+    modified_date = Column(Date)
+    xrdr_date = Column(Date)
+    balance_date = Column(Date)
+    income_date = Column(Date)
+    cashflow_date = Column(Date)
     flag = Column(String(10))
 
     def __str__(self):
@@ -118,224 +120,224 @@ class formBalance(formFinanceTemplate):
     __tablename__ = 'balance_sheet'
     report_date = Column(Date, primary_key=True)
     char_stock_code = Column(String(10), primary_key=True)
-    float_assets = Column(Float)
-    float_r1_current_assets = Column(Float)
-    float_r1_1_bank_and_cash = Column(Float)
-    float_r1_2_provision_of_settlement_fund = Column(Float)
-    float_r1_3_lent_fund = Column(Float)
-    float_r1_4_financial_asset_held_for_trading = Column(Float)
-    float_r1_5_derivative_financial_asset = Column(Float)
-    float_r1_6_notes_receivable = Column(Float)
-    float_r1_7_accounts_receivable = Column(Float)
-    float_r1_8_prepayment = Column(Float)
-    float_r1_9_insurance_premiums_receivable = Column(Float)
-    float_r1_10_cession_premiums_receivable = Column(Float)
-    float_r1_11_provision_of_cession_receivable = Column(Float)
-    float_r1_12_interest_receivable = Column(Float)
-    float_r1_13_dividend_receivable = Column(Float)
-    float_r1_14_other_receivable = Column(Float)
-    float_r1_15_export_drawback_receivable = Column(Float)
-    float_r1_16_allowance_receivable = Column(Float)
-    float_r1_17_deposite_recievable = Column(Float)
-    float_r1_18_internal_recievables = Column(Float)
-    float_r1_19_recoursable_financial_assets_acquired = Column(Float)
-    float_r1_20_inventory = Column(Float)
-    float_r1_21_deferred_expense = Column(Float)
-    float_r1_22_unsettled_gross_and_loss_on_current_asset = Column(Float)
-    float_r1_23_long_term_debenture_investment_falling_due_in_a_year = Column(Float)
-    float_r1_24_other_current_asset = Column(Float)
-    float_r2_non_current_assets = Column(Float)
-    float_r2_1_loans_and_payments_on_behalf = Column(Float)
-    float_r2_2_financial_asset_available_for_sale = Column(Float)
-    float_r2_3_investment_held_to_maturity = Column(Float)
-    float_r2_4_long_term_receivable = Column(Float)
-    float_r2_5_long_term_equity_investment = Column(Float)
-    float_r2_6_other_long_term_investment = Column(Float)
-    float_r2_7_investment_real_estate = Column(Float)
-    float_r2_8_fixed_asset_original_cost = Column(Float)
-    float_r2_9_accmulated_depreciation = Column(Float)
-    float_r2_10_fixed_asset_net_value = Column(Float)
-    float_r2_11_provision_of_fixed_asset_impairment = Column(Float)
-    float_r2_12_fixed_asset = Column(Float)
-    float_r2_13_construction_in_progress = Column(Float)
-    float_r2_14_construction_supplies = Column(Float)
-    float_r2_15_fixed_asset_pending_disposal = Column(Float)
-    float_r2_16_bearer_bio_asset = Column(Float)
-    float_r2_17_bio_asset = Column(Float)
-    float_r2_18_oil_and_gas_asset = Column(Float)
-    float_r2_19_intangible_asset = Column(Float)
-    float_r2_20_rd_cost = Column(Float)
-    float_r2_21_goodwill = Column(Float)
-    float_r2_22_long_term_deferred_expense = Column(Float)
-    float_r2_23_circulation_right_for_equity_separation = Column(Float)
-    float_r2_24_deferred_tax_asset = Column(Float)
-    float_r2_25_other_non_current_asset = Column(Float)
-    float_liability = Column(Float)
-    float_r3_current_liability = Column(Float)
-    float_r3_1_short_term_loan = Column(Float)
-    float_r3_2_loan_from_central_bank = Column(Float)
-    float_r3_3_deposite_from_customer_and_interbank = Column(Float)
-    float_r3_4_deposite_fund = Column(Float)
-    float_r3_5_financial_liability_held_for_trading = Column(Float)
-    float_r3_6_derivative_financial_liability = Column(Float)
-    float_r3_7_note_payable = Column(Float)
-    float_r3_8_accout_payable = Column(Float)
-    float_r3_9_advance_from_customer = Column(Float)
-    float_r3_10_fund_from_sale_of_financial_asset_with_repurchasement_agreement = Column(Float)
-    float_r3_11_handling_charge_and_commission_payable = Column(Float)
-    float_r3_12_employee_benefit_payable = Column(Float)
-    float_r3_13_tax_payable = Column(Float)
-    float_r3_14_interest_payable = Column(Float)
-    float_r3_15_dividend_payable = Column(Float)
-    float_r3_16_other_payable = Column(Float)
-    float_r3_17_cession_insurance_payable = Column(Float)
-    float_r3_18_internal_payable = Column(Float)
-    float_r3_19_other_payable = Column(Float)
-    float_r3_20_provision_for_expense = Column(Float)
-    float_r3_21_accured_liability = Column(Float)
-    float_r3_22_account_payable_reinsurance = Column(Float)
-    float_r3_23_reserve_for_insurance_contract = Column(Float)
-    float_r3_24_acting_trading_security = Column(Float)
-    float_r3_25_acting_underwriting_security = Column(Float)
-    float_r3_26_international_bill_settlement = Column(Float)
-    float_r3_27_domestic_bill_settlement = Column(Float)
-    float_r3_28_deferred_income = Column(Float)
-    float_r3_29_short_term_bonds_payable = Column(Float)
-    float_r3_30_none_current_liability_due_within_one_year = Column(Float)
-    float_r3_31_other_none_current_liability = Column(Float)
-    float_r4_long_term_liability = Column(Float)
-    float_r4_1_long_term_loan = Column(Float)
-    float_r4_2_bonds_payable = Column(Float)
-    float_r4_3_long_term_payable = Column(Float)
-    float_r4_4_specific_payable = Column(Float)
-    float_r4_5_estimated_none_current_liability = Column(Float)
-    float_r4_6_long_term_deferred_income = Column(Float)
-    float_r4_7_deferred_tax_liability = Column(Float)
-    float_r4_8_other_none_current_liability = Column(Float)
-    float_owner_equity = Column(Float)
-    float_r6_equity_attributable_to_parent_company = Column(Float)
-    float_r6_1_paid_up_capital = Column(Float)
-    float_r6_2_capital_surplus = Column(Float)
-    float_r6_3_treasury_stock = Column(Float)
-    float_r6_4_specific_reserve = Column(Float)
-    float_r6_5_surplus_reserve = Column(Float)
-    float_r6_6_general_risk_preperation = Column(Float)
-    float_r6_7_unaffirmed_investment_loss = Column(Float)
-    float_r6_8_retained_earning = Column(Float)
-    float_r6_9_cash_dividend_to_be_distributed = Column(Float)
-    float_r6_10_converted_difference_in_foreign_currency_statements = Column(Float)
-    float_r7_minority_interest = Column(Float)
-    float_liability_and_equity = Column(Float)
+    float_assets = Column(Float, comment='assets')
+    float_c1_current_assets= Column(Float, comment='current assets')
+    float_c1_1 = Column(Float, comment='bank and cash')
+    float_c1_2 = Column(Float, comment='provision_of_settlement_fund')
+    float_c1_3 = Column(Float, comment='lent_fund')
+    float_c1_4 = Column(Float, comment='financial_asset_held_for_trading')
+    float_c1_5 = Column(Float, comment='derivative_financial_asset')
+    float_c1_6 = Column(Float, comment='notes_receivable')
+    float_c1_7 = Column(Float, comment='accounts_receivable')
+    float_c1_8 = Column(Float, comment='prepayment')
+    float_c1_9 = Column(Float, comment='insurance_premiums_receivable')
+    float_c1_10 = Column(Float, comment='cession_premiums_receivable')
+    float_c1_11 = Column(Float, comment='provision_of_cession_receivable')
+    float_c1_12 = Column(Float, comment='interest_receivable')
+    float_c1_13 = Column(Float, comment='dividend_receivable')
+    float_c1_14 = Column(Float, comment='other_receivable')
+    float_c1_15 = Column(Float, comment='export_drawback_receivable')
+    float_c1_16 = Column(Float, comment='allowance_receivable')
+    float_c1_17 = Column(Float, comment='deposite_recievable')
+    float_c1_18 = Column(Float, comment='internal_recievables')
+    float_c1_19 = Column(Float, comment='recoursable_financial_assets_acquired')
+    float_c1_20 = Column(Float, comment='inventory')
+    float_c1_21 = Column(Float, comment='deferred_expense')
+    float_c1_22 = Column(Float, comment='unsettled_gross_and_loss_on_current_asset')
+    float_c1_23 = Column(Float, comment='long_term_debenture_investment_falling_due_in_a_year')
+    float_c1_24 = Column(Float, comment='other_current_asset')
+    float_c2_non_current_assets = Column(Float, comment='non_current_assets')
+    float_c2_1 = Column(Float, comment='loans_and_payments_on_behalf')
+    float_c2_2 = Column(Float, comment='financial_asset_available_for_sale')
+    float_c2_3 = Column(Float, comment='investment_held_to_maturity')
+    float_c2_4 = Column(Float, comment='long_term_receivable')
+    float_c2_5 = Column(Float, comment='long_term_equity_investment')
+    float_c2_6 = Column(Float, comment='other_long_term_investment')
+    float_c2_7 = Column(Float, comment='investment_real_estate')
+    float_c2_8 = Column(Float, comment='fixed_asset_original_cost')
+    float_c2_9 = Column(Float, comment='accmulated_depreciation')
+    float_c2_10 = Column(Float, comment='fixed_asset_net_value')
+    float_c2_11 = Column(Float, comment='provision_of_fixed_asset_impairment')
+    float_c2_12 = Column(Float, comment='fixed_asset')
+    float_c2_13 = Column(Float, comment='construction_in_progress')
+    float_c2_14 = Column(Float, comment='construction_supplies')
+    float_c2_15 = Column(Float, comment='fixed_asset_pending_disposal')
+    float_c2_16 = Column(Float, comment='bearer_bio_asset')
+    float_c2_17 = Column(Float, comment='bio_asset')
+    float_c2_18 = Column(Float, comment='oil_and_gas_asset')
+    float_c2_19 = Column(Float, comment='intangible_asset')
+    float_c2_20 = Column(Float, comment='rd_cost')
+    float_c2_21 = Column(Float, comment='goodwill')
+    float_c2_22 = Column(Float, comment='long_term_deferred_expense')
+    float_c2_23 = Column(Float, comment='circulation_right_for_equity_separation')
+    float_c2_24 = Column(Float, comment='deferred_tax_asset')
+    float_c2_25 = Column(Float, comment='other_non_current_asset')
+    float_liability = Column(Float, comment='liability')
+    float_c3_current_liability = Column(Float, comment='current_liability')
+    float_c3_1 = Column(Float, comment='short_term_loan')
+    float_c3_2 = Column(Float, comment='loan_from_central_bank')
+    float_c3_3 = Column(Float, comment='deposite_from_customer_and_interbank')
+    float_c3_4 = Column(Float, comment='deposite_fund')
+    float_c3_5 = Column(Float, comment='financial_liability_held_for_trading')
+    float_c3_6 = Column(Float, comment='derivative_financial_liability')
+    float_c3_7 = Column(Float, comment='note_payable')
+    float_c3_8 = Column(Float, comment='accout_payable')
+    float_c3_9 = Column(Float, comment='advance_from_customer')
+    float_c3_10 = Column(Float, comment='fund_from_sale_of_financial_asset_with_repurchasement_agreement')
+    float_c3_11 = Column(Float, comment='handling_charge_and_commission_payable')
+    float_c3_12 = Column(Float, comment='employee_benefit_payable')
+    float_c3_13 = Column(Float, comment='tax_payable')
+    float_c3_14 = Column(Float, comment='interest_payable')
+    float_c3_15 = Column(Float, comment='dividend_payable')
+    float_c3_16 = Column(Float, comment='other_payable')
+    float_c3_17 = Column(Float, comment='cession_insurance_payable')
+    float_c3_18 = Column(Float, comment='internal_payable')
+    float_c3_19 = Column(Float, comment='other_payable')
+    float_c3_20 = Column(Float, comment='provision_for_expense')
+    float_c3_21 = Column(Float, comment='accured_liability')
+    float_c3_22 = Column(Float, comment='account_payable_reinsurance')
+    float_c3_23 = Column(Float, comment='reserve_for_insurance_contract')
+    float_c3_24 = Column(Float, comment='acting_trading_security')
+    float_c3_25 = Column(Float, comment='acting_underwriting_security')
+    float_c3_26 = Column(Float, comment='international_bill_settlement')
+    float_c3_27 = Column(Float, comment='domestic_bill_settlement')
+    float_c3_28 = Column(Float, comment='deferred_income')
+    float_c3_29 = Column(Float, comment='short_term_bonds_payable')
+    float_c3_30 = Column(Float, comment='none_current_liability_due_within_one_year')
+    float_c3_31 = Column(Float, comment='other_none_current_liability')
+    float_c4_long_term_liability = Column(Float, comment='long_term_liability')
+    float_c4_1 = Column(Float, comment='long_term_loan')
+    float_c4_2 = Column(Float, comment='bonds_payable')
+    float_c4_3 = Column(Float, comment='long_term_payable')
+    float_c4_4 = Column(Float, comment='specific_payable')
+    float_c4_5 = Column(Float, comment='estimated_none_current_liability')
+    float_c4_6 = Column(Float, comment='long_term_deferred_income')
+    float_c4_7 = Column(Float, comment='deferred_tax_liability')
+    float_c4_8 = Column(Float, comment='other_none_current_liability')
+    float_owner_equity = Column(Float, comment='owner_equity')
+    float_c6_equity_attributable_to_parent_company = Column(Float, comment='equity_attributable_to_parent_company')
+    float_c6_1 = Column(Float, comment='paid_up_capital')
+    float_c6_2 = Column(Float, comment='capital_surplus')
+    float_c6_3 = Column(Float, comment='treasury_stock')
+    float_c6_4 = Column(Float, comment='specific_reserve')
+    float_c6_5 = Column(Float, comment='surplus_reserve')
+    float_c6_6 = Column(Float, comment='general_risk_preperation')
+    float_c6_7 = Column(Float, comment='unaffirmed_investment_loss')
+    float_c6_8 = Column(Float, comment='retained_earning')
+    float_c6_9 = Column(Float, comment='cash_dividend_to_be_distributed')
+    float_c6_10 = Column(Float, comment='converted_difference_in_foreign_currency_statements')
+    float_c7_minority_interest = Column(Float, comment='minority_interest')
+    float_liability_and_equity = Column(Float, comment='liability_and_equity')
 
 
 balance_column = [
     'float_assets',
-    'float_r1_current_assets',
-    'float_r1_1_bank_and_cash',
-    'float_r1_2_provision_of_settlement_fund',
-    'float_r1_3_lent_fund',
-    'float_r1_4_financial_asset_held_for_trading',
-    'float_r1_5_derivative_financial_asset',
-    'float_r1_6_notes_receivable',
-    'float_r1_7_accounts_receivable',
-    'float_r1_8_prepayment',
-    'float_r1_9_insurance_premiums_receivable',
-    'float_r1_10_cession_premiums_receivable',
-    'float_r1_11_provision_of_cession_receivable',
-    'float_r1_12_interest_receivable',
-    'float_r1_13_dividend_receivable',
-    'float_r1_14_other_receivable',
-    'float_r1_15_export_drawback_receivable',
-    'float_r1_16_allowance_receivable',
-    'float_r1_17_deposite_recievable',
-    'float_r1_18_internal_recievables',
-    'float_r1_19_recoursable_financial_assets_acquired',
-    'float_r1_20_inventory',
-    'float_r1_21_deferred_expense',
-    'float_r1_22_unsettled_gross_and_loss_on_current_asset',
-    'float_r1_23_long_term_debenture_investment_falling_due_in_a_year',
-    'float_r1_24_other_current_asset',
-    'float_r2_non_current_assets',
-    'float_r2_1_loans_and_payments_on_behalf',
-    'float_r2_2_financial_asset_available_for_sale',
-    'float_r2_3_investment_held_to_maturity',
-    'float_r2_4_long_term_receivable',
-    'float_r2_5_long_term_equity_investment',
-    'float_r2_6_other_long_term_investment',
-    'float_r2_7_investment_real_estate',
-    'float_r2_8_fixed_asset_original_cost',
-    'float_r2_9_accmulated_depreciation',
-    'float_r2_10_fixed_asset_net_value',
-    'float_r2_11_provision_of_fixed_asset_impairment',
-    'float_r2_12_fixed_asset',
-    'float_r2_13_construction_in_progress',
-    'float_r2_14_construction_supplies',
-    'float_r2_15_fixed_asset_pending_disposal',
-    'float_r2_16_bearer_bio_asset',
-    'float_r2_17_bio_asset',
-    'float_r2_18_oil_and_gas_asset',
-    'float_r2_19_intangible_asset',
-    'float_r2_20_rd_cost',
-    'float_r2_21_goodwill',
-    'float_r2_22_long_term_deferred_expense',
-    'float_r2_23_circulation_right_for_equity_separation',
-    'float_r2_24_deferred_tax_asset',
-    'float_r2_25_other_non_current_asset',
+    'float_c1_current_assets',
+    'float_c1_1',
+    'float_c1_2',
+    'float_c1_3',
+    'float_c1_4',
+    'float_c1_5',
+    'float_c1_6',
+    'float_c1_7',
+    'float_c1_8',
+    'float_c1_9',
+    'float_c1_10',
+    'float_c1_11',
+    'float_c1_12',
+    'float_c1_13',
+    'float_c1_14',
+    'float_c1_15',
+    'float_c1_16',
+    'float_c1_17',
+    'float_c1_18',
+    'float_c1_19',
+    'float_c1_20',
+    'float_c1_21',
+    'float_c1_22',
+    'float_c1_23',
+    'float_c1_24',
+    'float_c2_non_current_assets',
+    'float_c2_1',
+    'float_c2_2',
+    'float_c2_3',
+    'float_c2_4',
+    'float_c2_5',
+    'float_c2_6',
+    'float_c2_7',
+    'float_c2_8',
+    'float_c2_9',
+    'float_c2_10',
+    'float_c2_11',
+    'float_c2_12',
+    'float_c2_13',
+    'float_c2_14',
+    'float_c2_15',
+    'float_c2_16',
+    'float_c2_17',
+    'float_c2_18',
+    'float_c2_19',
+    'float_c2_20',
+    'float_c2_21',
+    'float_c2_22',
+    'float_c2_23',
+    'float_c2_24',
+    'float_c2_25',
     'float_liability',
-    'float_r3_current_liability',
-    'float_r3_1_short_term_loan',
-    'float_r3_2_loan_from_central_bank',
-    'float_r3_3_deposite_from_customer_and_interbank',
-    'float_r3_4_deposite_fund',
-    'float_r3_5_financial_liability_held_for_trading',
-    'float_r3_6_derivative_financial_liability',
-    'float_r3_7_note_payable',
-    'float_r3_8_accout_payable',
-    'float_r3_9_advance_from_customer',
-    'float_r3_10_fund_from_sale_of_financial_asset_with_repurchasement_agreement',
-    'float_r3_11_handling_charge_and_commission_payable',
-    'float_r3_12_employee_benefit_payable',
-    'float_r3_13_tax_payable',
-    'float_r3_14_interest_payable',
-    'float_r3_15_dividend_payable',
-    'float_r3_16_other_payable',
-    'float_r3_17_cession_insurance_payable',
-    'float_r3_18_internal_payable',
-    'float_r3_19_other_payable',
-    'float_r3_20_provision_for_expense',
-    'float_r3_21_accured_liability',
-    'float_r3_22_account_payable_reinsurance',
-    'float_r3_23_reserve_for_insurance_contract',
-    'float_r3_24_acting_trading_security',
-    'float_r3_25_acting_underwriting_security',
-    'float_r3_26_international_bill_settlement',
-    'float_r3_27_domestic_bill_settlement',
-    'float_r3_28_deferred_income',
-    'float_r3_29_short_term_bonds_payable',
-    'float_r3_30_none_current_liability_due_within_one_year',
-    'float_r3_31_other_none_current_liability',
-    'float_r4_long_term_liability',
-    'float_r4_1_long_term_loan',
-    'float_r4_2_bonds_payable',
-    'float_r4_3_long_term_payable',
-    'float_r4_4_specific_payable',
-    'float_r4_5_estimated_none_current_liability',
-    'float_r4_6_long_term_deferred_income',
-    'float_r4_7_deferred_tax_liability',
-    'float_r4_8_other_none_current_liability',
+    'float_c3_current_liability',
+    'float_c3_1',
+    'float_c3_2',
+    'float_c3_3',
+    'float_c3_4',
+    'float_c3_5',
+    'float_c3_6',
+    'float_c3_7',
+    'float_c3_8',
+    'float_c3_9',
+    'float_c3_10',
+    'float_c3_11',
+    'float_c3_12',
+    'float_c3_13',
+    'float_c3_14',
+    'float_c3_15',
+    'float_c3_16',
+    'float_c3_17',
+    'float_c3_18',
+    'float_c3_19',
+    'float_c3_20',
+    'float_c3_21',
+    'float_c3_22',
+    'float_c3_23',
+    'float_c3_24',
+    'float_c3_25',
+    'float_c3_26',
+    'float_c3_27',
+    'float_c3_28',
+    'float_c3_29',
+    'float_c3_30',
+    'float_c3_31',
+    'float_c4_long_term_liability',
+    'float_c4_1',
+    'float_c4_2',
+    'float_c4_3',
+    'float_c4_4',
+    'float_c4_5',
+    'float_c4_6',
+    'float_c4_7',
+    'float_c4_8',
     'float_owner_equity',
-    'float_r6_equity_attributable_to_parent_company',
-    'float_r6_1_paid_up_capital',
-    'float_r6_2_capital_surplus',
-    'float_r6_3_treasury_stock',
-    'float_r6_4_specific_reserve',
-    'float_r6_5_surplus_reserve',
-    'float_r6_6_general_risk_preperation',
-    'float_r6_7_unaffirmed_investment_loss',
-    'float_r6_8_retained_earning',
-    'float_r6_9_cash_dividend_to_be_distributed',
-    'float_r6_10_converted_difference_in_foreign_currency_statements',
-    'float_r7_minority_interest',
+    'float_c6_equity_attributable_to_parent_company',
+    'float_c6_1',
+    'float_c6_2',
+    'float_c6_3',
+    'float_c6_4',
+    'float_c6_5',
+    'float_c6_6',
+    'float_c6_7',
+    'float_c6_8',
+    'float_c6_9',
+    'float_c6_10',
+    'float_c7_minority_interest',
     'float_liability_and_equity'
 ]
 
@@ -344,63 +346,63 @@ class formIncomeStatement(formFinanceTemplate):
     __tablename__ = 'income_statement_sheet'
     report_period = Column(Date, primary_key=True)
     stock_code = Column(String(10), primary_key=True)
-    r1_total_revenue = Column(Float)
-    r2_total_cost = Column(Float)
-    r3_profit_from_operation = Column(Float)
-    r4_net_profit = Column(Float)
-    r1_1_revenue = Column(Float)
-    r1_2_interest_income = Column(Float)
-    r1_3_other_operating_income = Column(Float)
-    r2_1_operating_cost = Column(Float)
-    r2_2_rd_expense = Column(Float)
-    r2_3_ga_expense = Column(Float)
-    r2_4_selling_expense = Column(Float)
-    r2_5_finance_expense = Column(Float)
-    r3_1_non_operating_income = Column(Float)
-    r3_2_non_operating_expense = Column(Float)
-    r3_3_disposal_loss_on_non_current_asset = Column(Float)
-    r3_4_profit_before_tax = Column(Float)
-    r3_5_income_tax = Column(Float)
-    r3_6_unrealized_investment_loss = Column(Float)
+    r1_total_revenue = Column(Float, comment='')
+    r2_total_cost = Column(Float, comment='')
+    r3_profit_from_operation = Column(Float, comment='')
+    r4_net_profit = Column(Float, comment='')
+    r1_1_revenue = Column(Float, comment='')
+    r1_2_interest_income = Column(Float, comment='')
+    r1_3_other_operating_income = Column(Float, comment='')
+    r2_1_operating_cost = Column(Float, comment='')
+    r2_2_rd_expense = Column(Float, comment='')
+    r2_3_ga_expense = Column(Float, comment='')
+    r2_4_selling_expense = Column(Float, comment='')
+    r2_5_finance_expense = Column(Float, comment='')
+    r3_1_non_operating_income = Column(Float, comment='')
+    r3_2_non_operating_expense = Column(Float, comment='')
+    r3_3_disposal_loss_on_non_current_asset = Column(Float, comment='')
+    r3_4_profit_before_tax = Column(Float, comment='')
+    r3_5_income_tax = Column(Float, comment='')
+    r3_6_unrealized_investment_loss = Column(Float, comment='')
 
 
 class formCashFlowSupplymentary(formFinanceTemplate):
     __tablename__ = 'cashflow_supplymentary'
     report_period = Column(Date, primary_key=True)
     stock_code = Column(String(10), primary_key=True)
-    r1_net_profit = Column(Float)
-    r2_minority_interest = Column(Float)
-    r3_unaffirmed_investment_loss = Column(Float)
-    r4_impairment_of_fixed_asset = Column(Float)
-    r5_depreciation_of_fixed_asset = Column(Float)
-    r6_amortization_of_intangible_asset = Column(Float)
-    r7_deferred_asset = Column(Float)
-    r8_ = Column(Float)
-    r9_ = Column(Float)
-    r10_loss_on_disposal_asset = Column(Float)
-    r11_loss_on_scrapping_of_fixed_asset = Column(Float)
-    r12_ = Column(Float)
-    r13_ = Column(Float)
-    r14_accrued_liabilities = Column(Float)
-    r15_finance_expense = Column(Float)
-    r16_invesetment_loss = Column(Float)
-    r17_ = Column(Float)
-    r18_ = Column(Float)
-    r19_decrease_in_inventory = Column(Float)
-    r20_decrease_in_operating_receivables = Column(Float)
-    r21_increase_in_operating_payables = Column(Float)
-    r22_ = Column(Float)
-    r23_ = Column(Float)
-    r24_other = Column(Float)
-    r25_net_cashflow_from_operating_activities = Column(Float)
-    r26_ = Column(Float)
-    r27_ = Column(Float)
-    r28_ = Column(Float)
-    r29_cash_at_the_end_of_period = Column(Float)
-    r30_cash_at_the_beginning_of_period = Column(Float)
-    r31_cash_equivalent_at_the_end_of_period = Column(Float)
-    r32_cash_equivalent_at_the_beginning_of_period = Column(Float)
-    r33_net_increase_in_cash_and_cash_equivalent = Column(Float)
+    r1_net_profit = Column(Float, comment='')
+    r2_minority_interest = Column(Float, comment='')
+    r3_unaffirmed_investment_loss = Column(Float, comment='')
+    r4_impairment_of_fixed_asset = Column(Float, comment='')
+    r5_depreciation_of_fixed_asset = Column(Float, comment='')
+    r6_amortization_of_intangible_asset = Column(Float, comment='')
+    r7_deferred_asset = Column(Float, comment='')
+    r8_ = Column(Float, comment='')
+    r9_ = Column(Float, comment='')
+    r10_loss_on_disposal_asset = Column(Float, comment='')
+    r11_loss_on_scrapping_of_fixed_asset = Column(Float, comment='')
+    r12_ = Column(Float, comment='')
+    r13_ = Column(Float, comment='')
+    r14_accrued_liabilities = Column(Float, comment='')
+    r15_finance_expense = Column(Float, comment='')
+    r16_invesetment_loss = Column(Float, comment='')
+    r17_ = Column(Float, comment='')
+    r18_ = Column(Float, comment='')
+    r19_decrease_in_inventory = Column(Float, comment='')
+    r20_decrease_in_operating_receivables = Column(Float, comment='')
+    r21_increase_in_operating_payables = Column(Float, comment='')
+    r22_ = Column(Float, comment='')
+    r23_ = Column(Float, comment='')
+    r24_other = Column(Float, comment='')
+    r25_net_cashflow_from_operating_activities = Column(Float, comment='')
+    r26_ = Column(Float, comment='')
+    r27_ = Column(Float, comment='')
+    r28_ = Column(Float, comment='')
+    r29_cash_at_the_end_of_period = Column(Float, comment='')
+    r30_cash_at_the_beginning_of_period = Column(Float, comment='')
+    r31_cash_equivalent_at_the_end_of_period = Column(Float, comment='')
+    r32_cash_equivalent_at_the_beginning_of_period = Column(Float, comment='')
+    r33_net_increase_in_cash_and_cash_equivalent = Column(Float, comment='')
 
 
 """
@@ -408,8 +410,8 @@ class formCashFlowSupplymentary(formFinanceTemplate):
 class formIncomeStatement(formFinanceTemplate):
     __tablename__ = 'income_statement'
     report_period = Column(Date, primary_key=True)
-    r1_revenue = Column(Float)
-    r2_less_cost_of_sales = Column(Float)
+    r1_revenue = Column(Float, comment='')
+    r2_less_cost_of_sales = Column(Float, comment='')
     r3_sales_tax = Column(Float)
     r4_gross_profit = Column(Float)
     r5_add_other_operating_income = Column(Float)

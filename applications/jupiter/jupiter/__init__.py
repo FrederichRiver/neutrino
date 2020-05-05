@@ -1,5 +1,5 @@
-__version__ = '1.5.26'
-__all__ = ['network', 'task_manager', 'utils', 'database_manager']
+__version__ = '1.6.28'
+__all__ = ['network', 'task_manager', 'utils', 'database_manager', 'mail_manager']
 
 # v1.3.19: Modify event_backup, compress after backup.
 # v1.3.20: Modification for finance_event.
@@ -7,4 +7,4 @@ __all__ = ['network', 'task_manager', 'utils', 'database_manager']
 # v1.5.22: Add class cookie.
 # v1.5.23: Debug.
 # v1.5.25: Mail attachment.
-# v1.6.26: A more powerful inteligent mail server.
+# v1.6.27: A more powerful inteligent mail server.

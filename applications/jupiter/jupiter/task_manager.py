@@ -14,6 +14,7 @@ import venus.stock_event
 import taurus.nlp_event
 import saturn.finance_event
 import jupiter.database_manager
+import jupiter.mail_manager
 import jupiter.test_jupiter as test
 
 __version__ = '1.1.6'
@@ -127,7 +128,7 @@ class taskManager(BackgroundScheduler):
     def check_task_file(self):
         # if task file not exist, send a warning.
         if os.path.exists(self.taskfile):
-            INFO("Task file checking successd.")
+            # INFO("Task file checking successd.")
             self.append_task()
         else:
             ERROR("Task plan file is not found.")

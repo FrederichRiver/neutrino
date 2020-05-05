@@ -29,6 +29,7 @@ if __name__ == "__main__":
         print("maint init|backup")
         raise SystemExit(1)
     if sys.argv[1] == "init":
+        from jupiter.database_manager import event_initial_database
         event_initial_database()
     elif sys.argv[1] == "backup":
         event_mysql_backup()

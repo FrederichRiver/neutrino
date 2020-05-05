@@ -14,6 +14,10 @@ __version__ = '1.0.10'
 
 
 class StockEventBase(object):
+    """
+    Today: date format like yyyy-mm-dd \n
+    today: date format like yyyymmdd
+    """
     def __init__(self, header):
         self.Today = datetime.date.today().strftime(TIME_FMT)
         self.today = datetime.date.today().strftime('%Y%m%d')
@@ -109,15 +113,15 @@ class StockEventBase(object):
 
     def update_stock_manager(self, stock_code: str, option='update'):
         if option == 'update':
-            col = 'gmt_modified'
+            col = 'modified_date'
         elif option == 'xrdr':
-            col = 'gmt_xrdr'
+            col = 'xrdr_date'
         elif option == 'balance':
-            col = 'gmt_balance'
+            col = 'balance_date'
         elif option == 'income':
-            col = 'gmt_income'
+            col = 'income_date'
         elif option == 'cashflow':
-            col = 'gmt_cashflow'
+            col = 'cashflow_date'
         else:
             col = None
         if col:
@@ -222,17 +226,18 @@ class dataLine(object):
         # self.data = df
         self.table_name = table_name
 
-    def insert_sql(self, df):
+    def insert_sql(self, stock_code, df):
         """
         Result: Return a list of sql.
         """
         sql = f"INSERT IGNORE into {self.table_name} ("
+        sql += 'char_stock_code,report_date,'
         sql += ','.join(df.columns)
         sql += ") VALUES ({})"
         value = []
         result = []
         for index, row in df.iterrows():
-            value = []
+            value = [f"'{stock_code}'", f"'{index}'"]
             for col in df.columns:
                 value.append(trans(row[col]))
             result_sql = sql.format(','.join(value))
