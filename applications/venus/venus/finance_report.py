@@ -16,10 +16,11 @@ class EventFinanceReport(StockEventBase):
             dataline = dataLine('balance_sheet')
             try:
                 insert_sql_list = dataline.insert_sql(stock_code, df)
+                for sql in insert_sql_list:
+                    self.mysql.engine.execute(sql)
             except Exception as e:
                 print(e)
-        for sql in insert_sql_list:
-            self.mysql.engine.execute(sql)
+
 
     def get_balance_sheet(self, stock_code, url):
         """
@@ -57,10 +58,11 @@ class EventFinanceReport(StockEventBase):
             dataline = dataLine('cashflow')
             try:
                 insert_sql_list = dataline.insert_sql(stock_code, df)
+                for sql in insert_sql_list:
+                    self.mysql.engine.execute(sql)
             except Exception as e:
                 print(e)
-        for sql in insert_sql_list:
-            self.mysql.engine.execute(sql)
+
 
     def get_cashflow(self, stock_code, url):
         """
@@ -98,10 +100,11 @@ class EventFinanceReport(StockEventBase):
             dataline = dataLine('income_statement')
             try:
                 insert_sql_list = dataline.insert_sql(stock_code, df)
+                for sql in insert_sql_list:
+                    self.mysql.engine.execute(sql)
             except Exception as e:
                 print(e)
-        for sql in insert_sql_list:
-            self.mysql.engine.execute(sql)
+        
 
     def get_income(self, stock_code, url):
         """

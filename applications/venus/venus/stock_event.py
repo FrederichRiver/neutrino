@@ -256,6 +256,7 @@ def event_download_cashflow_data():
             event.update_cashflow(stock_code)
         except Exception as e:
             ERROR(f"Error occours while recording {stock_code} cashflow sheet.")
+            ERROR(e)
 
 def event_download_income_data():
     from dev_global.env import GLOBAL_HEADER
@@ -268,57 +269,8 @@ def event_download_income_data():
             event.update_income(stock_code)
         except Exception as e:
             ERROR(f"Error occours while recording {stock_code} income sheet.")
+            ERROR(e)
 
-
-'''
-def event_flag_stock():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = EventFlag()
-    event._init_database(header)
-    event.fetch_all_security_list()
-    for stock_code in event.security_list:
-        event.main_flag(stock_code)
-
-
-def event_rehabilitation():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = EventRehabilitation()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    for stock in stock_list:
-        print(f"Calculating adjust factor of {stock}")
-        event.rehabilitate(stock)
-        event.update_adjust_factor(stock)
-
-
-
-def event_cooperation_info():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StockEventBase()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    # stock_list = ['SH601818']
-    for stock in stock_list:
-        print("fetch cooperation: ", stock)
-        try:
-            fetch_cooperation_info(stock)
-        except Exception as e:
-            print(e)
-
-
-def event_finance_info():
-    header = mysqlHeader('root', '6414939', 'test')
-    event = StockEventBase()
-    event._init_database(header)
-    stock_list = event.fetch_all_stock_list()
-    # stock_list = ['SH601818']
-    for stock in stock_list:
-        print("fetch finance: ", stock)
-        try:
-            fetch_finance_info(stock)
-        except Exception as e:
-            print(e)
-'''
 
 if __name__ == "__main__":
     # event_download_finance_report()
@@ -329,4 +281,17 @@ if __name__ == "__main__":
     # event_record_cooperation_info()
     # event_update_shibor()
     # event_init_interest()
-    event_download_trade_detail_data()
+    # event_download_trade_detail_data()
+    from dev_global.env import GLOBAL_HEADER
+    from jupiter.utils import ERROR
+    from venus.finance_report import EventFinanceReport
+    event = EventFinanceReport(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock_code in stock_list:
+        try:
+            event.update_income(stock_code)
+            event.update_balance(stock_code)
+            event.update_cashflow(stock_code)
+        except Exception as e:
+            ERROR(f"Error occours while recording {stock_code} income sheet.")
+            ERROR(e)

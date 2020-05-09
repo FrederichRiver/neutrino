@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from dev_global.env import GLOBAL_HEADER
-from polaris.mysql8 import mysqlHeader, mysqlBase, create_table
-from venus.stock_base import StockEventBase
 
+from dev_global.env import GLOBAL_HEADER
+from polaris.mysql8 import create_table, mysqlBase, mysqlHeader
+from venus.stock_base import StockEventBase
 
 __version__ = '1.1.6'
 __all__ = ['event_mysql_backup', 'event_initial_database']
