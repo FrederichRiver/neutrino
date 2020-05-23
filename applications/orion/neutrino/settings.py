@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
     'index',
+    'dev',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +86,8 @@ DATABASES = {
         'NAME': 'stock',
         'HOST': 'localhost',
         'PORT': '3306',
-        'USER': 'web',
-        'PASSWORD': 'we_user_1983',
+        'USER': 'fred',
+        'PASSWORD': 'weuse1983',
     },
 }
 

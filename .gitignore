@@ -3,6 +3,7 @@
 *.log
 *.txt
 .vscode/
+doc/
 __pycache__/
 old_code/
 dist/
@@ -17,3 +18,10 @@ applications/taurus/taurus/__pycache__/__init__.cpython-36.pyc
 applications/venus/venus/__pycache__/__init__.cpython-36.pyc
 applications/venus/venus/__pycache__/__init__.cpython-36.pyc
 applications/jupiter/jupiter/__pycache__/__init__.cpython-36.pyc
+applications/doc/note.aux
+applications/doc/note.bbl
+applications/doc/note.blg
+applications/doc/note.pdf
+applications/doc/note.synctex.gz
+applications/doc/note.tex
+applications/doc/note.toc

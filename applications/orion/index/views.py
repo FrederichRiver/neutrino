@@ -7,7 +7,7 @@ from . import models
 
 
 def index(request):
-    header = mysqlHeader('web', 'web_user_1983', 'stock')
+    header = mysqlHeader('fred', 'weuse1983', 'stock')
     mysql = mysqlBase(header)
     result = mysql.select_values('SH000300', 'trade_date,close_price')
     stock_data = []
