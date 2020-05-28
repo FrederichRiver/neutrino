@@ -185,13 +185,91 @@ class EventTradeDataManager(StockEventBase):
         except Exception as e:
             ERROR(f"Failed when download {stock_code} tick data.")
             ERROR(e)
+    def set_ipo_date(self, stock_code):
+        import pandas as pd
+        import datetime 
+        query = self.mysql.select_values(stock_code, 'trade_date')
+        ipo_date = pd.to_datetime(query[0])
+        # ipo_date = datetime.date(1990,12,19)
+        self.mysql.update_value('stock_manager', 'ipo_date', f"'{ipo_date[0]}'", f"stock_code='{stock_code}'")
+        return ipo_date[0]
 
+    def repaire_lost_data(self, stock_code):
+        import pandas as pd
+        import numpy as np
+        import datetime
+        ipo_date = self.set_ipo_date(stock_code)
+        query = self.mysql.condition_select(
+            stock_code, 'trade_date,close_price,highest_price,lowest_price,open_price,prev_close_price,change_rate,amplitude,volume,turnover',
+            f"trade_date>='{ipo_date}'"
+            )
+        query.columns = ['trade_date','close_price','highest_price','lowest_price','open_price','prev_close_price','change_rate','amplitude','volume','turnover']
+        query['trade_date'] = pd.to_datetime(query['trade_date'])
+        query.set_index('trade_date', inplace=True)
+        basic = self.mysql.condition_select(
+            'SH000001', 'trade_date, close_price',f"trade_date>='{ipo_date}'"
+        )
+        basic.columns = ['trade_date', 'sh000001']
+        basic['trade_date'] = pd.to_datetime(basic['trade_date'])
+        basic.set_index('trade_date', inplace=True)
+        
+        result = pd.concat([query, basic], axis=1)
+        #print(result.loc[datetime.date(2009,11,1):datetime.date(2010,1,22),])
+        #print(result.dtypes)
+        result = result[result['close_price'].isnull()]
+        for index, row in result.iterrows():
+            sql = (
+                    f"INSERT ignore into {stock_code}  set trade_date='{index}'"
+                )
+            self.mysql.insert(sql)
+    
+    def repair_prev_close_data(self, stock_code):
+        import pandas as pd
+        import numpy as np
+        import datetime
+        ipo_date = self.set_ipo_date(stock_code)
+        query = self.mysql.select_values(stock_code, 'trade_date,close_price')
+        query.columns = ['trade_date','close_price']
+        query['trade_date'] = pd.to_datetime(query['trade_date'])
+        query.set_index('trade_date', inplace=True)
+        query.fillna(0,inplace=True)
+        query['prev_close_price'] = query['close_price'].shift(1)
+        query = query[1:]
+        print(query[query['close_price'].isnull()])
+        for index, row in query.iterrows():
+            try:
+                sql = (
+                    f"update {stock_code} set prev_close_price={row['prev_close_price']} "
+                    f"where trade_date='{index}'"
+                )
+                self.mysql.engine.execute(sql)
+            except Exception as e:
+                print(e, index)
 
+    def temp_change(self, stock_code):
+        col = ['close_price','highest_price', 'lowest_price','open_price','prev_close_price','change_rate','amplitude','turnover']
+        for name in col:
+            sql = f"alter table {stock_code} change {name} {name} float default 0"
+            self.mysql.engine.execute(sql)
+        sql = f"alter table {stock_code} change volume volume int(11) default 0"
+        self.mysql.engine.execute(sql)
+        sql = f"alter table {stock_code} change adjust_factor adjust_factor float default 1"
+        self.mysql.engine.execute(sql)
+            
 if __name__ == "__main__":
     from dev_global.env import GLOBAL_HEADER
-    event = EventTradeDataManager(GLOBAL_HEADER)
+    from polaris.mysql8 import mysqlHeader
+    #event = EventTradeDataManager(GLOBAL_HEADER)
+    root_header = mysqlHeader('root', '6414939', 'stock')
+    event = EventTradeDataManager(root_header)
+    # stock_code = 'SH600007'
+    # event.temp_change('SH600022')
+    # event.repaire_lost_data('SH600022')
+    # event.repair_prev_close_data('SH600022')
+    #event.set_ipo_date('SH600000')
     stock_list = event.get_all_stock_list()
-    stock_code = 'SH600007'
-    # for stock_code in stock_list:
-    event.download_stock_data(stock_code)
-    # event.record_stock(stock_code)
+    stock_list.remove('SH600022')
+    for stock_code in stock_list:
+        event.temp_change(stock_code)
+        event.set_ipo_date(stock_code)
+    # event.mysql.update_value('stock_manager', 'ipo_date', "'1990-12-30'", "stock_code='SH600000'")

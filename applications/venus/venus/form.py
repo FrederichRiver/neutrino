@@ -66,16 +66,16 @@ class formStock(formTemplate):
     __tablename__ = 'template_stock'
     trade_date = Column(Date, primary_key=True)
     stock_name = Column(String(20))
-    close_price = Column(Float)
-    highest_price = Column(Float)
-    lowest_price = Column(Float)
-    open_price = Column(Float)
-    prev_close_price = Column(Float)
-    change_rate = Column(Float)
-    amplitude = Column(Float)
-    volume = Column(Integer)
-    turnover = Column(Float)
-    adjust_factor = Column(Float)
+    close_price = Column(Float, default=0)
+    highest_price = Column(Float, default=0)
+    lowest_price = Column(Float, default=0)
+    open_price = Column(Float, default=0)
+    prev_close_price = Column(Float, default=0)
+    change_rate = Column(Float, default=0)
+    amplitude = Column(Float, default=0)
+    volume = Column(Integer, default=0)
+    turnover = Column(Float, default=0)
+    adjust_factor = Column(Float, default=1)
 
     def __str__(self):
         return "<Stock template>"

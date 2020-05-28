@@ -46,7 +46,6 @@ class mysqlBase(object):
 
     def insert(self, sql):
         self.engine.execute(sql)
-        # self.engine.commit()
         return 1
 
     def select_one(self, table, field, condition):
@@ -80,7 +79,7 @@ class mysqlBase(object):
         try:
             self.engine.execute(sql)
         except Exception as e:
-            pass
+            print(e)
 
     def condition_select(self, table, field, condition):
         """
@@ -168,6 +167,6 @@ def create_table(table, engine):
 
 
 if __name__ == '__main__':
-    header = mysqlHeader('root', '6414939', 'test')
-    engine = mysqlBase(header)
-    print(engine)
+    from dev_global.env import GLOBAL_HEADER
+    event = mysqlBase(GLOBAL_HEADER)
+    event.update_value('stock_manager', 'ipo_date', "'1990-12-30'", "stock_code='SH600000'")

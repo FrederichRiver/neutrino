@@ -17,6 +17,10 @@ __version__ = '1.2.4'
 class EventInterest(StockEventBase):
     """
     """
+    def __init__(self, header):
+        super(EventInterest, self).__init__(header)
+        self.df = pd.DataFrame()
+
     def create_interest_table(self):
         """
         Initial interest table.
@@ -129,7 +133,7 @@ class EventInterest(StockEventBase):
         for index, row in update_factor.iterrows():
             # print(type(index), row['factor'])
             try:
-                pass
+                print(index, row)
                 # sql = (
                 #    f"update {stock_code} set adjust_factor={row['factor']} "
                 #    f"where trade_date='{index}'")
@@ -140,16 +144,81 @@ class EventInterest(StockEventBase):
                     f"trade_date={index}, factor={row['factor']}"))
         # """
 
-
-if __name__ == "__main__":
+def test():
     from dev_global.env import GLOBAL_HEADER
     import numpy as np
     import re
     stock_code = 'SH601818'
-    event = EventInterest(GLOBAL_HEADER)
-    # event.insert_interest_table_into_sql('SZ002230')
-    df = event.resolve_interest_table('SZ000625')
-    print(df.info())
-    event.batch_insert_interest_to_sql(df)
-    # event.price_adjust(stock_code)
-    # event.update_adjust_factor(stock_code)
+    event = EventInterest(GLOBAL_HEADER) 
+
+def test2():
+    from dev_global.env import GLOBAL_HEADER
+    import numpy as np
+    import re
+    import pandas as pd
+    from datetime import date as dt
+    stock_code = 'SH600000'
+    event = StockEventBase(GLOBAL_HEADER)
+    query1 = pd.DataFrame()
+    query2 = pd.DataFrame()
+    query1 = event.mysql.select_values(
+        stock_code, 'trade_date,open_price,close_price, prev_close_price'
+    )
+    query1.columns = ['trade_date','open','close', 'prev_close']
+    query1['trade_date'] = pd.to_datetime(query1['trade_date'])
+    query1.set_index('trade_date',inplace=True)
+
+
+    query2 = event.mysql.condition_select(
+        'stock_interest', 'float_dividend,float_bonus,xrdr_date', f"char_stock_code='{stock_code}'"
+    )
+    query2.columns = ['dividend','bonus','xrdr_date']
+    query2['xrdr_date'] = pd.to_datetime(query2['xrdr_date'])
+    query2['trade_date'] = query2['xrdr_date']
+    query2.set_index('trade_date',inplace=True)
+
+    query1['comp'] = query1['close'] - query1['prev_close'].shift(-1)
+    #print(query1[query1['comp']!=0])
+    #print(query2.head(5))
+    comb = pd.concat([query1,query2], axis=1)
+    #print(comb[(comb['xrdr_date'].notnull()) | (comb['comp']!=0.0)])
+    print(comb.loc[dt(2010,2,24):dt(2010,3,13),])
+
+def test3():
+    from dev_global.env import GLOBAL_HEADER
+    import numpy as np
+    import re
+    import pandas as pd
+    from datetime import date as dt
+    stock_code = 'SH600022'
+    event = StockEventBase(GLOBAL_HEADER)
+    query1 = pd.DataFrame()
+    query1 = event.mysql.select_values(
+            stock_code, 'trade_date,open_price,close_price,highest_price,lowest_price, prev_close_price'
+        )
+    query1.columns = ['trade_date','open_price','close_price','highest_price','lowest_price', 'prev_close_price']
+    query1.set_index('trade_date', inplace=True)
+    print(query1.loc[dt(2009,11,5):dt(2010,2,23),])
+
+
+def test4():
+    from dev_global.env import GLOBAL_HEADER
+    import numpy as np
+    import re
+    import pandas as pd
+    from datetime import date as dt
+    stock_code = 'SH600022'
+    event = StockEventBase(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock_code in stock_list:
+        query1 = pd.DataFrame()
+        query1 = event.mysql.select_values(
+            stock_code, 'trade_date,open_price,close_price,highest_price,lowest_price, prev_close_price'
+        )
+        if not query1.empty:
+            for index, row in query1.iterrows():
+                if row[0] == 0 or row[1] == 0 or row[2] == 0 or row[3] == 0 or row[4] == 0 or row[5] == 0 :
+                    print(stock_code, row[0], row[1],row[2],row[3],row[4], row[5])
+            
+if __name__ == "__main__":
+    test3()   
