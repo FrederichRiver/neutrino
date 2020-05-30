@@ -61,6 +61,11 @@ class formStockManager(formTemplate):
     def __str__(self):
         return "<Stock Manager>"
 
+formStockManager_column = [
+    "stock_code", "stock_name", "orgId", "short_code", "create_date", "modified_date",
+    "xrdr_date", "balance_date", "income_date", "cashflow_date", "flag"
+]
+
 
 class formStock(formTemplate):
     __tablename__ = 'template_stock'
@@ -80,6 +85,10 @@ class formStock(formTemplate):
     def __str__(self):
         return "<Stock template>"
 
+formStock_column = [
+    'trade_date', 'stock_code', 'stock_name', 'close_price', 'highest_price',
+    'lowest_price', 'open_price', 'prev_close_price', 'change_rate', 'amplitude',
+    'volume', 'turnover']
 
 class formBalance(formFinanceTemplate):
     __tablename__ = 'balance_sheet'

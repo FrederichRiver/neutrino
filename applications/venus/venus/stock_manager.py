@@ -25,6 +25,7 @@ class EventTradeDataManager(StockEventBase):
         read csv data and return dataframe type data.
         """
         # config file is a url file.
+        import pandas as pd
         url = self.url_netease(stock_code, start_date, end_date)
         result = pd.read_csv(url, encoding='gb18030')
         return result
@@ -179,12 +180,13 @@ class EventTradeDataManager(StockEventBase):
             trade_date[:4], trade_date, code)
         try:
             df = pd.read_excel(url)
-            filename = root_path + f"{stock_code}_{trade_date}.csv"
+            filename = absolute_path(root_path, f"{stock_code}_{trade_date}.csv")
             if not df.empty:
                 df.to_csv(filename, encoding='gb18030')
         except Exception as e:
             ERROR(f"Failed when download {stock_code} tick data.")
             ERROR(e)
+
     def set_ipo_date(self, stock_code):
         import pandas as pd
         import datetime 
@@ -255,8 +257,18 @@ class EventTradeDataManager(StockEventBase):
         self.mysql.engine.execute(sql)
         sql = f"alter table {stock_code} change adjust_factor adjust_factor float default 1"
         self.mysql.engine.execute(sql)
-            
+
+def absolute_path(file_path: str, file_name: str) -> str:
+    if (file_path[-1] == '/') and (file_name[0]== '/'):
+        result_path = file_path + file_name[1:]
+    elif (file_path[-1] != '/') and (file_name[0]!= '/'):
+        result_path = file_path + '/' + file_name
+    else:
+        result_path = file_path + file_name
+    return result_path
+
 if __name__ == "__main__":
+    """
     from dev_global.env import GLOBAL_HEADER
     from polaris.mysql8 import mysqlHeader
     #event = EventTradeDataManager(GLOBAL_HEADER)
@@ -273,3 +285,5 @@ if __name__ == "__main__":
         event.temp_change(stock_code)
         event.set_ipo_date(stock_code)
     # event.mysql.update_value('stock_manager', 'ipo_date', "'1990-12-30'", "stock_code='SH600000'")
+    """
+    

@@ -77,6 +77,16 @@ def unit_test_stockcode():
     print(call_result)
     print(func_result)
 
+def unit_test_absolute_path():
+    from venus.stock_manager import absolute_path
+    x = 'path/path2/path3'
+    y = 'path/path2/path3/'
+    z = 'path4/file'
+    z2 = '/path4/file'
+    print(absolute_path(x,z))
+    print(absolute_path(x,z2))
+    print(absolute_path(y,z))
+    print(absolute_path(y,z2))
 
 if __name__ == "__main__":
     # unit_test_NoneHeaderError()

@@ -99,6 +99,27 @@ def event_mysql_backup():
     except Exception:
         ERROR("Database backup failed.")
 
+def change_stock_template_definition():
+    from dev_global.env import GLOBAL_HEADER
+    from polaris.mysql8 import mysqlHeader
+    from venus.stock_base import StockEventBase
+    root_header = mysqlHeader('root', '6414939', 'stock')
+    event = StockEventBase(root_header)
+    stock_list = event.get_all_stock_list()
+    col = ['close_price','highest_price', 'lowest_price','open_price','prev_close_price','change_rate','amplitude','turnover']
+    for stock_code in stock_list:
+        print(stock_code)
+        for name in col:
+            sql = f"alter table {stock_code} change {name} {name} float default 0"
+            event.mysql.engine.execute(sql)
+        sql = f"alter table {stock_code} change volume volume int(11) default 0"
+        event.mysql.engine.execute(sql)
+        sql = f"alter table {stock_code} change adjust_factor adjust_factor float default 1"
+        event.mysql.engine.execute(sql)
+
+def test():
+    change_stock_template_definition()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

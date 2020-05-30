@@ -166,6 +166,15 @@ def create_table(table, engine):
     table.metadata.create_all(engine)
 
 
+class sqlExecutor(object):
+    def __init__(self, executor, sql):
+        self.executor = executor
+    def __enter__(self):
+        pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
 if __name__ == '__main__':
     from dev_global.env import GLOBAL_HEADER
     event = mysqlBase(GLOBAL_HEADER)

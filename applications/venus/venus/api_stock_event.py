@@ -3,17 +3,28 @@
 
 __version__ = '1.2.15'
 __all__ = [
-    'event_record_new_stock', 'event_download_stock_data',
-    'event_download_index_data', 'event_flag_quit_stock',
-    'event_init_interest', 'event_record_interest',
-    'event_flag_stock', 'event_flag_b_stock',
-    'event_flag_index', 'event_rehabilitation',
-    'event_record_cooperation_info', 'event_finance_info',
-    'event_init_stock', 'event_download_finance_report',
-    'event_update_shibor', 'event_download_trade_detail_data',
-    'event_get_hk_list', 'event_record_orgid',
-    'event_download_balance_data', 'event_download_cashflow_data',
-    'event_download_income_data'
+    'event_download_balance_data',
+    'event_download_cashflow_data',
+    'event_download_finance_report',
+    'event_download_income_data',
+    'event_download_index_data',
+    'event_download_stock_data',
+    'event_download_trade_detail_data',
+    'event_flag_quit_stock',
+    'event_flag_stock',
+    'event_flag_b_stock',
+    'event_flag_index',
+    'event_finance_info',
+    'event_get_hk_list',
+    'event_init_interest',
+    'event_init_stock',
+    'event_rehabilitation',
+    'event_record_cooperation_info',
+    'event_record_new_stock',
+    'event_record_interest',
+    'event_record_orgid',
+    'event_update_shibor',
+    'event'
     ]
 
 # Event Trade Data Manager

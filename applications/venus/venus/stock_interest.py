@@ -31,11 +31,10 @@ class EventInterest(StockEventBase):
                 formInterest.__tablename__,
                 self.mysql.engine)
 
-    def resolve_interest_table(self, stock_code):
+    def resolve_interest_table(self, stock_code:str):
         """
         Recognize interest table from html,
-        return a dataframe table.
-        Result -> tab (a Dataframe object)
+        returns a dataframe table.\n
         Used for batch insert.
         """
         import pandas as pd
