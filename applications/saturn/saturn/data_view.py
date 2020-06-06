@@ -98,6 +98,10 @@ class EventView(StockEventBase):
             pass
         return plt
 
+class DataViewBase(object):
+    def __init__(self):
+        pass
+
 
 if __name__ == "__main__":
     from dev_global.env import GLOBAL_HEADER

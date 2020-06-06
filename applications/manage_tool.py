@@ -35,5 +35,8 @@ if __name__ == "__main__":
         event_mysql_backup()
     elif sys.argv[1] == "install":
         neutrino_install()
+    elif sys.argv[1] == "test":
+        from jupiter import database_manager
+        database_manager.change_stock_template_definition()
     else:
         pass

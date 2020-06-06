@@ -18,7 +18,7 @@ from jupiter.utils import ERROR, INFO
 from sqlalchemy.ext.declarative import declarative_base
 from threading import Thread
 
-__version__ = '1.5.12'
+__version__ = '1.6.14'
 
 
 def neutrino(pid_file, log_file):
@@ -97,23 +97,41 @@ def main_function(taskfile=None, task_line_name=''):
     # INFO(f"Neutrino started with pid {os.getpid()}.")
     Base = declarative_base()
     mysql = mysqlBase(GLOBAL_HEADER)
+    # default jobstore config
     jobstores = {
         'default': SQLAlchemyJobStore(
             engine=mysql.engine, metadata=Base.metadata)
             }
     executor = {'default': ThreadPoolExecutor(20)}
     default_job = {'max_instance': 5}
+    # jobstore2 config
+    pluto_jobstores = {
+        'pluto': SQLAlchemyJobStore(
+            engine=mysql.engine, metadata=Base.metadata)
+            }
+    pluto_executor = {'pluto': ThreadPoolExecutor(20)}
+    pluto_job = {'max_instance': 5}
+    
     Neptune = taskManager(taskfile=taskfile,
                           jobstores=jobstores,
                           executors=executor,
                           job_defaults=default_job)
     Neptune.start()
+    pluto_task = '/opt/neutrino/config/pluto_task.json'
+    Pluto = taskManager(taskfile=pluto_task,
+                          jobstores=pluto_jobstores,
+                          executors=pluto_executor,
+                          job_defaults=pluto_job)
+    Pluto.start()
+    
     INFO(f"{task_line_name} start.")
     while True:
         # INFO("Checking task file.")
         try:
             Neptune.reload_event()
             Neptune.check_task_file()
+            Pluto.reload_event()
+            Pluto.check_task_file()
         except Exception:
             ERROR("ERROR while checking task file.")
         time.sleep(3600)

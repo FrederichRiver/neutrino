@@ -58,6 +58,19 @@ class EventStockFlag(StockEventBase):
             self.mysql.session.commit()
         return 1
 
+    def flag_hk_stock(self, stock_code):
+        from venus.form import formStockManager
+        result = self.mysql.session.query(
+            formStockManager.stock_code,
+            formStockManager.flag
+            ).filter_by(stock_code=stock_code)
+        if result:
+            result.update(
+                {"flag": 'h'}
+            )
+            self.mysql.session.commit()
+        return 1
+
 
 if __name__ == "__main__":
     import re

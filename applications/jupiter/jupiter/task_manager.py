@@ -15,11 +15,22 @@ import venus.api_stock_event
 import taurus.nlp_event
 import saturn.finance_event
 import jupiter.database_manager
+import jupiter.log_manager
 import jupiter.mail_manager
 import jupiter.test_jupiter as test
 
 __version__ = '1.2.7'
 
+
+def decoration_print(func):
+    """
+    decorater of print function.
+    """
+    def wrap_func():
+        print('+-' * 15)
+        func()
+        print('+-' * 15)
+    return wrap_func
 
 class taskManager(BackgroundScheduler):
     """
@@ -35,7 +46,7 @@ class taskManager(BackgroundScheduler):
             ERROR("Task file is not found.")
         else:
             self.module_list = [
-                venus.stock_event, taurus.nlp_event,
+                venus.api_stock_event, taurus.nlp_event,
                 jupiter.database_manager, saturn.finance_event,
                 jupiter.mail_manager]
             self.taskfile = taskfile
@@ -179,11 +190,12 @@ class taskManager2(BackgroundScheduler):
             ERROR("Task file is not found.")
         else:
             self.module_list = [
-                venus.stock_event,
+                venus.api_stock_event,
                 taurus.nlp_event,
                 jupiter.database_manager,
                 saturn.finance_event,
-                jupiter.mail_manager
+                jupiter.mail_manager,
+                jupiter.log_manager,
                 ]
             self.taskfile = taskfile
             self.func_list = {}
@@ -338,15 +350,7 @@ def format_timedelta(dt: datetime.timedelta) -> str:
     h, m = timedelta_convert(dt)
     return f"{h}:{m}"
 
-def decoration_print(func):
-    """
-    decorater of print function.
-    """
-    def wrap_func():
-        print('+-' * 15)
-        func()
-        print('+-' * 15)
-    return wrap_func
+
 
 if __name__ == "__main__":
     import datetime

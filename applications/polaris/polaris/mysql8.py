@@ -39,14 +39,18 @@ class mysqlBase(object):
             f"mysql engine <{header.account}@{header.host}>")
 
     def __str__(self):
-        result = (
-            str(self.account), str(self.host),
-            str(self.port), str(self.database), str(self.charset))
-        return result
+        return self.id_string
 
     def insert(self, sql):
         self.engine.execute(sql)
         return 1
+    
+    def insert2(self, table:str, value:dict, condition:str):
+        if isinstance(value, dict):
+            sql = f"INSERT IGNORE INTO {table} "
+            for key in value.keys():
+                sql += f"{key}={value[key]} "
+            self.engine.execute(sql)
 
     def select_one(self, table, field, condition):
         """

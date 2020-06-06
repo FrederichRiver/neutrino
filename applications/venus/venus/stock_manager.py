@@ -72,7 +72,7 @@ class EventTradeDataManager(StockEventBase):
                 f"Insert into stock_manager set "
                 f"stock_code='{stock_code}',"
                 f"stock_name='{stock_name}',"
-                f"gmt_create='{self.Today}'"
+                f"create_date='{self.Today}'"
             )
             self.mysql.engine.execute(sql)
             self.mysql.create_table_from_table(
@@ -121,11 +121,11 @@ class EventTradeDataManager(StockEventBase):
                           dtype=columetype)
             query = self.mysql.session.query(
                 formStockManager.stock_code,
-                formStockManager.gmt_modified
+                formStockManager.update_date
             ).filter_by(stock_code=stock_code)
             if query:
                 query.update(
-                    {"gmt_modified": self.Today()})
+                    {"update_date": self.Today})
             self.mysql.session.commit()
         except Exception as e:
             ERROR(f"Problem when initially download {stock_code} data.")
@@ -133,7 +133,7 @@ class EventTradeDataManager(StockEventBase):
     def download_stock_data(self, stock_code):
         from datetime import date
         query_result = self.mysql.select_one(
-            'stock_manager', 'gmt_modified', f"stock_code='{stock_code}'"
+            'stock_manager', 'update_date', f"stock_code='{stock_code}'"
         )
         if query_result[0]:
             update = query_result[0].strftime('%Y%m%d')
@@ -165,7 +165,7 @@ class EventTradeDataManager(StockEventBase):
                 self.mysql.engine.execute(insert_sql)
                 update_sql = (
                     f"UPDATE stock_manager "
-                    f"set gmt_modified='{row['trade_date']}' "
+                    f"set update_date='{row['trade_date']}' "
                     f"Where stock_code='{stock_code}'")
                 self.mysql.engine.execute(update_sql)
         except Exception as e:
@@ -195,12 +195,19 @@ class EventTradeDataManager(StockEventBase):
         # ipo_date = datetime.date(1990,12,19)
         self.mysql.update_value('stock_manager', 'ipo_date', f"'{ipo_date[0]}'", f"stock_code='{stock_code}'")
         return ipo_date[0]
+    
+    def get_ipo_date(self, stock_code):
+        import pandas as pd
+        import datetime 
+        query = self.mysql.select_values(stock_code, 'trade_date')
+        ipo_date = pd.to_datetime(query[0])
+        return ipo_date[0]
 
     def repaire_lost_data(self, stock_code):
         import pandas as pd
         import numpy as np
         import datetime
-        ipo_date = self.set_ipo_date(stock_code)
+        ipo_date = self.get_ipo_date(stock_code)
         query = self.mysql.condition_select(
             stock_code, 'trade_date,close_price,highest_price,lowest_price,open_price,prev_close_price,change_rate,amplitude,volume,turnover',
             f"trade_date>='{ipo_date}'"
@@ -229,7 +236,7 @@ class EventTradeDataManager(StockEventBase):
         import pandas as pd
         import numpy as np
         import datetime
-        ipo_date = self.set_ipo_date(stock_code)
+        ipo_date = self.get_ipo_date(stock_code)
         query = self.mysql.select_values(stock_code, 'trade_date,close_price')
         query.columns = ['trade_date','close_price']
         query['trade_date'] = pd.to_datetime(query['trade_date'])
@@ -248,15 +255,35 @@ class EventTradeDataManager(StockEventBase):
             except Exception as e:
                 print(e, index)
 
-    def temp_change(self, stock_code):
-        col = ['close_price','highest_price', 'lowest_price','open_price','prev_close_price','change_rate','amplitude','turnover']
-        for name in col:
-            sql = f"alter table {stock_code} change {name} {name} float default 0"
-            self.mysql.engine.execute(sql)
-        sql = f"alter table {stock_code} change volume volume int(11) default 0"
-        self.mysql.engine.execute(sql)
-        sql = f"alter table {stock_code} change adjust_factor adjust_factor float default 1"
-        self.mysql.engine.execute(sql)
+    def stat_problem_data(self, stock_code):
+        import pandas as pd
+        import numpy as np
+        import datetime
+        ipo_date = self.set_ipo_date(stock_code)
+        query = self.mysql.condition_select(
+            stock_code, 'trade_date,close_price', f"trade_date>='{ipo_date}'"
+            )
+        query.columns = ['trade_date','close_price']
+        query['trade_date'] = pd.to_datetime(query['trade_date'])
+        query.set_index('trade_date', inplace=True)
+
+        basic = self.mysql.condition_select(
+            'SH000001', 'trade_date, close_price',f"trade_date>='{ipo_date}'"
+        )
+        basic.columns = ['trade_date', 'sh000001']
+        basic['trade_date'] = pd.to_datetime(basic['trade_date'])
+        basic.set_index('trade_date', inplace=True)
+        
+        result = pd.concat([query, basic], axis=1)
+        result = result[result['close_price'].isnull()]
+        print(stock_code, ":",result.shape[0])
+        """
+        for index, row in result.iterrows():
+            sql = (
+                    f"INSERT ignore into {stock_code}  set trade_date='{index}'"
+                )
+            self.mysql.insert(sql)
+        """
 
 def absolute_path(file_path: str, file_name: str) -> str:
     if (file_path[-1] == '/') and (file_name[0]== '/'):
@@ -268,7 +295,6 @@ def absolute_path(file_path: str, file_name: str) -> str:
     return result_path
 
 if __name__ == "__main__":
-    """
     from dev_global.env import GLOBAL_HEADER
     from polaris.mysql8 import mysqlHeader
     #event = EventTradeDataManager(GLOBAL_HEADER)
@@ -280,10 +306,5 @@ if __name__ == "__main__":
     # event.repair_prev_close_data('SH600022')
     #event.set_ipo_date('SH600000')
     stock_list = event.get_all_stock_list()
-    stock_list.remove('SH600022')
     for stock_code in stock_list:
-        event.temp_change(stock_code)
-        event.set_ipo_date(stock_code)
-    # event.mysql.update_value('stock_manager', 'ipo_date', "'1990-12-30'", "stock_code='SH600000'")
-    """
-    
+        event.stat_problem_data(stock_code)     

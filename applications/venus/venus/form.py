@@ -51,7 +51,7 @@ class formStockManager(formTemplate):
     orgId = Column(String(25))
     short_code = Column(String(10))
     create_date = Column(Date)
-    modified_date = Column(Date)
+    update_date = Column(Date)
     xrdr_date = Column(Date)
     balance_date = Column(Date)
     income_date = Column(Date)

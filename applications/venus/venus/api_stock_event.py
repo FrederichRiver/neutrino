@@ -14,6 +14,7 @@ __all__ = [
     'event_flag_stock',
     'event_flag_b_stock',
     'event_flag_index',
+    'event_flag_hk_stock',
     'event_finance_info',
     'event_get_hk_list',
     'event_init_interest',
@@ -23,8 +24,8 @@ __all__ = [
     'event_record_new_stock',
     'event_record_interest',
     'event_record_orgid',
+    'event_set_ipo_date',
     'event_update_shibor',
-    'event'
     ]
 
 # Event Trade Data Manager
@@ -36,8 +37,10 @@ def event_init_stock():
     """
     from dev_global.env import GLOBAL_HEADER
     from venus.stock_manager import EventTradeDataManager
+    from venus.stock_base import StockList
     event = EventTradeDataManager(GLOBAL_HEADER)
-    stock_list = create_stock_list()
+    sl = StockList()
+    stock_list = sl.get_stock()
     for stock in stock_list:
         event.record_stock(stock)
 
@@ -131,7 +134,7 @@ def event_flag_stock():
     event = EventStockFlag(GLOBAL_HEADER)
     stock_list = event.get_all_security_list()
     for stock_code in stock_list:
-        if re.match(r'^SH60|^SZ00|^SZ300', stock_code):
+        if re.match(r'^SH60|^SZ00|^SZ300|^SH688', stock_code):
             event.flag_stock(stock_code)
 
 
@@ -156,6 +159,15 @@ def event_flag_index():
         if re.match(r'^SH000|^SH950|^SZ399', stock_code):
             event.flag_index(stock_code)
 
+def event_flag_hk_stock():
+    import re
+    from dev_global.env import GLOBAL_HEADER
+    from venus.stock_flag import EventStockFlag
+    event = EventStockFlag(GLOBAL_HEADER)
+    stock_list = event.get_all_security_list()
+    for stock_code in stock_list:
+        if re.match(r'^HK', stock_code):
+            event.flag_hk_stock(stock_code)
 
 def event_rehabilitation():
     pass
@@ -282,6 +294,14 @@ def event_download_income_data():
             ERROR(f"Error occours while recording {stock_code} income sheet.")
             ERROR(e)
 
+def event_set_ipo_date():
+    from venus.stock_manager import EventTradeDataManager
+    from dev_global.env import GLOBAL_HEADER
+    event = EventTradeDataManager(GLOBAL_HEADER)
+    stock_list = event.get_all_stock_list()
+    for stock_code in stock_list:
+        event.set_ipo_date(stock_code)
+
 
 if __name__ == "__main__":
     # event_download_finance_report()
@@ -293,16 +313,4 @@ if __name__ == "__main__":
     # event_update_shibor()
     # event_init_interest()
     # event_download_trade_detail_data()
-    from dev_global.env import GLOBAL_HEADER
-    from jupiter.utils import ERROR
-    from venus.finance_report import EventFinanceReport
-    event = EventFinanceReport(GLOBAL_HEADER)
-    stock_list = event.get_all_stock_list()
-    for stock_code in stock_list:
-        try:
-            event.update_income(stock_code)
-            event.update_balance(stock_code)
-            event.update_cashflow(stock_code)
-        except Exception as e:
-            ERROR(f"Error occours while recording {stock_code} income sheet.")
-            ERROR(e)
+    event_init_stock()
