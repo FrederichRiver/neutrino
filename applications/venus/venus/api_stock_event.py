@@ -20,7 +20,8 @@ __all__ = [
     'event_init_interest',
     'event_init_stock',
     'event_rehabilitation',
-    'event_record_cooperation_info',
+    'event_record_company_infomation',
+    'event_record_company_stock_structure',
     'event_record_new_stock',
     'event_record_interest',
     'event_record_orgid',
@@ -29,7 +30,20 @@ __all__ = [
     ]
 
 # Event Trade Data Manager
-
+"""
+def decoration_stock_event(func):
+    def wrap_func(*args, **kwargs):
+        from dev_global.env import GLOBAL_HEADER
+        from venus.stock_base import EventStockList
+        StockList = EventStockList(GLOBAL_HEADER)
+        stock_list = StockList.get_all_stock_list()
+        for stock in stock_list:
+            try:
+                func(stock)
+            except Exception as e:
+                print(stock, e)
+    return wrap_func
+"""
 
 def event_init_stock():
     """
@@ -173,24 +187,34 @@ def event_rehabilitation():
     pass
 
 
-def event_record_cooperation_info():
+def event_record_company_infomation():
     from dev_global.env import GLOBAL_HEADER
     from venus.company import EventCompany
     from jupiter.utils import ERROR, INFO
     event = EventCompany(GLOBAL_HEADER)
     stock_list = event.get_all_stock_list()
-    # stock_list = ['SH601818']
     for stock_code in stock_list:
         try:
-            event.get_cooperation_info(stock_code)
+            event.record_company_infomation(stock_code)
         except Exception as e:
-            ERROR("Error occours while recording company infomation.")
-            ERROR(e)
+            ERROR(stock_code, e)
 
 
 def event_finance_info():
     pass
 
+
+def event_record_company_stock_structure():
+    from venus.company import EventCompany
+    from dev_global.env import GLOBAL_HEADER
+    from jupiter.utils import ERROR
+    event = EventCompany(GLOBAL_HEADER)
+    stock_list = event.get_stock_list()
+    for stock in stock_list:
+        try:
+            event.record_stock_structure(stock)
+        except Exception as e:
+            ERROR(stock, e)
 
 def event_download_finance_report():
     from dev_global.env import GLOBAL_HEADER

@@ -132,7 +132,42 @@ class StockEventBase(object):
     def close(self):
         self.mysql.engine.close()
 
+class EventStockList(StockEventBase):
+    def get_all_stock_list(self):
+        """
+        Return stock code --> list.
+        """
+        query = self.mysql.condition_select(
+            "stock_manager", "stock_code", "flag='t'"
+        )
+        df = pd.DataFrame.from_dict(query)
+        self.stock_list = df[0].tolist()
+        return self.stock_list
 
+    def get_all_index_list(self):
+        """
+        Return stock code --> list.
+        """
+        query = self.mysql.condition_select(
+            "stock_manager", "stock_code", "flag='i'"
+        )
+        df = pd.DataFrame.from_dict(query)
+        self.stock_list = df[0].tolist()
+        return self.stock_list
+
+    def get_all_security_list(self):
+        """
+        Return stock code --> list
+        """
+        # Return all kinds of securities in form stock list.
+        # Result : List type data.
+        from venus.form import formStockManager
+        result = self.mysql.session.query(
+            formStockManager.stock_code).all()
+        df = pd.DataFrame.from_dict(result)
+        result = df['stock_code'].tolist()
+        return result
+ 
 class StockCodeFormat(object):
     def __call__(self, stock_code):
         if type(stock_code) == str:

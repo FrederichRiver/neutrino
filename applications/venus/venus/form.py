@@ -28,6 +28,13 @@ class company_info(formInfomation):
     introduction = Column(String(1000))
 
 
+class company_stock_structure(formInfomation):
+    __tablename__ = 'company_stock_structure'
+    stock_code = Column(String(10), primary_key=True)
+    stock_name = Column(String(10))
+    report_date = Column(Date, primary_key=True)
+    total_stock = stock_code = Column(Float)
+
 class formInterest(formTemplate):
     """
     This is the template of stock interest.

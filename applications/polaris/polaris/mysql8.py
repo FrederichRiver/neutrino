@@ -45,7 +45,7 @@ class mysqlBase(object):
         self.engine.execute(sql)
         return 1
     
-    def insert2(self, table:str, value:dict, condition:str):
+    def insert2(self, table:str, value:dict):
         if isinstance(value, dict):
             sql = f"INSERT IGNORE INTO {table} "
             for key in value.keys():
