@@ -197,7 +197,7 @@ def event_record_company_infomation():
         try:
             event.record_company_infomation(stock_code)
         except Exception as e:
-            ERROR(stock_code, e)
+            ERROR(e)
 
 
 def event_finance_info():
@@ -208,13 +208,16 @@ def event_record_company_stock_structure():
     from venus.company import EventCompany
     from dev_global.env import GLOBAL_HEADER
     from jupiter.utils import ERROR
+    from jupiter.network import delay
     event = EventCompany(GLOBAL_HEADER)
-    stock_list = event.get_stock_list()
+    stock_list = event.get_all_stock_list()
     for stock in stock_list:
         try:
+            #print(stock)
             event.record_stock_structure(stock)
+            delay(10)
         except Exception as e:
-            ERROR(stock, e)
+            ERROR(e)
 
 def event_download_finance_report():
     from dev_global.env import GLOBAL_HEADER
@@ -247,6 +250,7 @@ def event_download_trade_detail_data():
     from venus.stock_manager import EventTradeDataManager
     import datetime
     from jupiter.utils import ERROR
+    from jupiter.network import delay
     event = EventTradeDataManager(GLOBAL_HEADER)
     today = datetime.date.today()
     trade_date_list = [
@@ -258,6 +262,7 @@ def event_download_trade_detail_data():
             # print(f"Download detail trade data {stock}: {trade_date}")
             try:
                 event.get_trade_detail_data(stock, trade_date)
+                delay(5)
             except Exception as e:
                 ERROR(e)
 

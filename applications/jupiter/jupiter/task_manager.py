@@ -179,12 +179,11 @@ class taskManager2(BackgroundScheduler):
     It will run tasks according to task.json file.
     It will auto load modules without reboot system.
     """
-    def __init__(self, task_manager_name:str, taskfile=None, gconfig={}):
-        super(BackgroundScheduler, self).__init__(
-            gconfig=gconfig)
+    def __init__(self, taskfile=None, gconfig={}, **options):
+        super(BackgroundScheduler, self).__init__(gconfig=gconfig, **options)
         # if task file is not found.
         import datetime
-        self.name = task_manager_name
+        #self.name = task_manager_name
         self.start_time = datetime.datetime.now() 
         if not taskfile:
             ERROR("Task file is not found.")

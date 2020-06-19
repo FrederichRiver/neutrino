@@ -4,51 +4,11 @@
 		"work day":"18:00"
 	},
 	{
-		"task":"event_flag_stock",
-		"day":"2"
-	},
-	{
-		"task":"event_download_netease_news",
-		"time":"00:25"
-	},
-	{
-		"task":"event_init_interest",
-		"time":"03:00"
-	},
-	{
-		"task":"event_record_interest",
-		"time":"05:25"
-	},
-	{
-		"task":"event_flag_quit_stock",
-		"day":"1"
-	},
-	{
-		"task":"event_flag_index",
-		"day":"3"
-	},
-	{
-		"task":"event_update_shibor",
-		"time":"23:00"
-	},
-	{
 		"task":"event_download_index_data",
 		"time":"22:00"
 	},
 	{
-		"task":"event_get_hk_list",
-		"time":"00:30"
-	},
-	{
-		"task":"event_record_orgid",
-		"time":"23:20"
-	},
-	{
-		"task":"event_download_trade_detail_data",
-		"day_of_week":"6"
-	},
-	{
-		"task":"event_mysql_backup",
-		"time":"04:00"
+		"task":"event_record_company_stock_structure",
+		"time":"21:31"
 	}
 ]

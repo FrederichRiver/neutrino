@@ -106,10 +106,15 @@ class StockEventBase(object):
         # get html table from url.
         # Return a string like table object.
         # attr: [@class='table_bg001 border_box limit_scale scr_table']
+        # //table[contains(@id,'historyTable')]
         html = self.get_html_object(url)
         table_list = html.xpath(f"//table{attr}")
-        table = etree.tostring(table_list[0]).decode()
-        return table
+        result = []
+        if table_list:
+            for table in table_list:
+                df = etree.tostring(table).decode()
+                result.append(df)
+        return result
 
     def update_stock_manager(self, stock_code: str, option='update'):
         if option == 'update':

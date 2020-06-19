@@ -1,4 +1,4 @@
-__version__ = '1.4.11'
+__version__ = '1.4.12'
 __all__ = ['finance_base', 'finance_event', 'data_view']
 
 # v1.3.5: K plot and save image.

@@ -33,7 +33,7 @@ class company_stock_structure(formInfomation):
     stock_code = Column(String(10), primary_key=True)
     stock_name = Column(String(10))
     report_date = Column(Date, primary_key=True)
-    total_stock = stock_code = Column(Float)
+    total_stock = Column(Float)
 
 class formInterest(formTemplate):
     """

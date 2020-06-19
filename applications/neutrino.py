@@ -13,7 +13,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from dev_global.env import LOG_FILE, PID_FILE, TASK_FILE, MANUAL, GLOBAL_HEADER
 from polaris.mysql8 import mysqlHeader, mysqlBase
-from jupiter.task_manager import taskManager
+from jupiter.task_manager import taskManager, taskManager2
 from jupiter.utils import ERROR, INFO
 from sqlalchemy.ext.declarative import declarative_base
 from threading import Thread
@@ -94,47 +94,26 @@ def logfile_monitor(log_file):
 
 def main_function(taskfile=None, task_line_name=''):
     # judge whether the task file exists.
-    # INFO(f"Neutrino started with pid {os.getpid()}.")
-    Base = declarative_base()
     mysql = mysqlBase(GLOBAL_HEADER)
-    # default jobstore config
     jobstores = {
-        'default': SQLAlchemyJobStore(
-            engine=mysql.engine, metadata=Base.metadata)
+        'default': SQLAlchemyJobStore(tablename='apscheduler_jobs', engine=mysql.engine)
             }
     executor = {'default': ThreadPoolExecutor(20)}
     default_job = {'max_instance': 5}
-    # jobstore2 config
-    pluto_jobstores = {
-        'pluto': SQLAlchemyJobStore(
-            engine=mysql.engine, metadata=Base.metadata)
-            }
-    pluto_executor = {'pluto': ThreadPoolExecutor(20)}
-    pluto_job = {'max_instance': 5}
-    
     Neptune = taskManager(taskfile=taskfile,
                           jobstores=jobstores,
                           executors=executor,
                           job_defaults=default_job)
     Neptune.start()
-    pluto_task = '/opt/neutrino/config/pluto_task.json'
-    Pluto = taskManager(taskfile=pluto_task,
-                          jobstores=pluto_jobstores,
-                          executors=pluto_executor,
-                          job_defaults=pluto_job)
-    Pluto.start()
-    
     INFO(f"{task_line_name} start.")
     while True:
         # INFO("Checking task file.")
         try:
             Neptune.reload_event()
             Neptune.check_task_file()
-            Pluto.reload_event()
-            Pluto.check_task_file()
         except Exception:
             ERROR("ERROR while checking task file.")
-        time.sleep(3600)
+        time.sleep(300)
     return 1
 
 
