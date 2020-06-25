@@ -1,4 +1,4 @@
-__version__ = '1.9.33'
+__version__ = '1.9.34'
 __all__ = ['network', 'task_manager', 'utils', 'database_manager', 'mail_manager', 'log_manager']
 
 # v1.3.19: Modify event_backup, compress after backup.

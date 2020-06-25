@@ -23,7 +23,9 @@ def solve_dir(dir):
         'config/conf.json',
         'config/Neutrino',
         'config/task.json',
-        'config/cookie.json'
+        'config/cookie.json',
+        'config/new-energy-tag.json',
+        'config/semi-conductor-tag.json'
         ]
     for fi in files:
         obj_fi = dir + fi

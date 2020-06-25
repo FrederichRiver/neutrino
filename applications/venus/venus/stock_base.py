@@ -13,6 +13,27 @@ from jupiter.utils import trans
 __version__ = '1.0.10'
 
 
+class StockBase(object):
+    """
+    param  header: mysqlHeader
+    """
+    def __init__(self, header):
+        self._Today = datetime.date.today().strftime(TIME_FMT)
+        self.today = datetime.date.today().strftime('%Y%m%d')
+        if not isinstance(header, mysqlHeader):
+            raise HeaderException()
+        self.mysql = mysqlBase(header)
+
+    @property
+    def Today(self):
+        self._Today = datetime.date.today().strftime(TIME_FMT)
+        return self._Today
+
+
+class HeaderException(BaseException):
+    def __str__(self) -> str:
+        return "Error occurs due to mysql header."
+
 class StockEventBase(object):
     """
     Today: date format like yyyy-mm-dd \n
@@ -309,8 +330,7 @@ class dataLine(object):
 
 
 if __name__ == "__main__":
-    event = StockCodeFormat()
-    call_result = event('600000.SH')
-    func_result = event.net_ease_code('SH601818')
-    print(call_result)
-    print(func_result)
+    from dev_global.env import GLOBAL_HEADER
+    event = StockBase("test")
+    #event = StockBase(GLOBAL_HEADER)
+    print(event.Today)

@@ -17,7 +17,7 @@ if os.getenv('SERVER') == 'MARS':
     SOFT_PATH = '/opt/neutrino/'
 else:
     ROOT_PATH = '~/Documents/dev/neutrino/applications/'
-    SOFT_PATH = '/opt/neutrino/'
+    SOFT_PATH = '~/Documents/dev/neutrino/applications/'
 
 
 encode = 'wAKO0tFJ8ZH38RW4WseZnQ=='

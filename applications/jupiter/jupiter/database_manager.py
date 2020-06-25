@@ -46,7 +46,7 @@ class databaseBackup(object):
         import time
         zip_time = time.strftime('%Y-%m-%d')
         file_name = 'mysql_database'
-        compress_file = f"{self.backup_path}{fine_name}_{zip_time}.tar.gz"
+        compress_file = f"{self.backup_path}{file_name}_{zip_time}.tar.gz"
         os.chdir(self.backup_path)
         os.system(f"tar -czvPf {compress_file} {self.temp_path}")
 
@@ -96,12 +96,13 @@ def event_initial_database():
 
 def event_mysql_backup():
     from jupiter.database_manager import databaseBackup
-    from jupiter.utils import ERROR
+    from jupiter.utils import ERROR, INFO
     try:
         event = databaseBackup()
         event.get_database_list()
         event.database_backup()
         event.file_compress()
+        INFO(f"Database backup successfully.")
     except Exception as e:
         ERROR(e, "Database backup failed.")
 

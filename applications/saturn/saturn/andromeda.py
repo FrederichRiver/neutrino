@@ -4,6 +4,7 @@ from venus import stock_base
 import pandas
 import datetime
 import numpy as np
+from abc import abstractmethod, ABC
 from jupiter.utils import TIME_FMT
 
 """
